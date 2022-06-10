@@ -147,17 +147,26 @@
   <data name="AccountUnlockedSuccess" xml:space="preserve">
     <value>Llogaria u zhbllokuar me sukses</value>
   </data>
+  <data name="Action" xml:space="preserve">
+    <value>Metoda</value>
+  </data>
   <data name="Actions" xml:space="preserve">
     <value>Veprimet</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>Shto</value>
   </data>
+  <data name="AddMenu" xml:space="preserve">
+    <value>Shto meny</value>
+  </data>
   <data name="AddRole" xml:space="preserve">
     <value>Shto grupin</value>
   </data>
   <data name="AddRoleFor" xml:space="preserve">
     <value>Shto grupin - {0}</value>
+  </data>
+  <data name="AddSubMenu" xml:space="preserve">
+    <value>Shto nënmeny</value>
   </data>
   <data name="AddUser" xml:space="preserve">
     <value>Shto përdoruesin</value>
@@ -189,6 +198,18 @@
   <data name="AsDiffUser" xml:space="preserve">
     <value>Me llogari tjetër</value>
   </data>
+  <data name="Authorization" xml:space="preserve">
+    <value>Autorizimi</value>
+  </data>
+  <data name="Authorizations" xml:space="preserve">
+    <value>Autorizimet</value>
+  </data>
+  <data name="AuthorizationsForActions" xml:space="preserve">
+    <value>Autorizimet për veprimet në sistem</value>
+  </data>
+  <data name="AuthorizationsForMenus" xml:space="preserve">
+    <value>Autorizimet për menytë</value>
+  </data>
   <data name="Browse" xml:space="preserve">
     <value>Ngarko</value>
   </data>
@@ -215,6 +236,9 @@
   </data>
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Konfirmo fjalëkalimin</value>
+  </data>
+  <data name="Controller" xml:space="preserve">
+    <value>Kontrolleri</value>
   </data>
   <data name="Country" xml:space="preserve">
     <value>Shteti</value>
@@ -252,8 +276,14 @@
   <data name="Department" xml:space="preserve">
     <value>Departamenti</value>
   </data>
+  <data name="Description" xml:space="preserve">
+    <value>Përshkrimi</value>
+  </data>
   <data name="DevelopedBy" xml:space="preserve">
     <value>Zhvilluar nga</value>
+  </data>
+  <data name="Developer" xml:space="preserve">
+    <value>Zhvilluesi</value>
   </data>
   <data name="DocumentType" xml:space="preserve">
     <value>Lloji dokumentit</value>
@@ -294,6 +324,9 @@
   <data name="GoHome" xml:space="preserve">
     <value>Shko në ballinë</value>
   </data>
+  <data name="HasAccess" xml:space="preserve">
+    <value>Ka qasje</value>
+  </data>
   <data name="HomePage" xml:space="preserve">
     <value>Ballina</value>
   </data>
@@ -308,6 +341,9 @@
   </data>
   <data name="HoursAgo" xml:space="preserve">
     <value>Orë më parë</value>
+  </data>
+  <data name="Icon" xml:space="preserve">
+    <value>Ikona</value>
   </data>
   <data name="IncorrectPassword" xml:space="preserve">
     <value>Fjalëkalimi i pasaktë!</value>
@@ -329,6 +365,9 @@
   </data>
   <data name="LightMode" xml:space="preserve">
     <value>Ndriçuar</value>
+  </data>
+  <data name="ListOfMenus" xml:space="preserve">
+    <value>Lista e menyve</value>
   </data>
   <data name="ListOfNotifications" xml:space="preserve">
     <value>Lista njoftimeve</value>
@@ -362,6 +401,18 @@
   </data>
   <data name="MaxImageSize" xml:space="preserve">
     <value>Madhësia maksimale e lejuar për foto</value>
+  </data>
+  <data name="Menu" xml:space="preserve">
+    <value>Meny</value>
+  </data>
+  <data name="MenuName" xml:space="preserve">
+    <value>Emri menysë</value>
+  </data>
+  <data name="MenuSubmenu" xml:space="preserve">
+    <value>Menytë dhe nënmenytë</value>
+  </data>
+  <data name="Method" xml:space="preserve">
+    <value>Metoda</value>
   </data>
   <data name="Minute" xml:space="preserve">
     <value>Minutë</value>
@@ -417,8 +468,14 @@
   <data name="PhoneNumber" xml:space="preserve">
     <value>Numri telefonit</value>
   </data>
+  <data name="PleaseTryAgainLater" xml:space="preserve">
+    <value>Ju lutem provoni përsëri më vonë!</value>
+  </data>
   <data name="PleaseWait" xml:space="preserve">
     <value>Ju lutem prisni...</value>
+  </data>
+  <data name="Policy" xml:space="preserve">
+    <value>Policy</value>
   </data>
   <data name="Profile" xml:space="preserve">
     <value>Profili</value>
@@ -495,14 +552,26 @@
   <data name="SetPasswordFor" xml:space="preserve">
     <value>Vendos fjalëkalimin - {0}</value>
   </data>
+  <data name="ShowSubMenus" xml:space="preserve">
+    <value>Shiko nënmenytë</value>
+  </data>
   <data name="StaffType" xml:space="preserve">
     <value>Lloji stafit</value>
   </data>
   <data name="StatusType" xml:space="preserve">
     <value>Lloji statusit</value>
   </data>
+  <data name="SubMenu" xml:space="preserve">
+    <value>Nënmeny</value>
+  </data>
   <data name="Success" xml:space="preserve">
     <value>Sukses</value>
+  </data>
+  <data name="SureYouWantToDeleteMenu" xml:space="preserve">
+    <value>A jeni i sigurt për fshirjen e menysë?</value>
+  </data>
+  <data name="SureYouWantToDeleteSubMenu" xml:space="preserve">
+    <value>A jeni i sigurt për fshirjen e nënmenysë?</value>
   </data>
   <data name="SureYouWantToDeleteUser" xml:space="preserve">
     <value>A jeni i sigurt për fshirjen e përdoruesit?</value>
@@ -512,6 +581,12 @@
   </data>
   <data name="SureYouWantToUnlockUser" xml:space="preserve">
     <value>A jeni i sigurt për zhbllokimin e përdoruesit?</value>
+  </data>
+  <data name="SystemError" xml:space="preserve">
+    <value>Gabim në sistem!</value>
+  </data>
+  <data name="ThereHasBeenSystemError" xml:space="preserve">
+    <value>Ka ndodhur një gabim në sistem.</value>
   </data>
   <data name="ThereWasAnError" xml:space="preserve">
     <value>Ka ndodhur një gabim. Provoni përsëri më vonë!</value>

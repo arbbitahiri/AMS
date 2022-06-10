@@ -151,6 +151,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Metoda.
+        /// </summary>
+        public static string Action {
+            get {
+                return ResourceManager.GetString("Action", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Veprimet.
         /// </summary>
         public static string Actions {
@@ -169,6 +178,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shto meny.
+        /// </summary>
+        public static string AddMenu {
+            get {
+                return ResourceManager.GetString("AddMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shto grupin.
         /// </summary>
         public static string AddRole {
@@ -183,6 +201,15 @@ namespace AMS.Resources {
         public static string AddRoleFor {
             get {
                 return ResourceManager.GetString("AddRoleFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shto nënmeny.
+        /// </summary>
+        public static string AddSubMenu {
+            get {
+                return ResourceManager.GetString("AddSubMenu", resourceCulture);
             }
         }
         
@@ -277,6 +304,42 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Autorizimi.
+        /// </summary>
+        public static string Authorization {
+            get {
+                return ResourceManager.GetString("Authorization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Autorizimet.
+        /// </summary>
+        public static string Authorizations {
+            get {
+                return ResourceManager.GetString("Authorizations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Autorizimet për veprimet në sistem.
+        /// </summary>
+        public static string AuthorizationsForActions {
+            get {
+                return ResourceManager.GetString("AuthorizationsForActions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Autorizimet për menytë.
+        /// </summary>
+        public static string AuthorizationsForMenus {
+            get {
+                return ResourceManager.GetString("AuthorizationsForMenus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ngarko.
         /// </summary>
         public static string Browse {
@@ -354,6 +417,15 @@ namespace AMS.Resources {
         public static string ConfirmPassword {
             get {
                 return ResourceManager.GetString("ConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kontrolleri.
+        /// </summary>
+        public static string Controller {
+            get {
+                return ResourceManager.GetString("Controller", resourceCulture);
             }
         }
         
@@ -466,11 +538,29 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Përshkrimi.
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zhvilluar nga.
         /// </summary>
         public static string DevelopedBy {
             get {
                 return ResourceManager.GetString("DevelopedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zhvilluesi.
+        /// </summary>
+        public static string Developer {
+            get {
+                return ResourceManager.GetString("Developer", resourceCulture);
             }
         }
         
@@ -592,6 +682,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ka qasje.
+        /// </summary>
+        public static string HasAccess {
+            get {
+                return ResourceManager.GetString("HasAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ballina.
         /// </summary>
         public static string HomePage {
@@ -633,6 +732,15 @@ namespace AMS.Resources {
         public static string HoursAgo {
             get {
                 return ResourceManager.GetString("HoursAgo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ikona.
+        /// </summary>
+        public static string Icon {
+            get {
+                return ResourceManager.GetString("Icon", resourceCulture);
             }
         }
         
@@ -696,6 +804,15 @@ namespace AMS.Resources {
         public static string LightMode {
             get {
                 return ResourceManager.GetString("LightMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista e menyve.
+        /// </summary>
+        public static string ListOfMenus {
+            get {
+                return ResourceManager.GetString("ListOfMenus", resourceCulture);
             }
         }
         
@@ -795,6 +912,42 @@ namespace AMS.Resources {
         public static string MaxImageSize {
             get {
                 return ResourceManager.GetString("MaxImageSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Meny.
+        /// </summary>
+        public static string Menu {
+            get {
+                return ResourceManager.GetString("Menu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emri menysë.
+        /// </summary>
+        public static string MenuName {
+            get {
+                return ResourceManager.GetString("MenuName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Menytë dhe nënmenytë.
+        /// </summary>
+        public static string MenuSubmenu {
+            get {
+                return ResourceManager.GetString("MenuSubmenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Metoda.
+        /// </summary>
+        public static string Method {
+            get {
+                return ResourceManager.GetString("Method", resourceCulture);
             }
         }
         
@@ -961,11 +1114,29 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ju lutem provoni përsëri më vonë!.
+        /// </summary>
+        public static string PleaseTryAgainLater {
+            get {
+                return ResourceManager.GetString("PleaseTryAgainLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ju lutem prisni....
         /// </summary>
         public static string PleaseWait {
             get {
                 return ResourceManager.GetString("PleaseWait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Policy.
+        /// </summary>
+        public static string Policy {
+            get {
+                return ResourceManager.GetString("Policy", resourceCulture);
             }
         }
         
@@ -1195,6 +1366,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shiko nënmenytë.
+        /// </summary>
+        public static string ShowSubMenus {
+            get {
+                return ResourceManager.GetString("ShowSubMenus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lloji stafit.
         /// </summary>
         public static string StaffType {
@@ -1213,11 +1393,38 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nënmeny.
+        /// </summary>
+        public static string SubMenu {
+            get {
+                return ResourceManager.GetString("SubMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sukses.
         /// </summary>
         public static string Success {
             get {
                 return ResourceManager.GetString("Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A jeni i sigurt për fshirjen e menysë?.
+        /// </summary>
+        public static string SureYouWantToDeleteMenu {
+            get {
+                return ResourceManager.GetString("SureYouWantToDeleteMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A jeni i sigurt për fshirjen e nënmenysë?.
+        /// </summary>
+        public static string SureYouWantToDeleteSubMenu {
+            get {
+                return ResourceManager.GetString("SureYouWantToDeleteSubMenu", resourceCulture);
             }
         }
         
@@ -1245,6 +1452,24 @@ namespace AMS.Resources {
         public static string SureYouWantToUnlockUser {
             get {
                 return ResourceManager.GetString("SureYouWantToUnlockUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gabim në sistem!.
+        /// </summary>
+        public static string SystemError {
+            get {
+                return ResourceManager.GetString("SystemError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ka ndodhur një gabim në sistem..
+        /// </summary>
+        public static string ThereHasBeenSystemError {
+            get {
+                return ResourceManager.GetString("ThereHasBeenSystemError", resourceCulture);
             }
         }
         

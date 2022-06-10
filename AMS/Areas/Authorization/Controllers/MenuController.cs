@@ -23,8 +23,11 @@ public class MenuController : BaseController
 
     #region Search
 
-    [Authorize(Policy = "52:m"), Description("Arb Tahiri", "Form to display list of menus.")]
-    public async Task<IActionResult> Index()
+    [Authorize(Policy = "52:m"), Description("Arb Tahiri", "Form to display list of menus and submenus.")]
+    public IActionResult Index() => View();
+
+    [Authorize(Policy = "52:r"), Description("Arb Tahiri", "Form to display list of menus.")]
+    public async Task<IActionResult> Search()
     {
         var menus = await db.Menu.Select(a => new MenuVM
         {

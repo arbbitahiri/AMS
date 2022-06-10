@@ -31,14 +31,14 @@ builder.Services.AddControllersWithViews(setupAction =>
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
 {
-    options.Password.RequireLowercase = bool.Parse(builder.Configuration["SecurityConfig:Password:RequireLowercase"]);
-    options.Password.RequireNonAlphanumeric = bool.Parse(builder.Configuration["SecurityConfig:Password:RequireNonAlphanumeric"]);
-    options.Password.RequireUppercase = bool.Parse(builder.Configuration["SecurityConfig:Password:RequireUppercase"]);
-    options.Password.RequireDigit = bool.Parse(builder.Configuration["SecurityConfig:Password:RequireDigit"]);
-    options.Password.RequiredLength = int.Parse(builder.Configuration["SecurityConfig:Password:RequiredLength"]);
-    options.SignIn.RequireConfirmedEmail = bool.Parse(builder.Configuration["SecurityConfig:Password:RequireConfirmedEmail"]);
-    options.SignIn.RequireConfirmedAccount = bool.Parse(builder.Configuration["SecurityConfig:Password:RequireConfirmedAccount"]);
-    options.Lockout.MaxFailedAccessAttempts = int.Parse(builder.Configuration["SecurityConfig:Password:MaxFailedAccessAttempts"]);
+    options.Password.RequireUppercase = bool.Parse(builder.Configuration["SecurityConfiguration:Password:RequireUppercase"]);
+    options.Password.RequireLowercase = bool.Parse(builder.Configuration["SecurityConfiguration:Password:RequireLowercase"]);
+    options.Password.RequireDigit = bool.Parse(builder.Configuration["SecurityConfiguration:Password:RequireDigit"]);
+    options.Password.RequireNonAlphanumeric = bool.Parse(builder.Configuration["SecurityConfiguration:Password:RequireNonAlphanumeric"]);
+    options.Password.RequiredLength = int.Parse(builder.Configuration["SecurityConfiguration:Password:RequireLength"]);
+    options.SignIn.RequireConfirmedEmail = bool.Parse(builder.Configuration["SecurityConfiguration:Password:RequireConfirmedEmail"]);
+    options.SignIn.RequireConfirmedAccount = bool.Parse(builder.Configuration["SecurityConfiguration:Password:RequireConfirmedAccount"]);
+    options.Lockout.MaxFailedAccessAttempts = int.Parse(builder.Configuration["SecurityConfiguration:Password:MaxFailedAccessAttempts"]);
 }).AddRoles<ApplicationRole>()
   .AddEntityFrameworkStores<ApplicationDbContext>().
   AddErrorDescriber<IdentityErrorDescriber>().

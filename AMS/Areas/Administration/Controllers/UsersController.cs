@@ -202,10 +202,6 @@ public class UsersController : BaseController
             }
         }
 
-        user.UpdateFrom = user.Id;
-        user.UpdateDate = DateTime.Now;
-        user.UpdateNo = UpdateNo(user.UpdateNo);
-
         var updateResult = await userManager.UpdateAsync(user);
         if (!updateResult.Succeeded)
         {
@@ -226,15 +222,6 @@ public class UsersController : BaseController
     {
         var userId = CryptoSecurity.Decrypt<string>(uIde);
         var user = await userManager.FindByIdAsync(userId);
-        user.UpdateFrom = user.Id;
-        user.UpdateDate = DateTime.Now;
-        user.UpdateNo = UpdateNo(user.UpdateNo);
-
-        var updateResult = await userManager.UpdateAsync(user);
-        if (!updateResult.Succeeded)
-        {
-            return Json(new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", updateResult.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
-        }
 
         await userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddYears(99));
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });

@@ -1,6 +1,8 @@
 ﻿using AMS.Data.Core;
+using AMS.Data.SqlFunctions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AMS.Data;
 
@@ -11,8 +13,27 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     {
     }
 
+    #region SQL Functions
+
+    [NotMapped]
+    public DbSet<MenuList> MenuList { get; set; }
+
+    [NotMapped]
+    public DbSet<MenuListAccess> MenuListAccess { get; set; }
+
+    [NotMapped]
+    public DbSet<Logs> Logs { get; set; }
+
+    #endregion
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.Entity<ApplicationUser>().HasIndex(a => new { a.PersonalNumber }).IsUnique(true);
+
+        builder.Entity<MenuList>().HasNoKey();
+        builder.Entity<MenuListAccess>().HasNoKey();
+        builder.Entity<Logs>().HasNoKey();
+
         base.OnModelCreating(builder);
     }
 }

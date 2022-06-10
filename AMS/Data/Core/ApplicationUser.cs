@@ -23,7 +23,4 @@ public class ApplicationUser : IdentityUser
     public bool AllowNotification { get; set; }
     public string InsertedFrom { get; set; }
     public DateTime InsertedDate { get; set; }
-    public string UpdateFrom { get; set; }
-    public DateTime? UpdateDate { get; set; }
-    public int? UpdateNo { get; set; }
 }
