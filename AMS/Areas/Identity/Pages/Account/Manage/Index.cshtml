@@ -1,0 +1,98 @@
+﻿@page
+@model IndexModel
+@using AMS.Data.Core
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = Resource.Profile;
+    ViewData["ActivePage"] = ManageNavPages.Index;
+    ApplicationUser user = (ApplicationUser)ViewData["InternalUser"];
+}
+
+<div class="card">
+    <div class="card-header p-2">
+        <div class="card-title align-items-start flex-column ml-2">
+            <h3 class="card-label font-weight-bolder">@Resource.PersonalData</h3>
+            <small class="text-muted font-weight-bolder mt-1">@Resource.UpdatePersonalData</small>
+        </div>
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-primary mr-2" onclick="$('#frm_personal_info').trigger('submit')">@Resource.Save</button>
+            <button type="button" class="btn btn-secondary" onclick="$('#frm_personal_info').trigger('reset')">@Resource.Cancel</button>
+        </div>
+    </div>
+    <div class="card-body">
+        <form id="frm_personal_info" method="post" enctype="multipart/form-data" class="form-horizontal">
+            <div class="row form-group">
+                <label asp-for="Input.ProfileImage" class="col-sm-2 col-form-label">@Resource.ProfileImage</label>
+                @* <label class="col-sm-2 col-form-label"></label> *@
+                <div class="col-sm-10">
+                    <div class="text-center">
+                        <label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="@Resource.UpdateImage">
+                            <img id="img_upload"
+                                src='@Url.Content(Model.Input.ImagePath ?? "~/images/user-default.png")'
+                                class="profile-user-img img-fluid img-circle"
+                                alt="User profile picture"
+                                style="cursor: pointer; object-fit: cover; height: 150px; width: 150px;">
+                            <input type="file" asp-for="Input.ProfileImage" class="d-none" />
+                            <input type="hidden" name="profile_avatar_remove" />
+                        </label>
+                    </div>
+                    <span asp-validation-for="Input.ProfileImage" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label asp-for="Input.FirstName" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="Input.FirstName" type="text" class="form-control" placeholder="@Resource.Firstname">
+                    <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label asp-for="Input.LastName" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="Input.LastName" type="text" class="form-control" placeholder="@Resource.Lastname">
+                    <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label asp-for="Input.PhoneNumber" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                        </div>
+                        <input asp-for="Input.PhoneNumber" type="text" class="form-control">
+                    </div>
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#Input_PhoneNumber').inputmask("mask", {
+                "mask": "+(999) 99 999-999",
+                removeMaskOnSubmit: true,
+                autoUnmask: true
+            });
+
+            $("#Input_ProfileImage").on('change', function() {
+                read_image(this);
+            });
+        });
+
+        function read_image(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#img_upload').prop('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                $('#img_upload').prop('src', '~/images/user-default.png');
+            }
+        }
+    </script>
+}

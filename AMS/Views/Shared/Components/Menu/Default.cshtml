@@ -1,0 +1,39 @@
+﻿@using AMS.Models.Menu
+@model IEnumerable<MenuVM>
+@{
+    var controller = this.ViewContext.RouteData.Values["controller"] ?? "";
+    var action = this.ViewContext.RouteData.Values["action"] ?? "";
+    var area = this.ViewContext.RouteData.Values["area"] ?? "";
+}
+
+<ul class="nav nav-pills nav-sidebar flex-column nav-child-ident nav-flat" data-widget="treeview" role="menu" data-accordion="false">
+    @foreach (var menu in Model)
+    {
+        <li class='nav-item @(menu.SubMenus.Any(a => string.IsNullOrEmpty((string)area) && a.Controller == (string)controller && a.OpenFor.Split(",").Contains((string)action)) ? "menu-open has-treeview" : "") @(menu.Controller == (string)controller && menu.OpenFor.Split(",").Contains((string)action) ? "menu-open" : "")' aria-haspopup="true" @(menu.HasSubMenu ? "data-menu-toggle=click" : "")>
+            <a href="@Url.Action(menu.Action, menu.Controller, new { area = menu.Area })" class='nav-link @(menu.SubMenus.Any(a => string.IsNullOrEmpty((string)area) && a.Controller == (string)controller && a.OpenFor.Split(",").Contains((string)action)) ? "active" : "") @(menu.Controller == (string)controller && menu.OpenFor.Split(",").Contains((string)action) ? "active" : "")'>
+                <i class="nav-icon @menu.Icon mr-2"></i>
+                <p>
+                    @menu.Title
+                    @if (menu.HasSubMenu)
+                    {
+                        <i class="right fas fa-angle-left"></i>
+                    }
+                </p>
+            </a>
+            @if (menu.SubMenus.Any(a => a.SubMenuId != null))
+            {
+                <ul class="nav nav-treeview">
+                    @foreach (var submenu in menu.SubMenus)
+                    {
+                        <li class="nav-item" aria-haspopup="true">
+                            <a asp-action="@submenu.Action" asp-controller="@submenu.Controller" asp-area="@submenu.Area" class="nav-link @(submenu.Controller == (string)controller && submenu.OpenFor.Split(',').Contains((string)action) ? "active" :"")">
+                                <i class="@submenu.Icon nav-icon"></i>
+                                <p>@submenu.Title</p>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        </li>
+    }
+</ul>

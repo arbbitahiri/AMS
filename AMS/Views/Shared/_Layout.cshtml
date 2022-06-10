@@ -1,0 +1,180 @@
+﻿@inject IConfiguration conf
+@{
+    UserModel user = (UserModel)ViewData["User"];
+    ErrorVM error = (ErrorVM)ViewData["Error"] ?? new ErrorVM();
+    var controller = this.ViewContext.RouteData.Values["controller"] ?? "";
+    var action = this.ViewContext.RouteData.Values["action"] ?? "";
+
+    string darkMode = user.Mode == TemplateMode.Dark ? "dark-mode" : "";
+    string navMode = user.Mode == TemplateMode.Dark ? "navbar-dark" : "navbar-light navbar-white";
+    string backTitleColour = user.Mode == TemplateMode.Dark ? "background-color: #7e8286; border-color: #7e8286 !important;" : "background-color: #eceded;";
+    string backNavColour = user.Mode == TemplateMode.Dark ? "border-color: #7e8286 !important;" : "";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - @Resource.AMS</title>
+
+    <link rel="shortcut icon" href="~/favicon.ico" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.3.0/css/flag-icon.min.css">
+
+    <link rel="stylesheet" href="~/assets/plugins/fontawesome-free/css/all.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/plugins/pace-progress/themes/blue/pace-theme-minimal.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/plugins/select2/css/select2.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/plugins/sweetalert2/sweetalert2.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/plugins/chart.js/Chart.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/plugins/bs-stepper/css/bs-stepper.min.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/assets/dist/css/adminlte.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/plugins/daterangepicker/daterangepicker.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/plugins/toastr/toastr.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/assets/plugins/jquery-ui/jquery-ui.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true">
+
+    <style>
+        .custom-file-input:lang(en) ~ .custom-file-label::after {
+            content: "@Resource.Browse"
+        }
+    </style>
+</head>
+<body class="hold-transition @darkMode sidebar-mini layout-fixed layout-navbar-fixed" style="height: auto;" id="main_body">
+    <script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js" asp-append-version="true"></script>
+    <script>
+        var connection = new signalR.HubConnectionBuilder().withUrl('/notificationHub').withAutomaticReconnect().build();
+    </script>
+
+    <div class="pace pace-inactive">
+        <div class="pace-progress" data-progress-text="100%" data-progress="99" style="transform: translate3d(100%, 0px, 0px);">
+            <div class="pace-progress-inner"></div>
+        </div>
+        <div class="pace-activity"></div>
+    </div>
+
+    <div class="wrapper main-wrapper">
+        <nav class="main-header navbar navbar-expand @navMode border-bottom" style="@backNavColour">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="/Home/Index" class="nav-link">HRMS Riinvest</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+                <partial name="_Language" model="user.Language" />
+                <partial name="_Notification" />
+
+                <li class="nav-item dropdown user-menu">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" id="profile_side" aria-expanded="false">
+                        <img src='@Url.Content(user.ImageProfile ?? "~/images/user-default.png")' class="user-image img-circle" alt="User image" >
+                        <span class="d-none d-md-inline">@user.FirstName @user.LastName</span>
+                    </a>
+                    @await Component.InvokeAsync("Profile")
+                </li>
+            </ul>
+        </nav>
+
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <a href="/Home/Index" class="brand-link">
+                <img src="~/favicon.ico" alt="Riinvest logo" class="brand-image" style="opacity: .8"/>
+                <span class="brand-text font-weight-light">HRMS Riinvest</span>
+            </a>
+
+            <div class="sidebar">
+                <nav class="mt-2">
+                    @await Component.InvokeAsync("Menu")
+                </nav>
+            </div>
+        </aside>
+
+        <div class="content-wrapper">
+            <div class="content-header pt-2 pl-2 pb-1 d-flex align-items-center border-bottom" style="@backTitleColour">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h6 class="m-0">@ViewData["Title"]</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section class="content mt-2">
+                @if (error.Status != 0)
+                {
+                    <div style="margin: 7px;">
+                        <partial name="_AlertMessage" model="error" />
+                    </div>
+                }
+
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </section>
+        </div>
+
+        <footer class="main-footer text-sm">
+            <div class='@(user.Mode == TemplateMode.Dark ? "text-light" : "text-dark") d-flex justify-content-end'>
+                &copy; <b>@Resource.AMS</b> &nbsp; @DateTime.Now.Year - @Resource.DevelopedBy Arb Tahiri. @Resource.AllRightReserved
+            </div>
+        </footer>
+    </div>
+
+    <div id="sidebar-overlay"></div>
+
+    <partial name="_ModalPartial" model="user" />
+    <partial name="_LoadingPartial" />
+
+    <script src="~/assets/plugins/jquery/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/datatables/jquery.dataTables.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/pace-progress/pace.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/jquery-ui/jquery-ui.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/chart.js/Chart.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/moment/moment.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/moment/locale/sq.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/moment/locale/en-gb.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/sweetalert2/sweetalert2.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/select2/js/select2.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/inputmask/jquery.inputmask.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/bs-stepper/js/bs-stepper.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/daterangepicker/daterangepicker.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js" asp-append-version="true"></script>
+    <script src="~/assets/plugins/toastr/toastr.min.js" asp-append-version="true"></script>
+    <script src="~/assets/dist/js/adminlte.js" asp-append-version="true"></script>
+    <script src="~/js/jquery.toast.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/jquery.repeater.js" asp-append-version="true"></script>
+    <script src="~/js/SignalRUtils.js" asp-append-version="true"></script>
+    <script src="~/js/notify.min.js" asp-append-version="true"></script>
+    <script src="~/js/JQueryCustomValidation.js" asp-append-version="true"></script>
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <script>
+        var culture = '@System.Globalization.CultureInfo.CurrentCulture.Name';
+        var cultureShort = '@System.Globalization.CultureInfo.CurrentCulture.Name.Substring(0, 2)';
+        var cult = cultureShort == 'en' ? 'en-gb' : 'sq';
+        $("#ch_change_mode").bootstrapSwitch();
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

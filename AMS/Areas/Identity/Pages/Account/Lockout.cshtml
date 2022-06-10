@@ -1,0 +1,18 @@
+﻿@page
+@model LockoutModel
+@{
+    Layout = "_Layout";
+}
+
+<div class="text-center mb-10">
+    <h3>@Resource.AccountLocked</h3>
+
+    <a asp-page-handler="ChangeLang" asp-route-culture="sq-AL">@Resource.Albanian</a> | <a asp-page-handler="ChangeLang" asp-route-culture="en-GB">@Resource.English</a>
+</div>
+
+<div class="pb-13 pt-lg-0 pt-5 mt-4">
+    <h5 class="login-box-msg">@Resource.ThisAccountLocked</h5>
+    <hr />
+</div>
+
+<div class="mb-0 font-size-h6"><a href="/Identity/Account/Login" class="text-warning"><b>@Resource.Login</b></a> @Resource.AsDiffUser</div>

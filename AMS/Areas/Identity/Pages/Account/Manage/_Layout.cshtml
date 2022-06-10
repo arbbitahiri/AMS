@@ -1,0 +1,24 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ErrorVM error = (ErrorVM)ViewData["ErrorIdentity"] ?? new ErrorVM();
+}
+
+@if (error.Status != 0)
+{
+    <div style="margin: 7px;">
+        <partial name="_AlertMessage" model="error" />
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <partial name="_Navigation" />
+    </div>
+    <div class="col-md-9">
+        @RenderBody()
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}
