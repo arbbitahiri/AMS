@@ -10,17 +10,17 @@ namespace AMS.Data.General
         public DateTime Date { get; set; }
         public bool Absent { get; set; }
         public int? AbsentTypeId { get; set; }
-        public string? Description { get; set; }
+        public string Description { get; set; }
         public bool Active { get; set; }
-        public string InsertedFrom { get; set; } = null!;
+        public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }
-        public string? UpdatedFrom { get; set; }
+        public string UpdatedFrom { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public int? UpdatedNo { get; set; }
 
-        public virtual AbsentType? AbsentType { get; set; }
-        public virtual AspNetUsers InsertedFromNavigation { get; set; } = null!;
-        public virtual StaffDepartment StaffDepartment { get; set; } = null!;
-        public virtual AspNetUsers? UpdatedFromNavigation { get; set; }
+        public virtual AbsentType AbsentType { get; set; }
+        public virtual AspNetUsers InsertedFromNavigation { get; set; }
+        public virtual StaffDepartment StaffDepartment { get; set; }
+        public virtual AspNetUsers UpdatedFromNavigation { get; set; }
     }
 }

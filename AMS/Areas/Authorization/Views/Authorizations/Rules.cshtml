@@ -10,7 +10,7 @@
             <th>@Resource.Developer</th>
             <th>@Resource.Description</th>
             <th>@Resource.Policy</th>
-            <th style="width: 20% !important;">@Resource.HasAccess</th>
+            <th data-orderable="false" style="width: 10% !important;">@Resource.HasAccess</th>
         </tr>
     </thead>
     <tbody>
@@ -35,7 +35,8 @@
                 { targets: [0, 5, 6], className: "w-10 vertikal" },
                 { targets: [4], className: "w-25 vertikal" },
                 { targets: [1, 2, 3], className: "w-15 vertikal" },
-                { targets: "_all", defaultContent: "///" }
+                { targets: "_all", defaultContent: "///" },
+                { targets: [0, 6], searchable: false }
             ],
             order: [[0, "asc"]],
             drawCallback: function () {

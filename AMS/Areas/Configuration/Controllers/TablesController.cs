@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AMS.Areas.Configuration.Controllers;
 
+[Route("/{area}/{controller}/{action}")]
 public class TablesController : BaseController
 {
     public TablesController(AMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
@@ -92,7 +93,7 @@ public class TablesController : BaseController
             }).ToListAsync(),
             LookUpTable.Status => await db.StatusType.Select(a => new DataList
             {
-                Ide = CryptoSecurity.Encrypt(a.StatusType1),
+                Ide = CryptoSecurity.Encrypt(a.StatusTypeId),
                 NameSQ = a.NameSq,
                 NameEN = a.NameEn,
                 Active = a.Active
@@ -285,10 +286,10 @@ public class TablesController : BaseController
                     }).FirstOrDefaultAsync(),
             LookUpTable.Status =>
                 editData = await db.StatusType
-                    .Where(a => a.StatusType1 == id)
+                    .Where(a => a.StatusTypeId == id)
                     .Select(a => new Edit
                     {
-                        Ide = CryptoSecurity.Encrypt(a.StatusType1),
+                        Ide = CryptoSecurity.Encrypt(a.StatusTypeId),
                         NameSQ = a.NameSq,
                         NameEN = a.NameEn,
                         Title = title,
@@ -362,7 +363,7 @@ public class TablesController : BaseController
                 staffType.UpdatedNo = UpdateNo(staffType.UpdatedNo);
                 break;
             case LookUpTable.Status:
-                var statusType = await db.StatusType.FirstOrDefaultAsync(a => a.StatusType1 == id);
+                var statusType = await db.StatusType.FirstOrDefaultAsync(a => a.StatusTypeId == id);
                 statusType.NameSq = edit.NameSQ;
                 statusType.NameEn = edit.NameEN;
                 statusType.UpdatedDate = DateTime.Now;
@@ -433,7 +434,7 @@ public class TablesController : BaseController
                 staffType.UpdatedNo = UpdateNo(staffType.UpdatedNo);
                 break;
             case LookUpTable.Status:
-                var statusType = await db.StatusType.FirstOrDefaultAsync(a => a.StatusType1 == id);
+                var statusType = await db.StatusType.FirstOrDefaultAsync(a => a.StatusTypeId == id);
                 statusType.Active = active;
                 statusType.UpdatedDate = DateTime.Now;
                 statusType.UpdatedFrom = user.Id;

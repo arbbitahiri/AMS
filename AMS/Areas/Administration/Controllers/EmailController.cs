@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 
 namespace AMS.Areas.Administration.Controllers;
 
+[Route("/{area}/{controller}/{action}")]
 public class EmailController : BaseController
 {
     public EmailController(AMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)

@@ -37,6 +37,8 @@ namespace AMS.Data.General
             StaffDocumentInsertedFromNavigation = new HashSet<StaffDocument>();
             StaffDocumentUpdatedFromNavigation = new HashSet<StaffDocument>();
             StaffInsertedFromNavigation = new HashSet<Staff>();
+            StaffRegistrationStatusInsertedFromNavigation = new HashSet<StaffRegistrationStatus>();
+            StaffRegistrationStatusUpdatedFromNavigation = new HashSet<StaffRegistrationStatus>();
             StaffTypeInsertedFromNavigation = new HashSet<StaffType>();
             StaffTypeUpdatedFromNavigation = new HashSet<StaffType>();
             StaffUpdatedFromNavigation = new HashSet<Staff>();
@@ -48,32 +50,32 @@ namespace AMS.Data.General
             Role = new HashSet<AspNetRoles>();
         }
 
-        public string Id { get; set; } = null!;
-        public string? UserName { get; set; }
-        public string PersonalNumber { get; set; } = null!;
-        public string FirstName { get; set; } = null!;
-        public string LastName { get; set; } = null!;
-        public string? PhoneNumber { get; set; }
-        public string? Email { get; set; }
-        public string? NormalizedUserName { get; set; }
-        public string? NormalizedEmail { get; set; }
+        public string Id { get; set; }
+        public string UserName { get; set; }
+        public string PersonalNumber { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public string NormalizedUserName { get; set; }
+        public string NormalizedEmail { get; set; }
         public bool PhoneNumberConfirmed { get; set; }
         public bool EmailConfirmed { get; set; }
-        public string? PasswordHash { get; set; }
-        public string? SecurityStamp { get; set; }
-        public string? ConcurrencyStamp { get; set; }
+        public string PasswordHash { get; set; }
+        public string SecurityStamp { get; set; }
+        public string ConcurrencyStamp { get; set; }
         public bool TwoFactorEnabled { get; set; }
         public DateTimeOffset? LockoutEnd { get; set; }
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
-        public string? ProfileImage { get; set; }
+        public string ProfileImage { get; set; }
         public bool AllowNotification { get; set; }
         public int Language { get; set; }
         public int AppMode { get; set; }
-        public string InsertedFrom { get; set; } = null!;
+        public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }
 
-        public virtual AspNetUsers InsertedFromNavigation { get; set; } = null!;
+        public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual ICollection<AbsentType> AbsentTypeInsertedFromNavigation { get; set; }
         public virtual ICollection<AbsentType> AbsentTypeUpdatedFromNavigation { get; set; }
         public virtual ICollection<AppSettings> AppSettings { get; set; }
@@ -104,6 +106,8 @@ namespace AMS.Data.General
         public virtual ICollection<StaffDocument> StaffDocumentInsertedFromNavigation { get; set; }
         public virtual ICollection<StaffDocument> StaffDocumentUpdatedFromNavigation { get; set; }
         public virtual ICollection<Staff> StaffInsertedFromNavigation { get; set; }
+        public virtual ICollection<StaffRegistrationStatus> StaffRegistrationStatusInsertedFromNavigation { get; set; }
+        public virtual ICollection<StaffRegistrationStatus> StaffRegistrationStatusUpdatedFromNavigation { get; set; }
         public virtual ICollection<StaffType> StaffTypeInsertedFromNavigation { get; set; }
         public virtual ICollection<StaffType> StaffTypeUpdatedFromNavigation { get; set; }
         public virtual ICollection<Staff> StaffUpdatedFromNavigation { get; set; }

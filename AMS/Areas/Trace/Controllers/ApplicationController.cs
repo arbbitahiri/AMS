@@ -12,6 +12,7 @@ using System.Globalization;
 
 namespace AMS.Areas.Trace.Controllers;
 
+[Route("/{area}/{controller}/{action}")]
 public class ApplicationController : BaseController
 {
     private readonly IFunctionRepository function;
@@ -29,7 +30,7 @@ public class ApplicationController : BaseController
     public IActionResult Index() => View();
 
     [HttpPost, Authorize(Policy = "61:r"), ValidateAntiForgeryToken]
-    [Description("Korab Mustafa", "Action to search for logs.")]
+    [Description("Arb Tahiri", "Action to search for logs.")]
     public async Task<IActionResult> SearchLogs(Search search)
     {
         string[] dates = search.Date.Split(" - ");

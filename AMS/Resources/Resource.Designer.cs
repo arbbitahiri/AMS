@@ -169,6 +169,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Aktiv.
+        /// </summary>
+        public static string Active {
+            get {
+                return ResourceManager.GetString("Active", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shto.
         /// </summary>
         public static string Add {
@@ -178,11 +187,38 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shto departament.
+        /// </summary>
+        public static string AddDepartment {
+            get {
+                return ResourceManager.GetString("AddDepartment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shto dokument.
+        /// </summary>
+        public static string AddDocument {
+            get {
+                return ResourceManager.GetString("AddDocument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shto meny.
         /// </summary>
         public static string AddMenu {
             get {
                 return ResourceManager.GetString("AddMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adresa.
+        /// </summary>
+        public static string Address {
+            get {
+                return ResourceManager.GetString("Address", resourceCulture);
             }
         }
         
@@ -210,6 +246,15 @@ namespace AMS.Resources {
         public static string AddSubMenu {
             get {
                 return ResourceManager.GetString("AddSubMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shto nënmeny - {0}.
+        /// </summary>
+        public static string AddSubMenuFor {
+            get {
+                return ResourceManager.GetString("AddSubMenuFor", resourceCulture);
             }
         }
         
@@ -286,6 +331,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zona.
+        /// </summary>
+        public static string Area {
+            get {
+                return ResourceManager.GetString("Area", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A jeni të sigurt?.
         /// </summary>
         public static string AreYouSure {
@@ -336,6 +390,24 @@ namespace AMS.Resources {
         public static string AuthorizationsForMenus {
             get {
                 return ResourceManager.GetString("AuthorizationsForMenus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prapa.
+        /// </summary>
+        public static string Back {
+            get {
+                return ResourceManager.GetString("Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data e lindjes.
+        /// </summary>
+        public static string Birthdate {
+            get {
+                return ResourceManager.GetString("Birthdate", resourceCulture);
             }
         }
         
@@ -394,11 +466,29 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vlera autorizimit.
+        /// </summary>
+        public static string ClaimPolicy {
+            get {
+                return ResourceManager.GetString("ClaimPolicy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mbyll.
         /// </summary>
         public static string Close {
             get {
                 return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Përfunduar.
+        /// </summary>
+        public static string Complete {
+            get {
+                return ResourceManager.GetString("Complete", resourceCulture);
             }
         }
         
@@ -417,6 +507,15 @@ namespace AMS.Resources {
         public static string ConfirmPassword {
             get {
                 return ResourceManager.GetString("ConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vazhdo.
+        /// </summary>
+        public static string Continue {
+            get {
+                return ResourceManager.GetString("Continue", resourceCulture);
             }
         }
         
@@ -466,7 +565,7 @@ namespace AMS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Të dhënat e regjistruan me sukses!.
+        ///   Looks up a localized string similar to Të dhënat u regjistruan me sukses!.
         /// </summary>
         public static string DataRegisteredSuccessfully {
             get {
@@ -475,7 +574,7 @@ namespace AMS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Të dhënat e ndryshuan me sukses!.
+        ///   Looks up a localized string similar to Të dhënat u ndryshuan me sukses!.
         /// </summary>
         public static string DataUpdatedSuccessfully {
             get {
@@ -565,11 +664,47 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dokumenti.
+        /// </summary>
+        public static string Document {
+            get {
+                return ResourceManager.GetString("Document", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Madhësia maksimale e dokumentit.
+        /// </summary>
+        public static string DocumentMaxFileSize {
+            get {
+                return ResourceManager.GetString("DocumentMaxFileSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dokumente.
+        /// </summary>
+        public static string Documents {
+            get {
+                return ResourceManager.GetString("Documents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lloji dokumentit.
         /// </summary>
         public static string DocumentType {
             get {
                 return ResourceManager.GetString("DocumentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shkarko.
+        /// </summary>
+        public static string Download {
+            get {
+                return ResourceManager.GetString("Download", resourceCulture);
             }
         }
         
@@ -619,11 +754,29 @@ namespace AMS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to EN.
+        ///   Looks up a localized string similar to AN.
         /// </summary>
         public static string EN {
             get {
                 return ResourceManager.GetString("EN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Përfundo.
+        /// </summary>
+        public static string End {
+            get {
+                return ResourceManager.GetString("End", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data mbarimit.
+        /// </summary>
+        public static string EndDate {
+            get {
+                return ResourceManager.GetString("EndDate", resourceCulture);
             }
         }
         
@@ -646,11 +799,38 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ka ndodhur një gabim gjatë procesimit të të dhënave! Ju lutem provoni përsëri më vonë..
+        /// </summary>
+        public static string ErrorProcessingData {
+            get {
+                return ResourceManager.GetString("ErrorProcessingData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1} ekziston si {2}. Duhet të pasivizoni këtë për të regjistruar pastaj!.
+        /// </summary>
+        public static string ExistsStaffRole {
+            get {
+                return ResourceManager.GetString("ExistsStaffRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Femër.
         /// </summary>
         public static string Female {
             get {
                 return ResourceManager.GetString("Female", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fusha.
+        /// </summary>
+        public static string Field {
+            get {
+                return ResourceManager.GetString("Field", resourceCulture);
             }
         }
         
@@ -664,11 +844,29 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 1. Të dhënat personale.
+        /// </summary>
+        public static string FirstStepStaffRegistration {
+            get {
+                return ResourceManager.GetString("FirstStepStaffRegistration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Keni harruar fjalëkalimin?.
         /// </summary>
         public static string ForgotPassword {
             get {
                 return ResourceManager.GetString("ForgotPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gjinia.
+        /// </summary>
+        public static string Gender {
+            get {
+                return ResourceManager.GetString("Gender", resourceCulture);
             }
         }
         
@@ -682,11 +880,29 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ka.
+        /// </summary>
+        public static string Has {
+            get {
+                return ResourceManager.GetString("Has", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ka qasje.
         /// </summary>
         public static string HasAccess {
             get {
                 return ResourceManager.GetString("HasAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ka nënmeny.
+        /// </summary>
+        public static string HasSubMenu {
+            get {
+                return ResourceManager.GetString("HasSubMenu", resourceCulture);
             }
         }
         
@@ -781,11 +997,20 @@ namespace AMS.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Email/emri përdoruesit ose fjalëaklimi janë të pasakta!.
+        ///   Looks up a localized string similar to Email/emri përdoruesit ose fjalëkalimi janë të pasakta!.
         /// </summary>
         public static string InvalidLogin {
             get {
                 return ResourceManager.GetString("InvalidLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Qelësi.
+        /// </summary>
+        public static string Key {
+            get {
+                return ResourceManager.GetString("Key", resourceCulture);
             }
         }
         
@@ -808,6 +1033,24 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lista e parametrave të aplikacionit.
+        /// </summary>
+        public static string ListOfAppSettings {
+            get {
+                return ResourceManager.GetString("ListOfAppSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista e departamenteve.
+        /// </summary>
+        public static string ListOfDepartments {
+            get {
+                return ResourceManager.GetString("ListOfDepartments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lista e menyve.
         /// </summary>
         public static string ListOfMenus {
@@ -822,6 +1065,24 @@ namespace AMS.Resources {
         public static string ListOfNotifications {
             get {
                 return ResourceManager.GetString("ListOfNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista e stafit në proces të regjistrimit.
+        /// </summary>
+        public static string ListOfStaffInProcessRegistration {
+            get {
+                return ResourceManager.GetString("ListOfStaffInProcessRegistration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista e nënmenyve.
+        /// </summary>
+        public static string ListSubMenus {
+            get {
+                return ResourceManager.GetString("ListSubMenus", resourceCulture);
             }
         }
         
@@ -889,6 +1150,33 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shiko më pak.
+        /// </summary>
+        public static string LookLess {
+            get {
+                return ResourceManager.GetString("LookLess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shiko më shumë.
+        /// </summary>
+        public static string LookMore {
+            get {
+                return ResourceManager.GetString("LookMore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tabelat ndihmëse.
+        /// </summary>
+        public static string LookUpTables {
+            get {
+                return ResourceManager.GetString("LookUpTables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mashkull.
         /// </summary>
         public static string Male {
@@ -903,6 +1191,15 @@ namespace AMS.Resources {
         public static string MarkAsRead {
             get {
                 return ResourceManager.GetString("MarkAsRead", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gjatësia maksimale e shkronjave është 10..
+        /// </summary>
+        public static string MaxChar10 {
+            get {
+                return ResourceManager.GetString("MaxChar10", resourceCulture);
             }
         }
         
@@ -952,6 +1249,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gjatësia minimale e shkronjave është 10..
+        /// </summary>
+        public static string MinChar10 {
+            get {
+                return ResourceManager.GetString("MinChar10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Minutë.
         /// </summary>
         public static string Minute {
@@ -988,11 +1294,38 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Punonjësi i stafit duhet të jetë 18 vjeç ose më i vjetër..
+        /// </summary>
+        public static string MustBe18YearsOld {
+            get {
+                return ResourceManager.GetString("MustBe18YearsOld", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Emri.
         /// </summary>
         public static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emri anglisht.
+        /// </summary>
+        public static string NameEn {
+            get {
+                return ResourceManager.GetString("NameEn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emri shqip.
+        /// </summary>
+        public static string NameSq {
+            get {
+                return ResourceManager.GetString("NameSq", resourceCulture);
             }
         }
         
@@ -1015,11 +1348,29 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nuk ka dokumente.
+        /// </summary>
+        public static string NoDocuments {
+            get {
+                return ResourceManager.GetString("NoDocuments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nuk u gjetë rezultate!.
         /// </summary>
         public static string NoResultsFound {
             get {
                 return ResourceManager.GetString("NoResultsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nuk lejohet data më e madhe se sot!.
+        /// </summary>
+        public static string NotAllowedGreaterDate {
+            get {
+                return ResourceManager.GetString("NotAllowedGreaterDate", resourceCulture);
             }
         }
         
@@ -1056,6 +1407,33 @@ namespace AMS.Resources {
         public static string OnlyNumbers {
             get {
                 return ResourceManager.GetString("OnlyNumbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hapur për.
+        /// </summary>
+        public static string OpenFor {
+            get {
+                return ResourceManager.GetString("OpenFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri rendor.
+        /// </summary>
+        public static string OrdinalNumber {
+            get {
+                return ResourceManager.GetString("OrdinalNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pasive.
+        /// </summary>
+        public static string Passive {
+            get {
+                return ResourceManager.GetString("Passive", resourceCulture);
             }
         }
         
@@ -1105,6 +1483,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Numri personal.
+        /// </summary>
+        public static string PersonalNumber {
+            get {
+                return ResourceManager.GetString("PersonalNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Numri telefonit.
         /// </summary>
         public static string PhoneNumber {
@@ -1137,6 +1524,15 @@ namespace AMS.Resources {
         public static string Policy {
             get {
                 return ResourceManager.GetString("Policy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kodi postal.
+        /// </summary>
+        public static string PostalCode {
+            get {
+                return ResourceManager.GetString("PostalCode", resourceCulture);
             }
         }
         
@@ -1321,6 +1717,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 2. Dokumentet.
+        /// </summary>
+        public static string SecondStepStaffRegistration {
+            get {
+                return ResourceManager.GetString("SecondStepStaffRegistration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dërgo email-in.
         /// </summary>
         public static string SendEmail {
@@ -1375,11 +1780,65 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lista stafit.
+        /// </summary>
+        public static string StaffList {
+            get {
+                return ResourceManager.GetString("StaffList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stafi nuk është regjistruar në një departament. Dëshironi të vazhdoni?.
+        /// </summary>
+        public static string StaffNotComplete {
+            get {
+                return ResourceManager.GetString("StaffNotComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lloji stafit.
         /// </summary>
         public static string StaffType {
             get {
                 return ResourceManager.GetString("StaffType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stafi me numrin personal të dhënë ekziston!.
+        /// </summary>
+        public static string StaffWithPersonalExists {
+            get {
+                return ResourceManager.GetString("StaffWithPersonalExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data fillimit.
+        /// </summary>
+        public static string StartDate {
+            get {
+                return ResourceManager.GetString("StartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data e fillimit nuk mund të jetë më e madhe se data e mbarimit!.
+        /// </summary>
+        public static string StartDateVSEndDate {
+            get {
+                return ResourceManager.GetString("StartDateVSEndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gjendja.
+        /// </summary>
+        public static string State {
+            get {
+                return ResourceManager.GetString("State", resourceCulture);
             }
         }
         
@@ -1402,11 +1861,38 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Titulli nënmenysë.
+        /// </summary>
+        public static string SubMenuTitle {
+            get {
+                return ResourceManager.GetString("SubMenuTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sukses.
         /// </summary>
         public static string Success {
             get {
                 return ResourceManager.GetString("Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A jeni i sigurt për fshirjen e departamentit nga stafi?.
+        /// </summary>
+        public static string SureYouWantToDeleteDepartmentForStaff {
+            get {
+                return ResourceManager.GetString("SureYouWantToDeleteDepartmentForStaff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A jeni i sigurt për fshirjen e dokumentit?.
+        /// </summary>
+        public static string SureYouWantToDeleteDocument {
+            get {
+                return ResourceManager.GetString("SureYouWantToDeleteDocument", resourceCulture);
             }
         }
         
@@ -1465,6 +1951,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tabelat.
+        /// </summary>
+        public static string Tables {
+            get {
+                return ResourceManager.GetString("Tables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ka ndodhur një gabim në sistem..
         /// </summary>
         public static string ThereHasBeenSystemError {
@@ -1483,11 +1978,29 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 3. Departamenti.
+        /// </summary>
+        public static string ThirdStepStaffRegistration {
+            get {
+                return ResourceManager.GetString("ThirdStepStaffRegistration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kjo llogari është bllokuar!.
         /// </summary>
         public static string ThisAccountLocked {
             get {
                 return ResourceManager.GetString("ThisAccountLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Titulli.
+        /// </summary>
+        public static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
             }
         }
         
@@ -1614,6 +2127,15 @@ namespace AMS.Resources {
         public static string Users {
             get {
                 return ResourceManager.GetString("Users", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vlera.
+        /// </summary>
+        public static string Value {
+            get {
+                return ResourceManager.GetString("Value", resourceCulture);
             }
         }
         

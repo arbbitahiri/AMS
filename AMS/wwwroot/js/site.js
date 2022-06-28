@@ -18,9 +18,8 @@ const ReportType = {
 }
 
 const MethodType = {
-    GET: 1,
-    POST: 2,
-    PUT: 3
+    POST: 1,
+    PUT: 2
 }
 
 const LookUpTable = {
@@ -37,31 +36,6 @@ const StatusType = {
     APPROVED: 1,
     REJECTED: 2,
     PENDING: 3
-}
-
-const EvaluationType = {
-    MANAGER: 1,
-    STUDENTSTAFF: 2,
-    STUDENTCOLLEGE: 3,
-    SELF: 4
-}
-
-const QuestionType = {
-    NUMERICAL: 1,
-    OPTIONAL: 2,
-    TOPIC: 3,
-    OPTIONALTOPIC: 5
-}
-
-const LeaveType = {
-    ANNUAL: 1,
-    SICK: 2,
-    MATERNITY: 3,
-    UNPAID: 4
-}
-
-const HolidayTypeEnum = {
-    OTHER: 13
 }
 
 $(document).ready(function () {

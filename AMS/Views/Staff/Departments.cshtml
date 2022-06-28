@@ -1,0 +1,181 @@
+﻿@using AMS.Models.Staff
+@model DepartmentVM
+@{
+    ViewData["Title"] = Resource.ThirdStepStaffRegistration;
+    Layout = "~/Views/Staff/_Layout.cshtml";
+}
+
+<div class="flex-row-fluid">
+    <div class="card" style="box-shadow: none !important;">
+        <div class="card-header border-0">
+            <h1 class="card-title align-items-start flex-column">
+                <span class="text-dark text-lg">@Resource.ListOfDepartments</span>
+            </h1>
+            <div class="card-tools">
+                <a onclick="add_department('@Model.StaffDetails.Ide')" class="btn btn-primary float-right">@Resource.AddDepartment</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table id="tbl_departments" class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>@Resource.Department</th>
+                        <th>@Resource.StaffType</th>
+                        <th>@Resource.StartDate</th>
+                        <th>@Resource.EndDate</th>
+                        <th data-orderable="false">@Resource.Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between border-top mt-5">
+        <input type="button" value="@Resource.Back" onclick="go_back_documents('@Model.StaffDetails.Ide')" class="btn btn-outline-primary font-weight-bolder text-uppercase mt-2"/>
+        <input type="button" value="@Resource.End" onclick="submit_form('@Model.StaffDetails.Ide')" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            if (@Model.MethodType == MethodType.POST) {
+                $('#tab1').attr({ href: '', style: 'cursor: pointer' });
+                $('#tab2').attr({ href: '', style: 'cursor: pointer' });
+                $('#tab3').attr({ href: '', style: '' });
+
+                $('#trigger_staff_department').attr({ disabled: true });
+
+                $('#icon_register').attr({ style: 'background-color: #43b25d' });
+                $('#icon_document').attr({ style: 'background-color: #43b25d' });
+            } else {
+                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffDetails.Ide', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffDetails.Ide', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffDetails.Ide', style: "cursor: pointer" });
+
+                $('#icon_register').attr({ style: 'background-color: #43b25d' });
+                $('#icon_qualification').attr({ style: 'background-color: #43b25d' });
+                $('#icon_document').attr({ style: 'background-color: #43b25d' });
+            }
+
+            render_tbl_departments(@Json.Serialize(Model.Departments));
+        });
+
+        function go_back_documents(ide) {
+            window.location.href = '@Url.Action("Documents", "Staff")?ide=' + ide;
+        }
+
+        function submit_form(ide) {
+            $.post('@Url.Action("Finish", "Staff")', {
+                ide: ide,
+                __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+            }, function(data) {
+                if (data.status == ErrorStatus.SUCCESS) {
+                    window.location.href = '@Url.Action("Index", "Staff")';
+                } else {
+                    Swal.fire({
+                        title: "@Html.Raw(Resource.AreYouSure)",
+                        text: "@Html.Raw(Resource.StaffNotComplete)",
+                        icon: "question",
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: "@Resource.Yes",
+                        cancelButtonText: "@Resource.No"
+                    }).then((result) => {
+                        if (result.value) {
+                            window.location.href = '@Url.Action("Index", "Staff")';
+                        }
+                    });
+                }
+            });
+        }
+
+        function render_tbl_departments(data) {
+            var rowCount = 1;
+            $('#tbl_departments').DataTable({
+                destroy: true,
+                language: {
+                    url: `/Culture/DataTable/${culture}.json`
+                },
+                keys: true,
+                responsive: true,
+                pageLength: 15,
+                data: data,
+                deferRender: true,
+                columnDefs: [
+                    { className: "w5 vertikal", targets: [0, 7] },
+                    { className: "w10 vertikal", targets: [2, 3, 4] },
+                    { className: "w15 vertikal", targets: [1, 5, 6] }
+                ],
+                order: [[0, "asc"]],
+                columns: [
+                    {
+                        data: function (data, type, row, meta) {
+                            rowCount++;
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    { data: "department" },
+                    { data: "staffType" },
+                    { data: "jobType" },
+                    { data: "bruttoSalary" },
+                    { data: "startDate" },
+                    { data: "endDate" },
+                    {
+                        data: function (row, type, set) {
+                            var date_time_now = new Date();
+                            var end_date = new Date(Date.parse(row.endDate));
+                            var active = end_date >= date_time_now ? true : false;
+
+                            var dropdown = '<div class="input-group-prepend">' +
+                                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                                '<div class="dropdown-menu" role="menu">' +
+                                '<button type="button" class="dropdown-item" onclick="edit_department(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>';
+                            if (active) {
+                                dropdown += '<button type="button" class="dropdown-item" onclick="delete_department(\'' + row.staffDepartmentIde + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>';
+                            }
+                                dropdown += '</div></div>';
+                            return dropdown;
+                        }
+                    }
+                ]
+            });
+        }
+
+        function add_department(ide) {
+            $('#modal-xl').find('.modal-content').load('@Url.Action("_AddDepartment", "Staff")?ide=' + ide, function () {
+                $('#modal-xl').modal('toggle');
+            });
+        }
+
+        function edit_department(ide) {
+            $('#modal-xl').find('.modal-content').load('@Url.Action("_EditDepartment", "Staff")?ide=' + ide, function () {
+                $('#modal-xl').modal('toggle');
+            });
+        }
+
+        function delete_department(ide) {
+            Swal.fire({
+                title: "@Html.Raw(Resource.AreYouSure)",
+                text: "@Html.Raw(Resource.SureYouWantToDeleteDepartmentForStaff)",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: "@Resource.Yes",
+                cancelButtonText: "@Resource.No"
+            }).then((result) => {
+                if (result.value) {
+                    $.post('@Url.Action("DeleteDepartment", "Staff")', {
+                        ide: ide,
+                        __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                        }, function (data) {
+                            handle_success(data, SubmitPathType.RELOAD, "");
+                    });
+                }
+            });
+        }
+    </script>
+}

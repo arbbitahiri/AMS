@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AMS.Areas.Administration.Controllers;
 
+[Route("/{area}/{controller}/{action}")]
 public class RolesController : BaseController
 {
     private readonly RoleManager<ApplicationRole> roleManager;

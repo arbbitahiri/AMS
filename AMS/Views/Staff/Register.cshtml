@@ -1,0 +1,140 @@
+﻿@using AMS.Models.Staff
+@model StaffPost
+@inject IDDLRepository repo
+@{
+    ViewData["Title"] = Resource.FirstStepStaffRegistration;
+    Layout = "~/Views/Staff/_Layout.cshtml";
+
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<form asp-action='@(Model.MethodType == (int)MethodType.Post ? "Register" : "Edit")' asp-controller="Staff" id="frm_staff_registration" method="post">
+    @Html.AntiForgeryToken()
+    <input asp-for="StaffIde" type="hidden"/>
+    <input asp-for="MethodType" type="hidden"/>
+
+    <div class="row form-group">
+        <div class="col-md-4">
+            <label asp-for="PersonalNumber"></label>
+            <input asp-for="PersonalNumber" type="text" autocomplete="off" class="form-control"/>
+            <span asp-validation-for="PersonalNumber" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Firstname"></label>
+            <input asp-for="Firstname" type="text" autocapitalize="on" autocomplete="off" class="form-control"/>
+            <span asp-validation-for="Firstname" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Lastname"></label>
+            <input asp-for="Lastname" type="text" autocapitalize="true" autocomplete="off" class="form-control"/>
+            <span asp-validation-for="Lastname" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-4">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" type="email" autocomplete="off" class="form-control"/>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="PhoneNumber"></label>
+            <input asp-for="PhoneNumber" type="text" autocomplete="off" class="form-control"/>
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="BirthDate"></label>
+            <input asp-for="BirthDate" type="text" autocomplete="off" class="form-control datetimepicker-input" data-toggle="datetimepicker" data-target="#Birthdate"/>
+            <span asp-validation-for="BirthDate" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-4">
+            <label asp-for="GenderId"></label>
+            <select asp-for="GenderId" asp-items='repo.Genders()' class="form-control select2"></select>
+            <span asp-validation-for="GenderId" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="CityId"></label>
+            <select asp-for="CityId" asp-items='await repo.Cities(user.Language)' class="form-control select2"></select>
+            <span asp-validation-for="CityId" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="CountryId"></label>
+            <select asp-for="CountryId" asp-items='await repo.Countries(user.Language)' class="form-control select2"></select>
+            <span asp-validation-for="CountryId" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div class="col-md-4">
+            <label asp-for="Address"></label>
+            <input asp-for="Address" type="text" autocomplete="off" class="form-control"/>
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="PostalCode"></label>
+            <input asp-for="PostalCode" type="text" autocomplete="off" class="form-control"/>
+            <span asp-validation-for="PostalCode" class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-end border-top mt-5">
+        <input type="button" value="@Resource.Continue" onclick="continue_form()" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            if (@Model.MethodType == MethodType.POST) {
+                $('#tab1').attr({ href: '', style: '' });
+                $('#tab2').attr({ href: '', style: 'cursor: default' });
+                $('#tab3').attr({ href: '', style: 'cursor: default' });
+
+                $('#trigger_document_form').attr({ disabled: true });
+                $('#trigger_staff_department').attr({ disabled: true });
+            } else {
+                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffIde&method=@Model.MethodType', style: "cursor: pointer" });
+                $('#tab2').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffIde&method=@Model.MethodType', style: "cursor: pointer" });
+                $('#tab3').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffIde&method=@Model.MethodType', style: "cursor: pointer" });
+            }
+
+            $.validator.setDefaults({ ignore: '' });
+            var form = $('#frm_staff_registration');
+            form.removeData('validator');
+            form.removeData('unobtrusiveValidation');
+            $.validator.unobtrusive.parse(form);
+
+            $('#PhoneNumber').inputmask("mask", {
+                mask: "+(999) 99 999-999",
+                removeMaskOnSubmit: true,
+                autoUnmask: true
+            });
+
+            $(".select2").select2({
+                width: "100%",
+                language: {
+                    noResults: function () {
+                        return '@Html.Raw(Resource.NoResultsFound)';
+                    },
+                }
+            });
+
+            $("#BirthDate").datetimepicker({
+                locale: "'" + cultureShort + "'",
+                format: 'DD/MM/YYYY',
+                dayViewHeaderFormat: "MMMM YYYY",
+                buttons: {
+                    showToday: true,
+                    showClear: true,
+                    showClose: true
+                },
+            });
+        });
+
+        function continue_form() {
+            if($('#frm_staff_registration').valid()) {
+                $('#frm_staff_registration').submit();
+            }
+        }
+    </script>
+}

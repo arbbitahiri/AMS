@@ -15,6 +15,9 @@ public class Edit
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string NameEn { get; set; }
 
+    [Display(Name = "Area", ResourceType = typeof(Resource))]
+    public string Area { get; set; }
+
     [Display(Name = "Controller", ResourceType = typeof(Resource))]
     public string Controller { get; set; }
 

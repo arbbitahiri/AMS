@@ -1,5 +1,85 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using AMS.Areas.Authorization.Models.SubMenu
+@model Create
+
+<div class="modal-header">
+    <h5 class="modal-title">@string.Format(Resource.AddSubMenuFor, Model.MenuTitle)</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="far fa-times-circle"></i>
+    </button>
+</div>
+
+<form asp-action="Create" asp-controller="SubMenu" asp-area="Authorization" id="frm_CreateSubMenu" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="on_success_submenu" role="form">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <input asp-for="MenuIde" type="hidden" />
+
+        <div class="row form-group">
+            <div class="col-md-4 form-group">
+                <label asp-for="NameSq" class="required"></label>
+                <input asp-for="NameSq" class="form-control" />
+                <span asp-validation-for="NameSq" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="NameEn" class="required"></label>
+                <input asp-for="NameEn" class="form-control" />
+                <span asp-validation-for="NameEn" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="Area" class="required"></label>
+                <input asp-for="Area" class="form-control" />
+                <span asp-validation-for="Area" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="Controller" class="required"></label>
+                <input asp-for="Controller" class="form-control" />
+                <span asp-validation-for="Controller" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="Action" class="required"></label>
+                <input asp-for="Action" class="form-control" />
+                <span asp-validation-for="Action" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="OrdinalNumber" class="required"></label>
+                <input asp-for="OrdinalNumber" type="number" class="form-control" />
+                <span asp-validation-for="OrdinalNumber" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="ClaimPolicy" class="required"></label>
+                <input asp-for="ClaimPolicy" class="form-control" />
+                <span asp-validation-for="ClaimPolicy" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="Icon" class="required"></label>
+                <input asp-for="Icon" class="form-control" />
+                <span asp-validation-for="Icon" class="text-danger"></span>
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="OpenFor" class="required"></label>
+                <input asp-for="OpenFor" class="form-control" />
+                <span asp-validation-for="OpenFor" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
+    </div>
+</form>
+
+<div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        var form = $('#frm_CreateSubMenu');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+    });
+
+    function on_success_submenu(data) {
+        handle_success(data, SubmitPathType.RELOAD, "");
+    }
+</script>

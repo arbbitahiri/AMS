@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AMS.Areas.Authorization.Controllers;
 
+[Route("/{area}/{controller}/{action}")]
 public class MenuController : BaseController
 {
     public MenuController(AMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)

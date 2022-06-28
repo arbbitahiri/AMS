@@ -33,4 +33,42 @@ public class DDLRepository : IDDLRepository
             Value = a.Id,
             Text = language == LanguageEnum.Albanian ? a.NameSq : a.NameEn
         }).OrderBy(a => a.Text).ToListAsync();
+
+    public async Task<List<SelectListItem>> Cities(LanguageEnum language) =>
+        await db.City.Select(a => new SelectListItem
+        {
+            Value = a.CityId.ToString(),
+            Text = language == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+        }).OrderBy(a => a.Text).ToListAsync();
+
+    public async Task<List<SelectListItem>> Countries(LanguageEnum language) =>
+        await db.Country.Select(a => new SelectListItem
+        {
+            Value = a.CountryId.ToString(),
+            Text = language == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+        }).OrderBy(a => a.Text).ToListAsync();
+
+    public async Task<List<SelectListItem>> Departments(LanguageEnum language) =>
+        await db.Department.Select(a => new SelectListItem
+        {
+            Value = a.DepartmentId.ToString(),
+            Text = language == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+        }).OrderBy(a => a.Text).ToListAsync();
+
+    public async Task<List<SelectListItem>> StaffTypes(LanguageEnum language) =>
+        await db.StaffType.Select(a => new SelectListItem
+        {
+            Value = a.StaffTypeId.ToString(),
+            Text = language == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+        }).OrderBy(a => a.Text).ToListAsync();
+
+    public async Task<List<SelectListItem>> DocumentTypesFor(LanguageEnum language) =>
+        await db.DocumentType
+            .OrderBy(a => language == LanguageEnum.Albanian ? a.NameSq : a.NameEn)
+            .Where(a => a.Active)
+            .Select(a => new SelectListItem
+            {
+                Value = a.DocumentTypeId.ToString(),
+                Text = language == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).ToListAsync();
 }

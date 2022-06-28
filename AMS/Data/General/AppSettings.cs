@@ -6,11 +6,11 @@ namespace AMS.Data.General
     public partial class AppSettings
     {
         public int AppSettingsId { get; set; }
-        public string OldVersion { get; set; } = null!;
-        public string NewVersion { get; set; } = null!;
-        public string InsertedFrom { get; set; } = null!;
+        public string OldVersion { get; set; }
+        public string NewVersion { get; set; }
+        public string InsertedFrom { get; set; }
         public DateTime? InsertedDate { get; set; }
 
-        public virtual AspNetUsers InsertedFromNavigation { get; set; } = null!;
+        public virtual AspNetUsers InsertedFromNavigation { get; set; }
     }
 }

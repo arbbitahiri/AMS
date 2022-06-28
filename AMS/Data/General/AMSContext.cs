@@ -16,38 +16,39 @@ namespace AMS.Data.General
         {
         }
 
-        public virtual DbSet<AbsentType> AbsentType { get; set; } = null!;
-        public virtual DbSet<AppSettings> AppSettings { get; set; } = null!;
-        public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; } = null!;
-        public virtual DbSet<AspNetRoles> AspNetRoles { get; set; } = null!;
-        public virtual DbSet<AspNetUser> AspNetUser { get; set; } = null!;
-        public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; } = null!;
-        public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; } = null!;
-        public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; } = null!;
-        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; } = null!;
-        public virtual DbSet<City> City { get; set; } = null!;
-        public virtual DbSet<Country> Country { get; set; } = null!;
-        public virtual DbSet<Department> Department { get; set; } = null!;
-        public virtual DbSet<DocumentType> DocumentType { get; set; } = null!;
-        public virtual DbSet<Gender> Gender { get; set; } = null!;
-        public virtual DbSet<Log> Log { get; set; } = null!;
-        public virtual DbSet<Menu> Menu { get; set; } = null!;
-        public virtual DbSet<Notification> Notification { get; set; } = null!;
-        public virtual DbSet<RealRole> RealRole { get; set; } = null!;
-        public virtual DbSet<Staff> Staff { get; set; } = null!;
-        public virtual DbSet<StaffDepartment> StaffDepartment { get; set; } = null!;
-        public virtual DbSet<StaffDepartmentAttendance> StaffDepartmentAttendance { get; set; } = null!;
-        public virtual DbSet<StaffDocument> StaffDocument { get; set; } = null!;
-        public virtual DbSet<StaffType> StaffType { get; set; } = null!;
-        public virtual DbSet<StatusType> StatusType { get; set; } = null!;
-        public virtual DbSet<SubMenu> SubMenu { get; set; } = null!;
+        public virtual DbSet<AbsentType> AbsentType { get; set; }
+        public virtual DbSet<AppSettings> AppSettings { get; set; }
+        public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; }
+        public virtual DbSet<AspNetRoles> AspNetRoles { get; set; }
+        public virtual DbSet<AspNetUser> AspNetUser { get; set; }
+        public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; }
+        public virtual DbSet<AspNetUserLogins> AspNetUserLogins { get; set; }
+        public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
+        public virtual DbSet<City> City { get; set; }
+        public virtual DbSet<Country> Country { get; set; }
+        public virtual DbSet<Department> Department { get; set; }
+        public virtual DbSet<DocumentType> DocumentType { get; set; }
+        public virtual DbSet<Gender> Gender { get; set; }
+        public virtual DbSet<Log> Log { get; set; }
+        public virtual DbSet<Menu> Menu { get; set; }
+        public virtual DbSet<Notification> Notification { get; set; }
+        public virtual DbSet<RealRole> RealRole { get; set; }
+        public virtual DbSet<Staff> Staff { get; set; }
+        public virtual DbSet<StaffDepartment> StaffDepartment { get; set; }
+        public virtual DbSet<StaffDepartmentAttendance> StaffDepartmentAttendance { get; set; }
+        public virtual DbSet<StaffDocument> StaffDocument { get; set; }
+        public virtual DbSet<StaffRegistrationStatus> StaffRegistrationStatus { get; set; }
+        public virtual DbSet<StaffType> StaffType { get; set; }
+        public virtual DbSet<StatusType> StatusType { get; set; }
+        public virtual DbSet<SubMenu> SubMenu { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=ARBTAHIRI;Database=AMS;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=ARBTAHIRI;Database=AMS;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
 
@@ -59,13 +60,17 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
                 entity.Property(e => e.NameEn)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameEN");
 
                 entity.Property(e => e.NameSq)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameSQ");
 
@@ -93,7 +98,13 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.Property(e => e.NewVersion).IsRequired();
+
+                entity.Property(e => e.OldVersion).IsRequired();
 
                 entity.HasOne(d => d.InsertedFromNavigation)
                     .WithMany(p => p.AppSettings)
@@ -105,6 +116,8 @@ namespace AMS.Data.General
             modelBuilder.Entity<AspNetRoleClaims>(entity =>
             {
                 entity.HasIndex(e => e.RoleId, "IX_AspNetRoleClaims_RoleId");
+
+                entity.Property(e => e.RoleId).IsRequired();
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.AspNetRoleClaims)
@@ -140,23 +153,32 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.Email).HasMaxLength(256);
 
-                entity.Property(e => e.FirstName).HasMaxLength(128);
+                entity.Property(e => e.FirstName)
+                    .IsRequired()
+                    .HasMaxLength(128);
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
-                entity.Property(e => e.LastName).HasMaxLength(128);
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(128);
 
                 entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
 
                 entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
 
-                entity.Property(e => e.PersonalNumber).HasMaxLength(50);
+                entity.Property(e => e.PersonalNumber)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.ProfileImage).HasMaxLength(512);
 
                 entity.Property(e => e.UserId)
+                    .IsRequired()
                     .HasMaxLength(450)
                     .HasColumnName("UserID");
 
@@ -166,6 +188,8 @@ namespace AMS.Data.General
             modelBuilder.Entity<AspNetUserClaims>(entity =>
             {
                 entity.HasIndex(e => e.UserId, "IX_AspNetUserClaims_UserId");
+
+                entity.Property(e => e.UserId).IsRequired();
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AspNetUserClaims)
@@ -181,6 +205,8 @@ namespace AMS.Data.General
                 entity.Property(e => e.LoginProvider).HasMaxLength(128);
 
                 entity.Property(e => e.ProviderKey).HasMaxLength(128);
+
+                entity.Property(e => e.UserId).IsRequired();
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.AspNetUserLogins)
@@ -210,19 +236,27 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.Email).HasMaxLength(256);
 
-                entity.Property(e => e.FirstName).HasMaxLength(128);
+                entity.Property(e => e.FirstName)
+                    .IsRequired()
+                    .HasMaxLength(128);
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
-                entity.Property(e => e.LastName).HasMaxLength(128);
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(128);
 
                 entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
 
                 entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
 
-                entity.Property(e => e.PersonalNumber).HasMaxLength(50);
+                entity.Property(e => e.PersonalNumber)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.ProfileImage).HasMaxLength(512);
 
@@ -258,13 +292,17 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
                 entity.Property(e => e.NameEn)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameEN");
 
                 entity.Property(e => e.NameSq)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameSQ");
 
@@ -292,13 +330,17 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
                 entity.Property(e => e.NameEn)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameEN");
 
                 entity.Property(e => e.NameSq)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameSQ");
 
@@ -324,13 +366,17 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
                 entity.Property(e => e.NameEn)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameEN");
 
                 entity.Property(e => e.NameSq)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameSQ");
 
@@ -356,13 +402,17 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
                 entity.Property(e => e.NameEn)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameEN");
 
                 entity.Property(e => e.NameSq)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameSQ");
 
@@ -389,10 +439,12 @@ namespace AMS.Data.General
                 entity.Property(e => e.GenderId).HasColumnName("GenderID");
 
                 entity.Property(e => e.NameEn)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("NameEN");
 
                 entity.Property(e => e.NameSq)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .HasColumnName("NameSQ");
             });
@@ -403,25 +455,34 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.LogId).HasColumnName("LogID");
 
-                entity.Property(e => e.Action).HasMaxLength(128);
+                entity.Property(e => e.Action)
+                    .IsRequired()
+                    .HasMaxLength(128);
 
-                entity.Property(e => e.Controller).HasMaxLength(128);
+                entity.Property(e => e.Controller)
+                    .IsRequired()
+                    .HasMaxLength(128);
 
-                entity.Property(e => e.Description).HasMaxLength(64);
+                entity.Property(e => e.Description).HasMaxLength(128);
 
                 entity.Property(e => e.Developer).HasMaxLength(32);
 
                 entity.Property(e => e.FormContent).HasMaxLength(2048);
 
-                entity.Property(e => e.HttpMethod).HasMaxLength(24);
+                entity.Property(e => e.HttpMethod)
+                    .IsRequired()
+                    .HasMaxLength(24);
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
                 entity.Property(e => e.Ip)
+                    .IsRequired()
                     .HasMaxLength(64)
                     .HasColumnName("IP");
 
-                entity.Property(e => e.Url).HasMaxLength(1024);
+                entity.Property(e => e.Url)
+                    .IsRequired()
+                    .HasMaxLength(1024);
 
                 entity.Property(e => e.UserId)
                     .HasMaxLength(450)
@@ -453,13 +514,17 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
                 entity.Property(e => e.NameEn)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameEN");
 
                 entity.Property(e => e.NameSq)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameSQ");
 
@@ -489,15 +554,23 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.Description).HasMaxLength(1024);
 
-                entity.Property(e => e.Icon).HasMaxLength(128);
+                entity.Property(e => e.Icon)
+                    .IsRequired()
+                    .HasMaxLength(128);
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
-                entity.Property(e => e.Receiver).HasMaxLength(450);
+                entity.Property(e => e.Receiver)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
-                entity.Property(e => e.Title).HasMaxLength(512);
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(512);
 
                 entity.Property(e => e.Url).HasMaxLength(1024);
 
@@ -522,9 +595,12 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
                 entity.Property(e => e.RoleId)
+                    .IsRequired()
                     .HasMaxLength(450)
                     .HasColumnName("RoleID");
 
@@ -533,6 +609,7 @@ namespace AMS.Data.General
                 entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.Property(e => e.UserId)
+                    .IsRequired()
                     .HasMaxLength(450)
                     .HasColumnName("UserID");
 
@@ -572,17 +649,25 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.CountryId).HasColumnName("CountryID");
 
-                entity.Property(e => e.FirstName).HasMaxLength(128);
+                entity.Property(e => e.FirstName)
+                    .IsRequired()
+                    .HasMaxLength(128);
 
                 entity.Property(e => e.GenderId).HasColumnName("GenderID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
-                entity.Property(e => e.LastName).HasMaxLength(128);
+                entity.Property(e => e.LastName)
+                    .IsRequired()
+                    .HasMaxLength(128);
 
-                entity.Property(e => e.PersonalNumber).HasMaxLength(50);
+                entity.Property(e => e.PersonalNumber)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.PostalCode).HasMaxLength(12);
 
@@ -591,6 +676,7 @@ namespace AMS.Data.General
                 entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
 
                 entity.Property(e => e.UserId)
+                    .IsRequired()
                     .HasMaxLength(450)
                     .HasColumnName("UserID");
 
@@ -642,7 +728,9 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
                 entity.Property(e => e.StaffId).HasColumnName("StaffID");
 
@@ -672,6 +760,12 @@ namespace AMS.Data.General
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_StaffDepartment_Staff");
 
+                entity.HasOne(d => d.StaffType)
+                    .WithMany(p => p.StaffDepartment)
+                    .HasForeignKey(d => d.StaffTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StaffDepartment_StaffType");
+
                 entity.HasOne(d => d.UpdatedFromNavigation)
                     .WithMany(p => p.StaffDepartmentUpdatedFromNavigation)
                     .HasForeignKey(d => d.UpdatedFrom)
@@ -690,7 +784,9 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
                 entity.Property(e => e.StaffDepartmentId).HasColumnName("StaffDepartmentID");
 
@@ -731,13 +827,19 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
-                entity.Property(e => e.Path).HasMaxLength(2048);
+                entity.Property(e => e.Path)
+                    .IsRequired()
+                    .HasMaxLength(2048);
 
                 entity.Property(e => e.StaffId).HasColumnName("StaffID");
 
-                entity.Property(e => e.Title).HasMaxLength(256);
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(256);
 
                 entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
@@ -767,19 +869,65 @@ namespace AMS.Data.General
                     .HasConstraintName("FK_StaffDocument_AspNetUsers_Updated");
             });
 
+            modelBuilder.Entity<StaffRegistrationStatus>(entity =>
+            {
+                entity.Property(e => e.StaffRegistrationStatusId).HasColumnName("StaffRegistrationStatusID");
+
+                entity.Property(e => e.InsertedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
+
+                entity.Property(e => e.StaffId).HasColumnName("StaffID");
+
+                entity.Property(e => e.StatusTypeId).HasColumnName("StatusTypeID");
+
+                entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
+                entity.HasOne(d => d.InsertedFromNavigation)
+                    .WithMany(p => p.StaffRegistrationStatusInsertedFromNavigation)
+                    .HasForeignKey(d => d.InsertedFrom)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StaffRegistrationStatus_AspNetUsers_Inserted");
+
+                entity.HasOne(d => d.Staff)
+                    .WithMany(p => p.StaffRegistrationStatus)
+                    .HasForeignKey(d => d.StaffId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StaffRegistrationStatus_Staff");
+
+                entity.HasOne(d => d.StatusType)
+                    .WithMany(p => p.StaffRegistrationStatus)
+                    .HasForeignKey(d => d.StatusTypeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StaffRegistrationStatus_StatusType");
+
+                entity.HasOne(d => d.UpdatedFromNavigation)
+                    .WithMany(p => p.StaffRegistrationStatusUpdatedFromNavigation)
+                    .HasForeignKey(d => d.UpdatedFrom)
+                    .HasConstraintName("FK_StaffRegistrationStatus_AspNetUsers_Updated");
+            });
+
             modelBuilder.Entity<StaffType>(entity =>
             {
                 entity.Property(e => e.StaffTypeId).HasColumnName("StaffTypeID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
                 entity.Property(e => e.NameEn)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameEN");
 
                 entity.Property(e => e.NameSq)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameSQ");
 
@@ -801,21 +949,23 @@ namespace AMS.Data.General
 
             modelBuilder.Entity<StatusType>(entity =>
             {
-                entity.HasKey(e => e.StatusType1);
-
                 entity.ToTable("StatusType", "Core");
 
-                entity.Property(e => e.StatusType1).HasColumnName("StatusType");
+                entity.Property(e => e.StatusTypeId).HasColumnName("StatusTypeID");
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
                 entity.Property(e => e.NameEn)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameEN");
 
                 entity.Property(e => e.NameSq)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameSQ");
 
@@ -855,15 +1005,19 @@ namespace AMS.Data.General
 
                 entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
-                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+                entity.Property(e => e.InsertedFrom)
+                    .IsRequired()
+                    .HasMaxLength(450);
 
                 entity.Property(e => e.MenuId).HasColumnName("MenuID");
 
                 entity.Property(e => e.NameEn)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameEN");
 
                 entity.Property(e => e.NameSq)
+                    .IsRequired()
                     .HasMaxLength(128)
                     .HasColumnName("NameSQ");
 

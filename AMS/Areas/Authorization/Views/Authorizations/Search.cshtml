@@ -4,10 +4,10 @@
 <table id="tbl_Menu" class="table table-striped table-bordered w-100 table-hover">
     <thead>
         <tr>
-            <th>#</th>
-            <th>@Resource.Name</th>
-            <th>@Resource.Policy</th>
-            <th style="width: 20% !important;">@Resource.HasAccess</th>
+            <th style="width: 5% !important;">#</th>
+            <th style="width: 70% !important;">@Resource.Name</th>
+            <th style="width: 20% !important;">@Resource.Policy</th>
+            <th data-orderable="false" style="width: 5% !important;">@Resource.HasAccess</th>
         </tr>
     </thead>
     <tbody>
@@ -32,7 +32,8 @@
             columnDefs: [
                 { targets: 3, className: "w-20" },
                 { targets: "_all", className: "vertikal" },
-                { targets: "_all", defaultContent: "///" }
+                { targets: "_all", defaultContent: "///" },
+                { targets: [0, 3], searchable: false }
             ],
             order: [[0, "asc"]],
             drawCallback: function () {

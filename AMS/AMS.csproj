@@ -46,7 +46,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Administration\Views\" />
-    <Folder Include="Areas\Configuration\Views\" />
     <Folder Include="Areas\Trace\Views\" />
     <Folder Include="Scripts\" />
     <Folder Include="Reports\" />

@@ -18,6 +18,7 @@ using System.Security.Claims;
 
 namespace AMS.Areas.Authorization.Controllers;
 
+[Route("/{area}/{controller}/{action}")]
 public class AuthorizationsController : BaseController
 {
     private readonly RoleManager<ApplicationRole> roleManager;

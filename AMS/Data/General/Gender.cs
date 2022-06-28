@@ -11,8 +11,8 @@ namespace AMS.Data.General
         }
 
         public int GenderId { get; set; }
-        public string NameSq { get; set; } = null!;
-        public string NameEn { get; set; } = null!;
+        public string NameSq { get; set; }
+        public string NameEn { get; set; }
 
         public virtual ICollection<Staff> Staff { get; set; }
     }

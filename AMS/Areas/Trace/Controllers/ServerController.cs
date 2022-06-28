@@ -13,6 +13,7 @@ using System.Security;
 
 namespace AMS.Areas.Trace.Controllers;
 
+[Route("/{area}/{controller}/{action}")]
 public class ServerController : BaseController
 {
     public ServerController(AMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)

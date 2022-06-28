@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AMS.Areas.Administration.Controllers;
 
+[Route("/{area}/{controller}/{action}")]
 public class UsersController : BaseController
 {
     private readonly IWebHostEnvironment environment;

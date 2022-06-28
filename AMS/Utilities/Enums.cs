@@ -2,7 +2,14 @@
 
 public enum Status
 {
-
+    Approved = 1,
+    Rejected = 2,
+    Pending = 3,
+    Processing = 4,
+    Finished = 5,
+    Deleted = 6,
+    Unprocessed = 7,
+    PendingForAnswers = 8
 }
 
 public enum ErrorStatus
@@ -77,4 +84,15 @@ public enum LookUpTable
     Department = 5,
     Document = 6,
     Staff = 7
+}
+
+public enum MethodType
+{
+    Post = 1,
+    Put = 2
+}
+
+public enum CountryEnum
+{
+    Kosova = 1
 }

@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AMS.Areas.Authorization.Controllers;
 
+[Route("/{area}/{controller}/{action}")]
 public class SubMenuController : BaseController
 {
     public SubMenuController(AMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
@@ -93,6 +94,7 @@ public class SubMenuController : BaseController
             Icon = create.Icon,
             Claim = create.ClaimPolicy,
             ClaimType = create.ClaimPolicy?.Split(":")[0],
+            Area = create.Area,
             Controller = create.Controller,
             Action = create.Action,
             OrdinalNumber = create.OrdinalNumber,
@@ -122,6 +124,7 @@ public class SubMenuController : BaseController
             Active = subMenu.Active,
             Icon = subMenu.Icon,
             ClaimPolicy = subMenu.Claim,
+            Area = subMenu.Area,
             Controller = subMenu.Controller,
             Action = subMenu.Action,
             OrdinalNumber = subMenu.OrdinalNumber,
@@ -147,6 +150,7 @@ public class SubMenuController : BaseController
         subMenu.Icon = edit.Icon;
         subMenu.Claim = edit.ClaimPolicy;
         subMenu.ClaimType = edit.ClaimPolicy?.Split(":")[0];
+        subMenu.Area = edit.Area;
         subMenu.Controller = edit.Controller;
         subMenu.Action = edit.Action;
         subMenu.OrdinalNumber = edit.OrdinalNumber;

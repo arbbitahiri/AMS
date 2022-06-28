@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 
 namespace AMS.Areas.Configuration.Controllers;
 
+[Route("/{area}/{controller}/{action}")]
 public class AppSettingsController : BaseController
 {
     private readonly RoleManager<ApplicationRole> roleManager;
@@ -63,7 +64,7 @@ public class AppSettingsController : BaseController
     }
 
     [HttpPost, Authorize(Policy = "15:r")]
-    [Description("Korab Mustafa", "Form to edit application settings.")]
+    [Description("Arb Tahiri", "Form to edit application settings.")]
     public async Task<IActionResult> _Edit(ApplicationSettings edit)
     {
         if (!ModelState.IsValid)
