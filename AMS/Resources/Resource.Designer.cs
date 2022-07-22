@@ -358,6 +358,24 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pjesëmarrja.
+        /// </summary>
+        public static string Attendance {
+            get {
+                return ResourceManager.GetString("Attendance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista e pjesëmarrjes.
+        /// </summary>
+        public static string AttendanceList {
+            get {
+                return ResourceManager.GetString("AttendanceList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Autorizimi.
         /// </summary>
         public static string Authorization {
@@ -399,6 +417,15 @@ namespace AMS.Resources {
         public static string Back {
             get {
                 return ResourceManager.GetString("Back", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ka munguar.
+        /// </summary>
+        public static string BeenAbsent {
+            get {
+                return ResourceManager.GetString("BeenAbsent", resourceCulture);
             }
         }
         
@@ -579,6 +606,15 @@ namespace AMS.Resources {
         public static string DataUpdatedSuccessfully {
             get {
                 return ResourceManager.GetString("DataUpdatedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data.
+        /// </summary>
+        public static string Date {
+            get {
+                return ResourceManager.GetString("Date", resourceCulture);
             }
         }
         
@@ -1780,6 +1816,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stafi.
+        /// </summary>
+        public static string Staff {
+            get {
+                return ResourceManager.GetString("Staff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lista stafit.
         /// </summary>
         public static string StaffList {
@@ -2145,6 +2190,15 @@ namespace AMS.Resources {
         public static string Warning {
             get {
                 return ResourceManager.GetString("Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duke punuar që.
+        /// </summary>
+        public static string WorkingSince {
+            get {
+                return ResourceManager.GetString("WorkingSince", resourceCulture);
             }
         }
         

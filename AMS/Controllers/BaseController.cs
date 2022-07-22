@@ -115,6 +115,10 @@ public class BaseController : Controller
         await db.SaveChangesAsync();
     }
 
+    #region General methods
+
+    #region Language
+
     [Description("Arb Tahiri", "Change language.")]
     public async Task<ActionResult> ChangeLanguage(string culture, string returnUrl = "/")
     {
@@ -140,6 +144,18 @@ public class BaseController : Controller
         return LocalRedirect(returnUrl);
     }
 
+    protected LanguageEnum GetLanguage(string culture) =>
+        culture switch
+        {
+            "sq-AL" => LanguageEnum.Albanian,
+            "en-GB" => LanguageEnum.English,
+            _ => LanguageEnum.Albanian,
+        };
+
+    #endregion
+
+    #region Notification
+
     [HttpPost, Description("Arb Tahiri", "Change notification mode.")]
     public async Task<IActionResult> ChangeNotificationMode(bool mode)
     {
@@ -148,12 +164,6 @@ public class BaseController : Controller
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = "Notification mode changed successfully!" });
     }
-
-    [AllowAnonymous, Description("Arb Tahiri", "Error status message.")]
-    public IActionResult _StatusMessage(ErrorVM error) => PartialView(nameof(_StatusMessage), error);
-
-    public async Task<List<string>> GetUsers(string role) =>
-        await db.AspNetUsers.Where(a => a.Role.Any(a => a.Name == role)).Select(a => a.Id).ToListAsync();
 
     protected string GetNotificationType(NotificationTypeEnum notificationType) =>
         notificationType switch
@@ -179,13 +189,15 @@ public class BaseController : Controller
             NotificationType = notificationType
         });
 
-    protected LanguageEnum GetLanguage(string culture) =>
-        culture switch
-        {
-            "sq-AL" => LanguageEnum.Albanian,
-            "en-GB" => LanguageEnum.English,
-            _ => LanguageEnum.Albanian,
-        };
+    #endregion
+
+    #region Technical
+
+    [AllowAnonymous, Description("Arb Tahiri", "Error status message.")]
+    public IActionResult _StatusMessage(ErrorVM error) => PartialView(nameof(_StatusMessage), error);
+
+    public async Task<List<string>> GetUsers(string role) =>
+        await db.AspNetUsers.Where(a => a.Role.Any(a => a.Name == role)).Select(a => a.Id).ToListAsync();
 
     protected int? UpdateNo(int? updateNo) =>
         updateNo.HasValue ? ++updateNo : 1;
@@ -210,6 +222,25 @@ public class BaseController : Controller
         }
         return workingDays;
     }
+
+    protected string FirstTimePassword(IConfiguration configuration, string firstName, string lastName)
+    {
+        string password = "@1234";
+        if (bool.Parse(configuration["SecurityConfiguration:Password:RequiredUppercase"]))
+        {
+            password += firstName[..1].ToUpper();
+        }
+        if (bool.Parse(configuration["SecurityConfiguration:Password:RequiredLowercase"]))
+        {
+            password += lastName[..1].ToLower();
+        }
+        password += "#";
+        return password;
+    }
+
+    #endregion
+
+    #region Save file
 
     protected async Task<string> SaveFile(IWebHostEnvironment environment, IConfiguration configuration, IFormFile file, string folder, string fileTitle, int type = 512)
     {
@@ -287,6 +318,10 @@ public class BaseController : Controller
         return $"/Uploads/{folder}/{fileName}";
     }
 
+    #endregion
+
+    #region Email
+
     protected void SendEmailAsync(IConfiguration configuration, string email, string subject, string htmlMessage, string name, bool addHeader = true)
     {
         var smtpClient = new SmtpClient();
@@ -324,20 +359,9 @@ public class BaseController : Controller
         return email;
     }
 
-    protected string FirstTimePassword(IConfiguration configuration, string firstName, string lastName)
-    {
-        string password = "@1234";
-        if (bool.Parse(configuration["SecurityConfiguration:Password:RequiredUppercase"]))
-        {
-            password += firstName[..1].ToUpper();
-        }
-        if (bool.Parse(configuration["SecurityConfiguration:Password:RequiredLowercase"]))
-        {
-            password += lastName[..1].ToLower();
-        }
-        password += "#";
-        return password;
-    }
+    #endregion
+
+    #endregion
 
     #region Select list items
 
@@ -378,7 +402,9 @@ public class BaseController : Controller
         string search = string.IsNullOrEmpty(name) ? "" : name;
         var list = await db.Staff
             .Include(a => a.User)
-            .Where(a => (a.FirstName.ToLower().Contains(search.ToLower()) || a.LastName.ToLower().Contains(search.ToLower())) && a.UserId != userId)
+            .Where(a => (a.FirstName.ToLower().Contains(search.ToLower())
+                || a.LastName.ToLower().Contains(search.ToLower()))
+                && a.UserId != userId)
             .Take(10)
             .Select(a => new Select2
             {

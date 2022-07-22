@@ -216,6 +216,12 @@
   <data name="AsDiffUser" xml:space="preserve">
     <value>Me llogari tjetër</value>
   </data>
+  <data name="Attendance" xml:space="preserve">
+    <value>Pjesëmarrja</value>
+  </data>
+  <data name="AttendanceList" xml:space="preserve">
+    <value>Lista e pjesëmarrjes</value>
+  </data>
   <data name="Authorization" xml:space="preserve">
     <value>Autorizimi</value>
   </data>
@@ -230,6 +236,9 @@
   </data>
   <data name="Back" xml:space="preserve">
     <value>Prapa</value>
+  </data>
+  <data name="BeenAbsent" xml:space="preserve">
+    <value>Ka munguar</value>
   </data>
   <data name="Birthdate" xml:space="preserve">
     <value>Data e lindjes</value>
@@ -290,6 +299,9 @@
   </data>
   <data name="DataUpdatedSuccessfully" xml:space="preserve">
     <value>Të dhënat u ndryshuan me sukses!</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Data</value>
   </data>
   <data name="Day" xml:space="preserve">
     <value>Ditë</value>
@@ -690,6 +702,9 @@
   <data name="ShowSubMenus" xml:space="preserve">
     <value>Shiko nënmenytë</value>
   </data>
+  <data name="Staff" xml:space="preserve">
+    <value>Stafi</value>
+  </data>
   <data name="StaffList" xml:space="preserve">
     <value>Lista stafit</value>
   </data>
@@ -812,6 +827,9 @@
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Kujdes</value>
+  </data>
+  <data name="WorkingSince" xml:space="preserve">
+    <value>Duke punuar që</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Po</value>

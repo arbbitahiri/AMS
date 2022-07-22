@@ -1,0 +1,228 @@
+﻿@using AMS.Models.Attendance
+@model SearchStaff
+@inject IDDLRepository repo
+@{
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<div class="card card-custom gutter-b">
+    <div class="card-header">
+        <h3 class="card-title">@Resource.SearchByCriteria</h3>
+    </div>
+    <div class="card-body">
+        <form asp-action="StaffList" asp-controller="Attendance" method="post" id="frm_search_staff" data-ajax="true" data-ajax-success="success_staff">
+            @Html.AntiForgeryToken()
+            <input id="stype" name="stype" type="hidden"/>
+
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+                    <label asp-for="SStaffId">@Resource.Staff</label>
+                    <select asp-for="SStaffId" class="form-control select2"></select>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+                    <label asp-for="SDepartmentId">@Resource.Department</label>
+                    <select asp-for="SDepartmentId" asp-items="await repo.Departments(user.Language)" class="form-control select2">
+                        <option value="">@Resource.Choose</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+                    <label asp-for="SStaffTypeId">@Resource.StaffType</label>
+                    <select asp-for="SStaffTypeId" asp-items="await repo.StaffTypes(user.Language)" class="form-control select2">
+                        <option value="">@Resource.Choose</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+                    <label class="invisible">//</label>
+                    <button type="submit" id="btn_search" class="btn btn-primary btn-block">@Resource.SearchCriteria</button>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+                    <label class="invisible">//</label>
+                    <button type="button" id="btn_clear_j" class="btn btn-secondary btn-block">@Resource.Clear</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card" id="kt_staff_search">
+    <div class="card-header">
+        <h3 class="card-title mt-1">@Resource.SearchResult</h3>
+        <div class="card-tools mr-2">
+            <div class="input-group-prepend">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Download</button>
+                <div class="dropdown-menu dropdown-menu-sm" role="menu">
+                    <div class="d-flex">
+                        <button class="dropdown-item d-flex flex-column" type="button" onclick="get_staff_report(ReportType.PDF)">
+                            <span style="margin: auto;"><i class="fa fa-file-pdf fa-2x"></i></span>
+                            <span class="title text-center w-100">PDF</span>
+                        </button>
+                        <button class="dropdown-item d-flex flex-column" type="button" onclick="get_staff_report(ReportType.EXCEL)">
+                            <span style="margin: auto;"><i class="fa fa-file-excel fa-2x"></i></span>
+                            <span class="title text-center w-100">Excel</span>
+                        </button>
+                    </div>
+                    <div class="d-flex">
+                        <button class="dropdown-item d-flex flex-column" type="button" onclick="get_staff_report(ReportType.WORD)">
+                            <span style="margin: auto;"><i class="fa fa-file-word fa-2x"></i></span>
+                            <span class="title text-center w-100">Word</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="tbl_staff" class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>@Resource.Name</th>
+                    <th>@Resource.Department</th>
+                    <th>@Resource.StaffType</th>
+                    <th>@Resource.WorkingSince</th>
+                    <th>@Resource.Attendance</th>
+                    <th data-orderable="false">@Resource.Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $(".select2").select2({
+            width: "100%",
+            language: {
+                noResults: function() {
+                    return '@Html.Raw(Resource.NoResultsFound)';
+                },
+            }
+        });
+
+        change_staff_s();
+
+        $('#btn_clear_a').on('click', function() {
+            $('#frm_search_attendance').trigger("reset");
+            $('form select').each(function() {
+                $(this).val('').change();
+            });
+        });
+    });
+
+    function change_staff_s() {
+        $('#SStaffId').select2({
+            width: "100%",
+            allowClear: true,
+            language: {
+                noResults: function () {
+                    return '@Html.Raw(Resource.NoResultsFound)';
+                },
+                searching: function() {
+                    return '@Html.Raw(Resource.Searching)';
+                },
+            },
+            ajax: {
+                url: '@Url.Action("GetStaff")',
+                type: 'post',
+                datatype: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        name: params.term,
+                        __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                    };
+                },
+                processResults: function (response) {
+                    return {
+                        results: response
+                    };
+                },
+                catch: true
+            },
+            placeholder: '@Resource.Choose',
+            templateResult: format_repo,
+            templateSelection: format_repo_selection
+        });
+    }
+
+    function success_staff(data) {
+        $('#tbl_staff').DataTable({
+            destroy: true,
+            language: {
+                url: `/Culture/DataTable/${culture}.json`
+            },
+            keys: true,
+            responsive: true,
+            pageLength: 15,
+            data: data,
+            deferRender: true,
+            columnDefs: [
+                { className: "w5 vertikal button-td text-center", targets: [7] },
+                { className: "w5 vertikal", targets: [5] },
+                { className: "w10 vertikal", targets: [1, 3, 4, 6] },
+                { className: "w20 vertikal", targets: [2] },
+                { defaultContent: "///", targets: "_all" }
+            ],
+            order: [[0, "asc"]],
+            columns: [
+                {
+                    data: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        var name = '<div class="d-flex align-items-center">' +
+                            '<div class="symbol symbol-40 symbol-sm flex-shrink-0">' +
+                            '<span class="symbol-label font-size-h4 font-weight-bold">' + row.firstName.slice(0, 1) + ' ' + row.lastName.slice(0, 1) + '</span>' +
+                            '</div><div class="ml-4">' +
+                            '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstName + ' ' + row.lastName + '</div>' +
+                            '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
+                            '</div></div>';
+                        return name;
+                    }
+                },
+                { data: "department" },
+                { data: "staffType" },
+                {
+                    data: function(row, type, set) {
+                        return "///";
+                    }
+                },
+                {
+                    data: function(row, type, set) {
+                        return "///";
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        var dropdown = '<div class="input-group-prepend">' +
+                            '<button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                            '<div class="dropdown-menu" role="menu">'+
+                            '<button type="button" class="dropdown-item" onclick="details_attendance(\'' + row.staffAttendanceIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>' +
+                            '</div></div>';
+                        return dropdown;
+                    }
+                }
+            ]
+        });
+    }
+
+    function details_attendance(ide) {
+
+    }
+
+    function get_staff_report(type) {
+        $('#frm_search_attendance').attr('data-ajax', false);
+        $('#frm_search_attendance').attr('action', '@Url.Action("Attendance", "ReportAttendance")');
+        $('#frm_search_attendance').attr('target', '_blank');
+        $('#frm_search_attendance').addClass('noLoading');
+        $('#reportType').val(type);
+        $('#frm_search_attendance').submit();
+        $('#frm_search_attendance').attr('data-ajax', true);
+        $('#frm_search_attendance').attr('action', '@Url.Action("Attendance", "StaffAttendance")');
+        $('#frm_search_attendance').removeAttr('target');
+        $('#frm_search_attendance').removeClass('noLoading');
+    }
+</script>

@@ -32,7 +32,8 @@
             pageLength: 20,
             data: data,
             columnDefs: [
-                { className: "w5 vertikal", targets: [0, 6] },
+                { className: "w5 vertikal button-td text-center", targets: [0] },
+                { className: "w5 vertikal", targets: [6] },
                 { className: "w10 vertikal", targets: [2, 4, 5] },
                 { className: "w15 vertikal", targets: [3] },
                 { className: "w25 vertikal", targets: [1] },
@@ -76,7 +77,7 @@
                 {
                     data: function (row, type, set) {
                         var dropdown = '<div class="input-group-prepend">' +
-                            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                            '<button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                             '<div class="dropdown-menu" role="menu">' +
                             '<button type="button" class="dropdown-item" onclick="edit_staff(\'' + row.ide + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
                             '</div></div>';

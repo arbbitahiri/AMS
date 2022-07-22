@@ -1,0 +1,1 @@
+ Scaffold-DbContext "Server=ARBTAHIRI;Database=AMS;Trusted_Connection=True;MultipleActiveResultSets=true" Microsoft.EntityFrameworkCore.SqlServer -OutputDir .\Data\General -Force -NoPluralize
