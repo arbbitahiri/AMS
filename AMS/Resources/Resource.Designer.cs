@@ -367,6 +367,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pjesëmarrja u ndryshua me sukses.
+        /// </summary>
+        public static string AttendanceChangedSuccessfully {
+            get {
+                return ResourceManager.GetString("AttendanceChangedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lista e pjesëmarrjes.
         /// </summary>
         public static string AttendanceList {
@@ -498,6 +507,15 @@ namespace AMS.Resources {
         public static string ClaimPolicy {
             get {
                 return ResourceManager.GetString("ClaimPolicy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pastro.
+        /// </summary>
+        public static string Clear {
+            get {
+                return ResourceManager.GetString("Clear", resourceCulture);
             }
         }
         
@@ -678,6 +696,15 @@ namespace AMS.Resources {
         public static string Description {
             get {
                 return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Detajet.
+        /// </summary>
+        public static string Details {
+            get {
+                return ResourceManager.GetString("Details", resourceCulture);
             }
         }
         
@@ -1695,6 +1722,24 @@ namespace AMS.Resources {
         public static string Search {
             get {
                 return ResourceManager.GetString("Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kërkoni sipas parametrave.
+        /// </summary>
+        public static string SearchByCriteria {
+            get {
+                return ResourceManager.GetString("SearchByCriteria", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duke kërkuar....
+        /// </summary>
+        public static string Searching {
+            get {
+                return ResourceManager.GetString("Searching", resourceCulture);
             }
         }
         

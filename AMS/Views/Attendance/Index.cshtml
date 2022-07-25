@@ -2,23 +2,22 @@
     ViewData["Title"] = Resource.Attendance;
 }
 
-<div class="card card-primary card-outline card-outline-tabs d-none" id="kt_navigation">
+<div class="card card-primary card-outline card-outline-tabs" id="kt_navigation">
     <div class="card-header p-0 card-header-tabs-line border-bottom-0">
-        <ul class="nav nav-tabs" role="tablist" id="kt_tabs">
+        <ul class="nav nav-tabs kt_tabs" role="tablist" id="kt_tabs">
             <li class="nav-item">
-                <a href="/Attendance/StaffList" class="nav-link" role="tab" id="tab_menu" data-toggle="tab" data-target="#kt_staff">
+                <a href="/Attendance/SearchStaff" class="nav-link" role="tab" id="tab_menu" data-toggle="tab" data-target="#kt_staff">
                     @Resource.StaffList
                 </a>
             </li>
             <li class="nav-item">
-                <a href="/Attendance/StaffAttendance" class="nav-link" role="tab" id="tab_apps" data-toggle="tab" data-target="#kt_attendance">
+                <a href="/Attendance/SearchAttendance" class="nav-link" role="tab" id="tab_apps" data-toggle="tab" data-target="#kt_attendance">
                     @Resource.AttendanceList
                 </a>
             </li>
         </ul>
     </div>
 </div>
-<br />
 
 <div class="tab-content">
     <div class="tab-pane fade show active" role="tabpanel">
@@ -35,7 +34,9 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
-            $($('#kt_tabs').find('a')[0]).trigger('click');
+            setTimeout(function() {
+                $($('.kt_tabs').find('a')[0]).trigger('click');
+            }, 150);
 
             $('[data-toggle="tab"]').click(function(e) {
                 e.preventDefault();
@@ -76,7 +77,7 @@
             }
 
             var $container = $(
-                '<span class="d-flex align-items-center">' + (repo.image == null ? ('<div class="symbol symbol-40 symbol-sm flex-shrink-0 mr-3"><span class="symbol-label font-size-h5 font-weight-boldest">' + repo.initials + '</span></div>') : ('<img src="../..' + repo.image +'" height="40" class="flag-icon circle rounded rounded-circle" style="object-fit: cover; width: 36px; margin-right: 10px;"/>')) + repo.text + '</span>'
+                '<span class="d-flex align-items-center">' + repo.text + '</span>'
             );
             return $container;
         }

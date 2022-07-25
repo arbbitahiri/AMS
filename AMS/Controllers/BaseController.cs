@@ -212,14 +212,14 @@ public class BaseController : Controller
     protected double WorkingDays(DateTime startDate, DateTime endDate)
     {
         double workingDays = 1 + ((endDate - startDate).TotalDays * 5 - (startDate.DayOfWeek - endDate.DayOfWeek) * 2) / 7;
-        if (endDate.DayOfWeek == DayOfWeek.Saturday)
-        {
-            workingDays--;
-        }
-        if (startDate.DayOfWeek == DayOfWeek.Sunday)
-        {
-            workingDays--;
-        }
+        //if (endDate.DayOfWeek == DayOfWeek.Saturday)
+        //{
+        //    workingDays--;
+        //}
+        //if (startDate.DayOfWeek == DayOfWeek.Sunday)
+        //{
+        //    workingDays--;
+        //}
         return workingDays;
     }
 
@@ -404,7 +404,7 @@ public class BaseController : Controller
             .Include(a => a.User)
             .Where(a => (a.FirstName.ToLower().Contains(search.ToLower())
                 || a.LastName.ToLower().Contains(search.ToLower()))
-                && a.UserId != userId)
+                && (string.IsNullOrEmpty(userId) || a.UserId != userId))
             .Take(10)
             .Select(a => new Select2
             {

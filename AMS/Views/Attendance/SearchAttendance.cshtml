@@ -3,6 +3,7 @@
 @inject IDDLRepository repo
 @{
     UserModel user = (UserModel)ViewData["User"];
+    Layout = null;
 }
 
 <div class="card card-custom gutter-b">
@@ -10,9 +11,9 @@
         <h3 class="card-title">@Resource.SearchByCriteria</h3>
     </div>
     <div class="card-body">
-        <form asp-action="StaffAttendance" asp-controller="Attendance" method="post" id="frm_search_attendance" data-ajax="true" data-ajax-success="success_attendance">
+        <form asp-action="SearchAttendance" asp-controller="Attendance" method="post" id="frm_search_attendance" data-ajax="true" data-ajax-success="success_attendance">
             @Html.AntiForgeryToken()
-            <input id="reportType" name="reportType" type="hidden"/>
+            <input id="atype" name="atype" type="hidden"/>
 
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-sm-6 form-group">
@@ -51,7 +52,7 @@
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6 form-group">
                     <label class="invisible">//</label>
-                    <button type="submit" id="btn_search" class="btn btn-primary btn-block">@Resource.SearchCriteria</button>
+                    <button type="submit" id="btn_search_a" class="btn btn-primary btn-block">@Resource.Search</button>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6 form-group">
                     <label class="invisible">//</label>
@@ -62,12 +63,12 @@
     </div>
 </div>
 
-<div class="card" id="kt_attendance_search">
+<div class="card" style="display: none;" id="kt_attendance_search">
     <div class="card-header">
         <h3 class="card-title mt-1">@Resource.SearchResult</h3>
         <div class="card-tools mr-2">
             <div class="input-group-prepend">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Download</button>
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">@Resource.Download</button>
                 <div class="dropdown-menu dropdown-menu-sm" role="menu">
                     <div class="d-flex">
                         <button class="dropdown-item d-flex flex-column" type="button" onclick="get_attendance_report(ReportType.PDF)">
@@ -99,7 +100,6 @@
                     <th>@Resource.StaffType</th>
                     <th>@Resource.Date</th>
                     <th>@Resource.BeenAbsent</th>
-                    <th>@Resource.AbsentType</th>
                     <th>@Resource.WorkingSince</th>
                     <th data-orderable="false">@Resource.Actions</th>
                 </tr>
@@ -140,6 +140,10 @@
             $('form select').each(function() {
                 $(this).val('').change();
             });
+        });
+
+        $('#btn_search_a').on('click', function() {
+            $('#kt_attendance_search').slideDown(500);
         });
     });
 
@@ -207,9 +211,7 @@
                 {
                     data: function (row, type, set) {
                         var name = '<div class="d-flex align-items-center">' +
-                            '<div class="symbol symbol-40 symbol-sm flex-shrink-0">' +
-                            '<span class="symbol-label font-size-h4 font-weight-bold">' + row.firstName.slice(0, 1) + ' ' + row.lastName.slice(0, 1) + '</span>' +
-                            '</div><div class="ml-4">' +
+                            '<div class="ml-2">' +
                             '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstName + ' ' + row.lastName + '</div>' +
                             '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
                             '</div></div>';
@@ -224,7 +226,6 @@
                     }
                 },
                 { data: "absent" },
-                { data: "absentType" },
                 {
                     data: function(row, type, set) {
                         return "///";
@@ -253,10 +254,10 @@
         $('#frm_search_attendance').attr('action', '@Url.Action("Attendance", "ReportAttendance")');
         $('#frm_search_attendance').attr('target', '_blank');
         $('#frm_search_attendance').addClass('noLoading');
-        $('#reportType').val(type);
+        $('#atype').val(type);
         $('#frm_search_attendance').submit();
         $('#frm_search_attendance').attr('data-ajax', true);
-        $('#frm_search_attendance').attr('action', '@Url.Action("Attendance", "StaffAttendance")');
+        $('#frm_search_attendance').attr('action', '@Url.Action("Attendance", "SearchAttendance")');
         $('#frm_search_attendance').removeAttr('target');
         $('#frm_search_attendance').removeClass('noLoading');
     }

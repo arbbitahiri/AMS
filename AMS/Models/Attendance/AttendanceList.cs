@@ -10,5 +10,5 @@ public class AttendanceList
     public string StaffType { get; set; }
     public DateTime Date { get; set; }
     public string Absent { get; set; }
-    public string AbsentType { get; set; }
+    public int WorkingSince { get; set; }
 }

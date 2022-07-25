@@ -840,4 +840,19 @@
   <data name="WorkingSince" xml:space="preserve">
     <value>Working since</value>
   </data>
+  <data name="AttendanceChangedSuccessfully" xml:space="preserve">
+    <value>Attendance changed successfully</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="SearchByCriteria" xml:space="preserve">
+    <value>Search by parameters</value>
+  </data>
+  <data name="Searching" xml:space="preserve">
+    <value>Searching...</value>
+  </data>
 </root>

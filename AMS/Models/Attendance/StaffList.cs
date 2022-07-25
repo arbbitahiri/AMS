@@ -9,4 +9,5 @@ public class StaffList
     public string Department { get; set; }
     public string StaffType { get; set; }
     public bool Absent { get; set; }
+    public int WorkingSince { get; set; }
 }

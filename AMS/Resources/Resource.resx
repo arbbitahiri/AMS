@@ -219,6 +219,9 @@
   <data name="Attendance" xml:space="preserve">
     <value>Pjesëmarrja</value>
   </data>
+  <data name="AttendanceChangedSuccessfully" xml:space="preserve">
+    <value>Pjesëmarrja u ndryshua me sukses</value>
+  </data>
   <data name="AttendanceList" xml:space="preserve">
     <value>Lista e pjesëmarrjes</value>
   </data>
@@ -263,6 +266,9 @@
   </data>
   <data name="ClaimPolicy" xml:space="preserve">
     <value>Vlera autorizimit</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Pastro</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Mbyll</value>
@@ -323,6 +329,9 @@
   </data>
   <data name="Description" xml:space="preserve">
     <value>Përshkrimi</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Detajet</value>
   </data>
   <data name="DevelopedBy" xml:space="preserve">
     <value>Zhvilluar nga</value>
@@ -662,6 +671,12 @@
   </data>
   <data name="Search" xml:space="preserve">
     <value>Kërko</value>
+  </data>
+  <data name="SearchByCriteria" xml:space="preserve">
+    <value>Kërkoni sipas parametrave</value>
+  </data>
+  <data name="Searching" xml:space="preserve">
+    <value>Duke kërkuar...</value>
   </data>
   <data name="SearchParameters" xml:space="preserve">
     <value>Parametrat e kërkimit</value>
