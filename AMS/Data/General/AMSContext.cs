@@ -771,6 +771,8 @@ public partial class AMSContext : DbContext
         {
             entity.Property(e => e.StaffDepartmentAttendanceId).HasColumnName("StaffDepartmentAttendanceID");
 
+            entity.Property(e => e.AbsentTypeId).HasColumnName("AbsentTypeID");
+
             entity.Property(e => e.Description).HasMaxLength(2048);
 
             entity.Property(e => e.InsertedDate).HasColumnType("datetime");
@@ -784,6 +786,11 @@ public partial class AMSContext : DbContext
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
             entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
+            entity.HasOne(d => d.AbsentType)
+                .WithMany(p => p.StaffDepartmentAttendance)
+                .HasForeignKey(d => d.AbsentTypeId)
+                .HasConstraintName("FK_StaffDepartmentAttendance_AbsentType");
 
             entity.HasOne(d => d.InsertedFromNavigation)
                 .WithMany(p => p.StaffDepartmentAttendanceInsertedFromNavigation)

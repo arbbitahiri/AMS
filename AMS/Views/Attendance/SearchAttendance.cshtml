@@ -96,11 +96,8 @@
                 <tr>
                     <th>#</th>
                     <th>@Resource.Name</th>
-                    <th>@Resource.Department</th>
-                    <th>@Resource.StaffType</th>
                     <th>@Resource.Date</th>
                     <th>@Resource.BeenAbsent</th>
-                    <th>@Resource.WorkingSince</th>
                     <th data-orderable="false">@Resource.Actions</th>
                 </tr>
             </thead>
@@ -195,9 +192,9 @@
             data: data,
             deferRender: true,
             columnDefs: [
-                { className: "w5 vertikal button-td text-center", targets: [8] },
-                { className: "w5 vertikal", targets: [0, 5, 8] },
-                { className: "w10 vertikal", targets: [2, 3, 4, 6] },
+                { className: "w5 vertikal button-td text-center", targets: [4] },
+                { className: "w5 vertikal", targets: [0, 3] },
+                { className: "w10 vertikal", targets: [2] },
                 { className: "w20 vertikal", targets: [1] },
                 { defaultContent: "///", targets: "_all" }
             ],
@@ -218,8 +215,6 @@
                         return name;
                     }
                 },
-                { data: "department" },
-                { data: "staffType" },
                 {
                     data: function(row, type, set) {
                         return moment(row.date).format('DD/MM/YYYY');
@@ -227,14 +222,9 @@
                 },
                 { data: "absent" },
                 {
-                    data: function(row, type, set) {
-                        return "///";
-                    }
-                },
-                {
                     data: function (row, type, set) {
-                        var dropdown = '<div class="input-group-prepend">' +
-                            '<button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                        var dropdown = '<div class="input-group-prepend" style="justify-content: center;">' +
+                            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                             '<div class="dropdown-menu" role="menu">'+
                             '<button type="button" class="dropdown-item" onclick="details_attendance(\'' + row.staffAttendanceIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>' +
                             '</div></div>';
