@@ -37,6 +37,7 @@
                 { className: "w10 vertikal", targets: [2, 4, 5] },
                 { className: "w15 vertikal", targets: [3] },
                 { className: "w25 vertikal", targets: [1] },
+                { targets: "_all", defaultContent: "///" }
             ],
             order: [[ 0, 'asc' ]],
             columns: [
@@ -48,13 +49,7 @@
                 {
                     data: function (row, type, set) {
                         var name = '<div class="d-flex align-items-center">' +
-                            '<div class="symbol symbol-40 symbol-sm flex-shrink-0">';
-                        if (row.profileImage == null) {
-                            name += '<span class="symbol-label font-size-h4 font-weight-bold">' + row.firstname.slice(0, 1) + ' ' + row.lastname.slice(0, 1) + '</span>';
-                        } else {
-                            name += '<img loading="lazy" src="' + row.profileImage + '" alt="user image"/>'
-                        }
-                        name += '</div><div class="ml-4">' +
+                            '<div class="ml-2">' +
                             '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstname + ' ' + row.lastname + '</div>' +
                             '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
                             '</div></div>';
@@ -77,7 +72,7 @@
                 {
                     data: function (row, type, set) {
                         var dropdown = '<div class="input-group-prepend">' +
-                            '<button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                             '<div class="dropdown-menu" role="menu">' +
                             '<button type="button" class="dropdown-item" onclick="edit_staff(\'' + row.ide + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
                             '</div></div>';

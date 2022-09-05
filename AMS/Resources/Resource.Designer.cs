@@ -970,6 +970,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tung.
+        /// </summary>
+        public static string Hi {
+            get {
+                return ResourceManager.GetString("Hi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ballina.
         /// </summary>
         public static string HomePage {

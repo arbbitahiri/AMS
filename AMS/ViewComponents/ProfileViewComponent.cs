@@ -27,6 +27,7 @@ public class ProfileViewComponent : ViewComponent
                 Name = $"{a.FirstName} {a.LastName}",
                 ProfileImage = a.ProfileImage ?? null,
                 Username = a.UserName,
+                Email = a.Email,
                 Mode = (TemplateMode)a.AppMode,
                 Roles = a.RealRoleUser.Select(a => new ProfileRoles
                 {

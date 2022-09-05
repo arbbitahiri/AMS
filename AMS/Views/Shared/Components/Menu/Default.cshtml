@@ -6,33 +6,33 @@
     var area = this.ViewContext.RouteData.Values["area"] ?? "";
 }
 
-<ul class="nav nav-pills nav-sidebar flex-column nav-child-ident nav-flat" data-widget="treeview" role="menu" data-accordion="false">
+<ul class="menu-nav">
     @foreach (var menu in Model)
     {
-        <li class='nav-item @(menu.SubMenus.Any(a => string.IsNullOrEmpty((string)area) && a.Controller == (string)controller && a.OpenFor.Split(",").Contains((string)action)) ? "menu-open has-treeview" : "") @(menu.Controller == (string)controller && menu.OpenFor.Split(",").Contains((string)action) ? "menu-open" : "")' aria-haspopup="true" @(menu.HasSubMenu ? "data-menu-toggle=click" : "")>
-            <a href="@Url.Action(menu.Action, menu.Controller, new { area = menu.Area })" class='nav-link @(menu.SubMenus.Any(a => string.IsNullOrEmpty((string)area) && a.Controller == (string)controller && a.OpenFor.Split(",").Contains((string)action)) ? "active" : "") @(menu.Controller == (string)controller && menu.OpenFor.Split(",").Contains((string)action) ? "active" : "")'>
-                <i class="nav-icon @menu.Icon mr-2"></i>
-                <p>
-                    @menu.Title
-                    @if (menu.HasSubMenu)
-                    {
-                        <i class="right fas fa-angle-left"></i>
-                    }
-                </p>
+        <li class="menu-item @(menu.HasSubMenu ? "menu-item-submenu" :"") menu-item-rel @(menu.Controller == (string)controller && menu.OpenFor.Split(",").Contains((string)action) ? "menu-item-active" :"")" aria-haspopup="true" @(menu.HasSubMenu ? "data-menu-toggle=click" : "")>
+            <a href="@Url.Action(menu.Action, menu.Controller, new { area = menu.Area })" class="menu-link @(menu.HasSubMenu ? "menu-toggle" :"")">
+                <i class="@menu.Icon menu-icon mr-3"></i>
+                <span class="menu-text">@menu.Title</span>
+                @if (menu.HasSubMenu)
+                {
+                    <i class="menu-arrow"></i>
+                }
             </a>
-            @if (menu.SubMenus.Any(a => a.SubMenuId != null))
+            @if (menu.SubMenus.Any(t => t.SubMenuId != null))
             {
-                <ul class="nav nav-treeview">
-                    @foreach (var submenu in menu.SubMenus)
-                    {
-                        <li class="nav-item" aria-haspopup="true">
-                            <a asp-action="@submenu.Action" asp-controller="@submenu.Controller" asp-area="@submenu.Area" class="nav-link @(submenu.Controller == (string)controller && submenu.OpenFor.Split(',').Contains((string)action) ? "active" :"")">
-                                <i class="@submenu.Icon nav-icon"></i>
-                                <p>@submenu.Title</p>
-                            </a>
-                        </li>
-                    }
-                </ul>
+                <div class="menu-submenu menu-submenu-classic menu-submenu-left">
+                    <ul class="menu-subnav">
+                        @foreach (var submenu in menu.SubMenus)
+                        {
+                            <li class="@(submenu.Controller == (string)controller && submenu.OpenFor.Split(",").Contains((string)action) ? "menu-item-active" :"") menu-item" aria-haspopup="true">
+                                <a asp-action="@submenu.Action" asp-controller="@submenu.Controller" asp-area="@submenu.Area" class="menu-link">
+                                    <i class="@submenu.Icon menu-icon"></i>
+                                    <span class="menu-text">@submenu.Title</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
             }
         </li>
     }

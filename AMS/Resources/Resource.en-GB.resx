@@ -855,4 +855,7 @@
   <data name="Searching" xml:space="preserve">
     <value>Searching...</value>
   </data>
+  <data name="Hi" xml:space="preserve">
+    <value>Hi</value>
+  </data>
 </root>

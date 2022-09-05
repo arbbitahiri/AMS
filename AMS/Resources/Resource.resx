@@ -420,6 +420,9 @@
   <data name="HasSubMenu" xml:space="preserve">
     <value>Ka nënmeny</value>
   </data>
+  <data name="Hi" xml:space="preserve">
+    <value>Tung</value>
+  </data>
   <data name="HomePage" xml:space="preserve">
     <value>Ballina</value>
   </data>

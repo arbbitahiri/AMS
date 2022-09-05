@@ -63,7 +63,7 @@
         <h3 class="card-title mt-1">@Resource.SearchResult</h3>
         <div class="card-tools mr-2">
             <div class="input-group-prepend">
-                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Download</button>
+                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">@Resource.Download</button>
                 <div class="dropdown-menu dropdown-menu-sm" role="menu">
                     <div class="d-flex">
                         <button class="dropdown-item d-flex flex-column" type="button" onclick="get_report(ReportType.PDF)">
@@ -146,10 +146,11 @@
                 pageLength: 20,
                 data: data,
                 columnDefs: [
-                    { className: "w5 vertikal button-td text-center", targets: [0] },
-                    { className: "w5 vertikal", targets: [4, 7] },
-                    { className: "w15 vertikal", targets: [2, 3, 6] },
-                    { className: "w20 vertikal", targets: [1, 5] },
+                    { targets: [0], className: "w5 vertikal button-td text-center" },
+                    { targets: [4, 7], className: "w5 vertikal" },
+                    { targets: [2, 3, 6], className: "w15 vertikal" },
+                    { targets: [1, 5], className: "w20 vertikal" },
+                    { targets: "_all", defaultContent: "///" }
                 ],
                 order: [[ 0, 'asc' ]],
                 columns: [
@@ -161,13 +162,7 @@
                     {
                         data: function (row, type, set) {
                             var name = '<div class="d-flex align-items-center">' +
-                                '<div class="symbol symbol-40 symbol-sm flex-shrink-0">';
-                            if (row.profileImage == null) {
-                                name += '<span class="symbol-label font-size-h4 font-weight-bold">' + row.firstname.slice(0, 1) + ' ' + row.lastname.slice(0, 1) + '</span>';
-                            } else {
-                                name += '<img loading="lazy" src="' + row.profileImage + '" alt="user image"/>'
-                            }
-                            name += '</div><div class="ml-4">' +
+                                '<div class="ml-2">' +
                                 '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstname + ' ' + row.lastname + '</div>' +
                                 '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
                                 '</div></div>';
@@ -180,13 +175,17 @@
                     { data: "email" },
                     {
                         data: function (row, type, set) {
-                            return `+${row.phoneNumber}`;
+                            if (row.phoneNumber != null && row.phoneNumber != "") {
+                                return `+${row.phoneNumber}`;
+                            } else {
+                                return '///';
+                            }
                         }
                     },
                     {
                         data: function (row, type, set) {
                             var dropdown = '<div class="input-group-prepend">' +
-                                '<button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                                 '<div class="dropdown-menu" role="menu">' +
                                 '<button type="button" class="dropdown-item" onclick="staff_profile(\'' + row.ide + '\')"><span class="mr-1"><i class="fas fa-address-card"></i></span><span class="p-1">@Resource.Profile</span></button>' +
                                 '<button type="button" class="dropdown-item" onclick="edit_staff(\'' + row.ide + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +

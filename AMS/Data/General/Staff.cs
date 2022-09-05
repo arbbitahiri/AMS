@@ -23,6 +23,8 @@ namespace AMS.Data.General
         public int CountryId { get; set; }
         public string Address { get; set; }
         public string PostalCode { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
         public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }
         public string UpdatedFrom { get; set; }

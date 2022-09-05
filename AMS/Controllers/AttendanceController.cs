@@ -2,6 +2,7 @@
 using AMS.Data.General;
 using AMS.Models.Attendance;
 using AMS.Models.Shared;
+using AMS.Repositories;
 using AMS.Resources;
 using AMS.Utilities;
 using AMS.Utilities.General;
@@ -10,20 +11,27 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.CodeAnalysis;
 
 namespace AMS.Controllers;
 
 public class AttendanceController : BaseController
 {
-    public AttendanceController(AMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+    private readonly IFunctionRepository function;
+
+    public AttendanceController(IFunctionRepository function,
+        AMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
+        this.function = function;
     }
 
     [Authorize(Policy = "8:m"), Description("Arb Tahiri", "Form to display list of staff attendance.")]
     public IActionResult Index() => View();
 
     #region List
+
+    #region Staff
 
     [Authorize(Policy = "8:m"), Description("Arb Tahiri", "Form to display list of staff attendance.")]
     public IActionResult SearchStaff() => View();
@@ -32,24 +40,27 @@ public class AttendanceController : BaseController
     [Description("Arb Tahiri", "Form to display list of staff attendance.")]
     public async Task<IActionResult> SearchStaff(SearchStaff search)
     {
-        var attendance = await db.StaffDepartment
-            .Where(a => a.EndDate >= DateTime.Now
-                && a.StaffId == (search.SStaffId ?? a.StaffId)
-                && a.DepartmentId == (search.SDepartmentId ?? a.DepartmentId)
-                && a.StaffTypeId == (search.SStaffTypeId ?? a.StaffTypeId))
+        var attendance = (await function.StaffConsecutiveDays(search.SStaffId, search.SDepartmentId, search.SStaffId, user.Language))
+            .OrderByDescending(a => a.EndDate)
             .Select(a => new StaffList
             {
                 StaffDepartmentIde = CryptoSecurity.Encrypt(a.StaffDepartmentId),
-                PersonalNumber = a.Staff.PersonalNumber,
-                FirstName = a.Staff.FirstName,
-                LastName = a.Staff.LastName,
-                Department = user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn,
-                StaffType = user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn,
-                Absent = a.StaffDepartmentAttendance.Any(a => a.Active && a.InsertedDate.Date == DateTime.Now.Date),
-                WorkingSince = !a.StaffDepartmentAttendance.Any() ? 0 : 14
-            }).ToListAsync();
+                PersonalNumber = a.PersonalNumber,
+                FirstName = a.FirstName,
+                LastName = a.LastName,
+                Department = a.Department,
+                StaffType = a.StaffType,
+                StartDate = a.StartDate,
+                EndDate = a.EndDate,
+                WorkingSince = a.WorkingSince
+            }).ToList();
+
         return Json(attendance);
     }
+
+    #endregion
+
+    #region Attendance
 
     [Authorize(Policy = "8:m"), Description("Arb Tahiri", "Form to display list of staff attendance.")]
     public IActionResult SearchAttendance() => View();
@@ -58,23 +69,21 @@ public class AttendanceController : BaseController
     [Description("Arb Tahiri", "Form to display list of staff attendance.")]
     public async Task<IActionResult> SearchAttendance(SearchAttendance search)
     {
-        var attendance = await db.StaffDepartmentAttendance
-            .Where(a => a.Active
-                && a.StaffDepartment.StaffId == (search.AStaffId ?? a.StaffDepartment.StaffId)
-                && a.StaffDepartment.DepartmentId == (search.ADepartmentId ?? a.StaffDepartment.DepartmentId)
-                && a.StaffDepartment.StaffTypeId == (search.AStaffTypeId ?? a.StaffDepartment.StaffTypeId)
-                && (!search.AStartDate.HasValue ? DateTime.Now.Date : search.AStartDate.Value.Date) <= a.InsertedDate.Date && a.InsertedDate.Date <= (!search.AEndDate.HasValue ? DateTime.Now.Date : search.AEndDate.Value.Date))
-            .Select(a => new AttendanceList
+        var attendance = (await function.StaffConsecutiveDays(search.AStaffId, search.ADepartmentId, search.AStaffId, user.Language))
+            .OrderByDescending(a => a.EndDate)
+            .Select(a => new StaffList
             {
-                StaffAttendanceIde = CryptoSecurity.Encrypt(a.StaffDepartmentAttendanceId),
-                PersonalNumber = a.StaffDepartment.Staff.PersonalNumber,
-                FirstName = a.StaffDepartment.Staff.FirstName,
-                LastName = a.StaffDepartment.Staff.LastName,
-                Date = a.InsertedDate,
-                Absent = !a.Absent ? Resource.Yes : Resource.No,
-            }).ToListAsync();
+                StaffDepartmentIde = CryptoSecurity.Encrypt(a.StaffDepartmentId),
+                PersonalNumber = a.PersonalNumber,
+                FirstName = a.FirstName,
+                LastName = a.LastName,
+                StartDate = a.StartDate,
+                WorkingSince = a.WorkingSince
+            }).Distinct(new DistinctComparer()).ToList();
         return Json(attendance);
     }
+
+    #endregion
 
     #endregion
 
@@ -124,7 +133,7 @@ public class AttendanceController : BaseController
 
     #endregion
 
-    #region Staff attendance
+    #region Staff attendance reason
 
     [HttpGet, Authorize(Policy = "8:e")]
     [Description("Arb Tahiri", "Form to add absent type and add description for staff.")]
@@ -171,4 +180,17 @@ public class AttendanceController : BaseController
     }
 
     #endregion
+}
+
+public class DistinctComparer : IEqualityComparer<StaffList>
+{
+    public bool Equals(StaffList x, StaffList y)
+    {
+        return x.StaffDepartmentIde == y.StaffDepartmentIde && x.EndDate >= y.EndDate;
+    }
+
+    public int GetHashCode([DisallowNull] StaffList obj)
+    {
+        return obj.StaffDepartmentIde.GetHashCode();
+    }
 }

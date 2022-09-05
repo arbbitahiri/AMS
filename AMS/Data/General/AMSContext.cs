@@ -646,6 +646,10 @@ public partial class AMSContext : DbContext
 
             entity.Property(e => e.CountryId).HasColumnName("CountryID");
 
+            entity.Property(e => e.Email)
+                .IsRequired()
+                .HasMaxLength(256);
+
             entity.Property(e => e.FirstName)
                 .IsRequired()
                 .HasMaxLength(128);
@@ -665,6 +669,8 @@ public partial class AMSContext : DbContext
             entity.Property(e => e.PersonalNumber)
                 .IsRequired()
                 .HasMaxLength(50);
+
+            entity.Property(e => e.PhoneNumber).IsRequired();
 
             entity.Property(e => e.PostalCode).HasMaxLength(12);
 

@@ -57,8 +57,8 @@ public class StaffController : BaseController
                 ProfileImage = a.Staff.User.ProfileImage,
                 Gender = user.Language == LanguageEnum.Albanian ? a.Staff.Gender.NameSq : a.Staff.Gender.NameEn,
                 Department = user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn,
-                Email = a.Staff.User.Email,
-                PhoneNumber = a.Staff.User.PhoneNumber,
+                Email = a.Staff.Email,
+                PhoneNumber = a.Staff.PhoneNumber,
                 StaffType = string.Join(", ", user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn)
             }).ToListAsync();
         return Json(staffList);
@@ -69,6 +69,7 @@ public class StaffController : BaseController
     public async Task<IActionResult> InProcess()
     {
         var list = await db.Staff
+            .Where(a => a.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Processing))
             .AsSplitQuery()
             .Select(a => new StaffDetails
             {
@@ -78,8 +79,8 @@ public class StaffController : BaseController
                 Lastname = a.LastName,
                 ProfileImage = a.User.ProfileImage,
                 Gender = user.Language == LanguageEnum.Albanian ? a.Gender.NameSq : a.Gender.NameEn,
-                Email = a.User.Email,
-                PhoneNumber = a.User.PhoneNumber,
+                Email = a.Email,
+                PhoneNumber = a.PhoneNumber,
                 InsertedDate = a.InsertedDate
             }).ToListAsync();
         return PartialView(list);
@@ -154,6 +155,8 @@ public class StaffController : BaseController
                     CountryId = staff.CountryId,
                     Address = staff.Address,
                     PostalCode = staff.PostalCode,
+                    Email = staff.Email,
+                    PhoneNumber = staff.PhoneNumber,
                     InsertedDate = DateTime.Now,
                     InsertedFrom = user.Id
                 };
@@ -224,6 +227,8 @@ public class StaffController : BaseController
         //            CountryId = staff.CountryId,
         //            Address = staff.Address,
         //            PostalCode = staff.PostalCode,
+        //            Email = staff.Email,
+        //            PhoneNumber = staff.PhoneNumber,
         //            InsertedDate = DateTime.Now,
         //            InsertedFrom = user.Id
         //        };
@@ -275,6 +280,8 @@ public class StaffController : BaseController
         staff.CountryId = edit.CountryId;
         staff.Address = edit.Address;
         staff.PostalCode = edit.PostalCode;
+        staff.Email = edit.Email;
+        staff.PhoneNumber = edit.PhoneNumber;
         userStaff.Email = edit.Email;
         userStaff.PhoneNumber = edit.PhoneNumber;
         staff.UpdatedDate = DateTime.Now;

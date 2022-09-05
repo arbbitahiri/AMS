@@ -1,29 +1,33 @@
 ﻿@model LanguageEnum
 @{
     var returnUrl = Context.Request.Path + Context.Request.QueryString.Value;
+    var svgFlag = Model == LanguageEnum.Albanian ? "/assets2/media/svg/flags/099-albania.svg" : "/assets2/media/svg/flags/260-united-kingdom.svg";
 }
 
-<li class="nav-item dropdown">
-    <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
-        @if (Model == LanguageEnum.Albanian)
-        {
-            <i class="flag-icon flag-icon-al"></i>
-        }
-        else if (Model == LanguageEnum.English)
-        {
-            <i class="flag-icon flag-icon-gb"></i>
-        }
-        else
-        {
-            <i class="flag-icon flag-icon-al"></i>
-        }
-    </a>
-    <div class="dropdown-menu dropdown-menu-right p-0" style="left: inherit; right: 0px;">
-        <a href='@Url.Action("ChangeLanguage", new { culture = "sq-AL", returnUrl = returnUrl })' class="dropdown-item @(Model == LanguageEnum.Albanian ? "active" : "")">
-            <i class="flag-icon flag-icon-al mr-2"></i> @Resource.Albanian
-        </a>
-        <a href='@Url.Action("ChangeLanguage", new { culture = "en-GB", returnUrl = returnUrl })' class="dropdown-item @(Model == LanguageEnum.English ? "active" : "")">
-            <i class="flag-icon flag-icon-gb mr-2"></i> @Resource.English
-        </a>
+<div class="dropdown">
+    <div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px">
+        <div class="btn btn-icon btn-clean btn-dropdown btn-lg mr-1">
+            <img class="h-20px w-20px rounded-sm" src="@svgFlag" alt="FLAG" />
+        </div>
     </div>
-</li>
+    <div class="dropdown-menu p-0 m-0 dropdown-menu-anim-up dropdown-menu-sm dropdown-menu-right">
+        <ul class="navi navi-hover py-4">
+            <li class="navi-item @(Model == LanguageEnum.Albanian ? "active" : "")">
+                <a href="@Url.Action("ChangeLanguage", new { culture = "sq-AL", returnUrl = returnUrl })" class="navi-link">
+                    <span class="symbol symbol-20 mr-3">
+                        <img src="/assets2/media/svg/flags/099-albania.svg" alt="" />
+                    </span>
+                    <span class="navi-text">@Resource.Albanian</span>
+                </a>
+            </li>
+            <li class="navi-item @(Model == LanguageEnum.English ? "active" : "")">
+                <a href="@Url.Action("ChangeLanguage", new { culture = "en-GB", returnUrl = returnUrl })" class="navi-link">
+                    <span class="symbol symbol-20 mr-3">
+                        <img src="/assets2/media/svg/flags/260-united-kingdom.svg" alt="" />
+                    </span>
+                    <span class="navi-text">@Resource.English</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

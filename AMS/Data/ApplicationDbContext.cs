@@ -24,6 +24,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     [NotMapped]
     public DbSet<Logs> Logs { get; set; }
 
+    [NotMapped]
+    public DbSet<StaffConsecutiveDays> StaffConsecutiveDays { get; set; }
+
     #endregion
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -33,6 +36,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         builder.Entity<MenuList>().HasNoKey();
         builder.Entity<MenuListAccess>().HasNoKey();
         builder.Entity<Logs>().HasNoKey();
+        builder.Entity<StaffConsecutiveDays>().HasNoKey();
 
         base.OnModelCreating(builder);
     }

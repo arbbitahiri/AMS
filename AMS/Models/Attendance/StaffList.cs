@@ -8,6 +8,7 @@ public class StaffList
     public string LastName { get; set; }
     public string Department { get; set; }
     public string StaffType { get; set; }
-    public bool Absent { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
     public int WorkingSince { get; set; }
 }
