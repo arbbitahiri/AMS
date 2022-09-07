@@ -2,12 +2,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="card">
-    <div class="card-body">
-        <div class="bs-stepper">
+<link href="~/assets2/css/pages/wizard/wizard-1.css" rel="stylesheet" asp-append-version="true" />
+
+<div class="card card-custom gutter-b">
+    <div class="card-body p-0">
+        <div class="wizard wizard-1" id="kt_wizard" data-wizard-state="step-first" data-wizard-clickable="true">
             <partial name="_Navigation" />
-            <div class="bs-stepper-content pt-4">
-                @RenderBody()
+            <div class="wizard-body py-8 px-8 py-lg-10 px-lg-10">
+                <div class="row">
+                    <div class="col-xxl-12" id="kt_replace_body">
+                        @RenderBody()
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -15,7 +21,11 @@
 
 @section Scripts {
     <script>
-
+        new KTOffcanvas(KTUtil.getById('kt_navSteps'), {
+            overlay: true,
+            baseClass: 'offcanvas-mobile',
+            toggleBy: 'kt_subheader_mobile_toggle'
+        });
     </script>
     @RenderSection("Scripts", required: false)
 }

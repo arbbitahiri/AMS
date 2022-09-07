@@ -6,6 +6,8 @@ namespace AMS.Areas.Authorization.Models.SubMenu;
 public class Create
 {
     public string MenuIde { get; set; }
+    public bool HasSubMenu { get; set; }
+
     public string MenuTitle { get; set; }
 
     [Display(Name = "NameSq", ResourceType = typeof(Resource))]

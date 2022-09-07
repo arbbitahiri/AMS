@@ -1,10 +1,10 @@
 ﻿@using AMS.Areas.Configuration.Models.Tables
 @model TableData
 
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title pt-2">@Model.Title</h3>
-        <div class="card-tools pr-3">
+<div class="card card-custom gutter-r">
+    <div class="card-header d-flex justify-content-between">
+        <h3 class="card-title">@Model.Title</h3>
+        <div class="card-toolbar">
             <a onclick="create('@((int)Model.Table)', '@Model.Title')" class="btn btn-primary">@Resource.Add</a>
         </div>
     </div>
@@ -44,8 +44,10 @@
             pageLength: 10,
             data: data,
             columnDefs: [
-                { targets: [4], className: "text-center vertikal" },
-                { targets: "_all", className: "vertikal" },
+                { targets: [0, 4], width: "5%" },
+                { targets: [3], width: "15%" },
+                { targets: [3], className: "text-center" },
+                { targets: [4], className: "button-td text-center" },
                 { targets: "_all", defaultContent: "///" }
             ],
             order: [[0, "asc"]],
@@ -61,18 +63,18 @@
                 {
                     data: function(row, type, set) {
                         var isActive = row.active ? "checked" : "";
-                        return '<label class="icheck-success d-inline">' +
+                        return '<label class="d-inline m-0">' +
                                '<input style="cursor: pointer;" type="checkbox" id="' + row.ide + '" ' + isActive + '>' +
-                               '<label for="' + row.ide + '" onclick="change_active(\'' + row.ide + '\',\'' + '@((int)Model.Table)' + '\', this)"></label>' +
+                               '<label for="' + row.ide + '" onclick="change_active(\'' + row.ide + '\',\'' + '@((int)Model.Table)' + '\', this)" style="margin: auto;"></label>' +
                                '</label>';
                     }
                 },
                 {
                     data: function(row, type, set) {
-                        return '<div class="input-group-prepend">' +
-                            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
-                            '<div class="dropdown-menu" role="menu">' +
-                            '<button type="button" class="dropdown-item" onclick="edit(\'' + row.ide + '\',\'' + '@((int)Model.Table)' + '\',\'' + '@Model.Title' + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
+                        return '<div class="dropdown dropleft cursor-pointer">' +
+                            '<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                            '<div class="dropdown-menu dropdown-grid" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">' +
+                            '<button class="dropdown-item cursor-pointer" type="button" class="dropdown-item" onclick="edit(\'' + row.ide + '\',\'' + '@((int)Model.Table)' + '\',\'' + '@Model.Title' + '\')">@Html.Raw(ActionButton.Edit.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Edit</span></button>' +
                             '</div></div>';
                     }
                 }
@@ -104,7 +106,7 @@
     }
 
     function edit(ide, tbl, title) {
-        $('#modal-lg').find('.modal-content').load('@Url.Action("_Edit", "Tables")', {
+        $('#modal-large').find('.modal-content').load('@Url.Action("_Edit", "Tables")', {
             table: tbl,
             title: title,
             ide: ide
@@ -112,19 +114,19 @@
             sessionStorage.setItem("tbl_enum", tbl);
             sessionStorage.setItem("tbl_title", title);
 
-            $('#modal-lg').modal('toggle');
+            $('#modal-large').modal('toggle');
         });
     }
 
     function create(tbl, title) {
-        $('#modal-lg').find('.modal-content').load('@Url.Action("_Create", "Tables")', {
+        $('#modal-large').find('.modal-content').load('@Url.Action("_Create", "Tables")', {
             table: tbl,
             title: title
         }, function () {
             sessionStorage.setItem("tbl_enum", tbl);
             sessionStorage.setItem("tbl_title", title);
 
-            $('#modal-lg').modal('toggle');
+            $('#modal-large').modal('toggle');
         });
     }
 </script>

@@ -3,33 +3,30 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="card card-primary card-outline card-outline-tabs">
-    <div class="card-header p-0 border-bottom-0">
-        <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item" id="kt_menu">
-                <a class="nav-link" id="tab_Menu" data-toggle="tab" href="#">
-                    <span class="nav-icon mr-1"><i class="fas fa-bars"></i></span>
-                    <span class="nav-text font-size-h6">@Resource.Menu</span>
-                </a>
-            </li>
-            <li class="nav-item" id="kt_submenu">
-                <a class="nav-link" id="tab_SubMenu" data-toggle="tab" href="#">
-                    <span class="nav-icon mr-1"><i class="fab fa-mendeley"></i></span>
-                    <span class="nav-text font-size-h6">@Resource.SubMenu</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <div class="card-body">
-        <div class="tab-content">
-            <div class="tab-pane" id="tab_forMenu">
-
-            </div>
-            <div class="tab-pane" id="tab_forSubMenu">
-
-            </div>
+<div class="card card-custom gutter-b">
+    <div class="card-header card-header-tabs-line border-0">
+        <div class="card-toolbar">
+            <ul class="nav nav-tabs nav-bold nav-tabs-line justify-content-center" role="tablist">
+                <li class="nav-item" id="kt_menu">
+                    <a class="nav-link" id="tab_Menu" data-toggle="tab" href="#">
+                        <span class="nav-icon mr-1"><i class="fas fa-bars"></i></span>
+                        <span class="nav-text font-size-h6">@Resource.Menu</span>
+                    </a>
+                </li>
+                <li class="nav-item" id="kt_submenu">
+                    <a class="nav-link" id="tab_SubMenu" data-toggle="tab" href="#">
+                        <span class="nav-icon mr-1"><i class="fab fa-mendeley"></i></span>
+                        <span class="nav-text font-size-h6">@Resource.SubMenu</span>
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
+</div>
+
+<div class="tab-content">
+    <div class="tab-pane" id="tab_forMenu"></div>
+    <div class="tab-pane" id="tab_forSubMenu"></div>
 </div>
 
 @Html.AntiForgeryToken()

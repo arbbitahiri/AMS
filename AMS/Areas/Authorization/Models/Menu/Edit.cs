@@ -1,4 +1,5 @@
-﻿using AMS.Resources;
+﻿using AMS.Areas.Authorization.Models.SubMenu;
+using AMS.Resources;
 using System.ComponentModel.DataAnnotations;
 
 namespace AMS.Areas.Authorization.Models.Menu;

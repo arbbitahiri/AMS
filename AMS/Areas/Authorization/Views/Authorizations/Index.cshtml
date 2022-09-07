@@ -12,7 +12,7 @@
     }
 </style>
 
-<div class="card card-default">
+<div class="card card-custom gutter-b">
     <div class="card-header">
         <h3 class="card-title">@Resource.Authorizations</h3>
     </div>
@@ -31,12 +31,14 @@
     </div>
 </div>
 
-<div class="card card-primary card-outline card-outline-tabs d-none" id="kt_authorization">
-    <div class="card-header p-0 border-bottom-0">
-        <ul class="nav nav-tabs" role="tablist">
-            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="menu_tab()" id="tab_menu" href="#kt_menu" data-toggle="tab">@Resource.AuthorizationsForMenus</a></li>
-            <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="auth_tab()" id="tab_apps" href="#kt_apps" data-toggle="tab">@Resource.AuthorizationsForActions</a></li>
-        </ul>
+<div class="card card-custom d-none" id="kt_authorization">
+    <div class="card-header">
+        <div class="card-toolbar">
+            <ul class="nav nav-light-primary nav-bold nav-pills" role="tablist">
+                <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="menu_tab()" id="tab_menu" href="#kt_menu" data-toggle="tab">@Resource.AuthorizationsForMenus</a></li>
+                <li class="nav-item"><a class="nav-link" role="tab" data-toggle="pill" onclick="auth_tab()" id="tab_apps" href="#kt_apps" data-toggle="tab">@Resource.AuthorizationsForActions</a></li>
+            </ul>
+        </div>
     </div>
     <div class="card-body">
         <div class="tab-content">
@@ -69,11 +71,15 @@
             $.validator.unobtrusive.parse(form);
 
             $('#Role').on('change', function() {
-                $('#kt_authorization').removeClass('d-none');
-                if (sessionStorage.getItem("tab_auth") == null) {
-                    $('#tab_menu').trigger("click");
+                if ($(this).val() != null && $(this).val() != "") {
+                    $('#kt_authorization').removeClass('d-none');
+                    if (sessionStorage.getItem("tab_auth") == null) {
+                        $('#tab_menu').trigger("click");
+                    } else {
+                        $('#' + sessionStorage.getItem("tab_auth")).trigger("click");
+                    }
                 } else {
-                    $('#' + sessionStorage.getItem("tab_auth")).trigger("click");
+                    $('#kt_authorization').addClass('d-none');
                 }
             });
         });

@@ -32,11 +32,11 @@
             pageLength: 20,
             data: data,
             columnDefs: [
-                { className: "w5 vertikal button-td text-center", targets: [0] },
-                { className: "w5 vertikal", targets: [6] },
-                { className: "w10 vertikal", targets: [2, 4, 5] },
-                { className: "w15 vertikal", targets: [3] },
-                { className: "w25 vertikal", targets: [1] },
+                { className: "button-td text-center", targets: [6] },
+                { width: "5%", targets: [0, 6] },
+                { width: "10%", targets: [2, 4, 5] },
+                { width: "15%", targets: [3] },
+                { width: "25%", targets: [1] },
                 { targets: "_all", defaultContent: "///" }
             ],
             order: [[ 0, 'asc' ]],

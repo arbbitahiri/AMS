@@ -3,8 +3,8 @@
 
 <div class="modal-header">
     <h5 class="modal-title">@string.Format(Resource.AddSubMenuFor, Model.MenuTitle)</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <i aria-hidden="true" class="far fa-times-circle"></i>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="ki ki-close"></i>
     </button>
 </div>
 
@@ -13,7 +13,7 @@
         @Html.AntiForgeryToken()
         <input asp-for="MenuIde" type="hidden" />
 
-        <div class="row form-group">
+        <div class="row">
             <div class="col-md-4 form-group">
                 <label asp-for="NameSq" class="required"></label>
                 <input asp-for="NameSq" class="form-control" />
@@ -60,9 +60,27 @@
                 <span asp-validation-for="OpenFor" class="text-danger"></span>
             </div>
         </div>
+        <div class="separator separator-solid mb-5"></div>
+
+        @if (Model.HasSubMenu)
+        {
+            <div class="accordion accordion-light accordion-toggle-arrow mb-5" id="kt_submenus">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title collapsed" data-toggle="collapse" data-target="#kt_submenu_list">
+                            @Resource.ListSubMenus
+                        </div>
+                    </div>
+                    <div id="kt_submenu_list" class="mt-4 collapse" data-parent="#kt_submenus">
+                        <div class="card-body" id="kt_submenu_data">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
     <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
+        <button type="button" class="btn btn-bold btn-pure btn-secondary" data-bs-dismiss="modal">@Resource.Close</button>
         <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
     </div>
 </form>
@@ -77,6 +95,7 @@
         form.removeData('validator');
         form.removeData('unobtrusiveValidation');
         $.validator.unobtrusive.parse(form);
+        $('#kt_submenu_data').load('@Url.Action("SubMenu", "Submenu")?mIde=@Model.MenuIde');
     });
 
     function on_success_submenu(data) {

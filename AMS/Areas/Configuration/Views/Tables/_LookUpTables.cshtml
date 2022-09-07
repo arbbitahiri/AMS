@@ -1,19 +1,17 @@
 ﻿@using AMS.Areas.Configuration.Models.Tables
 @model IEnumerable<TableName>
 
-<div class="card">
+<div class="card card-custom">
     <div class="card-header">
-        <h3 class="card-title">
-            @Resource.Tables
-        </h3>
+        <h3 class="card-title">@Resource.Tables</h3>
     </div>
     <div class="card-body p-0">
-        <ul class="nav nav-pills flex-column" role="tablist">
+        <ul class="navi navi-hover navi-active navi-accent" role="tablist">
             @foreach (var table in Model)
             {
-                <li class="nav-item">
-                    <a id="@((int)table.Table)" onclick="load_table('@((int)table.Table)', '@table.Title')" class="nav-link" style="cursor: pointer; border-radius: 0px;">
-                        @table.Title
+                <li class="navi-item">
+                    <a id="@((int)table.Table)" onclick="load_table('@((int)table.Table)', '@table.Title')" class="navi-link" style="cursor: pointer;">
+                        <span class="navi-text">@table.Title</span>
                     </a>
                 </li>
             }

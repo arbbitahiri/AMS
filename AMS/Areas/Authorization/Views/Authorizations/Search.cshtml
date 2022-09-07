@@ -30,14 +30,13 @@
             responsive: true,
             data: data,
             columnDefs: [
-                { targets: 3, className: "w-20" },
-                { targets: "_all", className: "vertikal" },
+                { targets: 3, className: "w-15" },
                 { targets: "_all", defaultContent: "///" },
                 { targets: [0, 3], searchable: false }
             ],
             order: [[0, "asc"]],
             drawCallback: function () {
-                $("input[data-bootstrap-switch]").bootstrapSwitch();
+                $('[data-switch="true"]').bootstrapSwitch();
             },
             columns:[
                 {
@@ -60,7 +59,8 @@
                         var hasAccess = row.hasAccess ? "checked" : "";
                         return '<input data-switch="true" style="cursor: pointer; width: 90px;" type="checkbox" id="ch_hasAccess" ' +
                                 'onchange="change_access(this, \'' + row.menuIde + '\',\'' + row.subMenuIde + '\')" ' + hasAccess + ' ' +
-                                'data-bootstrap-switch data-off-color="warning" data-on-color="success">';
+                                'data-bootstrap-switch data-off-color="warning" data-on-color="success" data-handle-width="90" ' +
+                                'data-on-text="@Html.Raw(Resource.Yes)" data-off-text="@Html.Raw(Resource.No)"/>';
                     }
                 }
             ]
@@ -80,9 +80,6 @@
             },
             success: function (data) {
                 handle_success(data, SubmitPathType.NORELOAD, "");
-            },
-            error: function (msg) {
-                console.log("Error " + msg);
             }
         });
     }

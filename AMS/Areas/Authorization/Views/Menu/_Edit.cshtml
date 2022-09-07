@@ -3,13 +3,13 @@
 
 <div class="modal-header">
     <h5 class="modal-title">@Resource.Edit</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <i aria-hidden="true" class="far fa-times-circle"></i>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="ki ki-close"></i>
     </button>
 </div>
 
 <form asp-action="Edit" asp-controller="Menu" asp-area="Authorization" id="frm_EditMenu" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="on_success_menu" role="form">
-    <div class="modal-body">
+    <div class="modal-body pb-0">
         @Html.AntiForgeryToken()
         <input asp-for="MenuIde" type="hidden"/>
 
@@ -58,27 +58,45 @@
                 <input asp-for="OpenFor" class="form-control" />
                 <span asp-validation-for="OpenFor" class="text-danger"></span>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 d-flex flex-column pl-5">
                 <label asp-for="HasSubMenu" class="required">@Resource.HasSubMenu</label>
-                <div class="icheck-primary d-inline">
+                <div class="d-inline">
                     <input asp-for="HasSubMenu" id="has_submenu" style="cursor: pointer;" type="checkbox">
                     <label asp-for="HasSubMenu" id="lbl_submenu" onclick="change_submenu(this)"></label>
                 </div>
             </div>
         </div>
-        <div class="row form-group">
-            <div class="col-md-4 d-flex flex-column pl-2">
+        <div class="row">
+            <div class="col-md-4 d-flex flex-column pl-5">
                 <label asp-for="Active" class="required">@Resource.Active</label>
-                <div class="icheck-primary d-inline">
+                <div class="d-inline">
                     <input asp-for="Active" id="inp_active" style="cursor: pointer;" type="checkbox">
                     <label asp-for="Active" id="lbl_active" onclick="change_active(this)"></label>
                 </div>
                 <span asp-validation-for="Active" class="text-danger"></span>
             </div>
         </div>
+        <div class="separator separator-solid mb-5"></div>
+
+        @if (Model.HasSubMenu)
+        {
+            <div class="accordion accordion-light accordion-toggle-arrow mb-5" id="kt_submenus">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title collapsed" data-toggle="collapse" data-target="#kt_submenu_list">
+                            @Resource.ListSubMenus
+                        </div>
+                    </div>
+                    <div id="kt_submenu_list" class="mt-4 collapse" data-parent="#kt_submenus">
+                        <div class="card-body" id="kt_submenu_data">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     </div>
-    <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
+    <div class="modal-footer modal-footer-uniform w-full justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-secondary" data-bs-dismiss="modal">@Resource.Close</button>
         <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Edit</button>
     </div>
 </form>
@@ -92,6 +110,8 @@
 
         $('#lbl_submenu').text('');
         $('#lbl_active').text('');
+
+        $('#kt_submenu_data').load('@Url.Action("SubMenu", "Submenu")?mIde=@Model.MenuIde');
     });
 
     function change_submenu(e) {

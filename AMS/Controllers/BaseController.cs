@@ -2,6 +2,7 @@
 using AMS.Data.General;
 using AMS.Models.Notification;
 using AMS.Models.Shared;
+using AMS.Resources;
 using AMS.Utilities;
 using AMS.Utilities.General;
 using AMS.Utilities.NotificationUtil;
@@ -115,6 +116,9 @@ public class BaseController : Controller
         await db.SaveChangesAsync();
     }
 
+    [AllowAnonymous, Description("Arb Tahiri", "Error status message.")]
+    public IActionResult _AlertMessage(ErrorVM error) => PartialView(error);
+
     #region General methods
 
     #region Language
@@ -192,9 +196,6 @@ public class BaseController : Controller
     #endregion
 
     #region Technical
-
-    [AllowAnonymous, Description("Arb Tahiri", "Error status message.")]
-    public IActionResult _StatusMessage(ErrorVM error) => PartialView(nameof(_StatusMessage), error);
 
     public async Task<List<string>> GetUsers(string role) =>
         await db.AspNetUsers.Where(a => a.Role.Any(a => a.Name == role)).Select(a => a.Id).ToListAsync();
@@ -387,7 +388,8 @@ public class BaseController : Controller
                 image = a.ProfileImage,
                 initials = $"{a.FirstName.Substring(0, 1)} {a.LastName.Substring(0, 1)}"
             }).ToListAsync();
-        return Json(list);
+        list.Add(new Select2 { id = "", text = Resource.Choose });
+        return Json(list.OrderBy(a => a.id));
     }
 
     /// <summary>
@@ -402,8 +404,7 @@ public class BaseController : Controller
         string search = string.IsNullOrEmpty(name) ? "" : name;
         var list = await db.Staff
             .Include(a => a.User)
-            .Where(a => (a.FirstName.ToLower().Contains(search.ToLower())
-                || a.LastName.ToLower().Contains(search.ToLower()))
+            .Where(a => (a.FirstName.ToLower().Contains(search.ToLower()) || a.LastName.ToLower().Contains(search.ToLower()))
                 && (string.IsNullOrEmpty(userId) || a.UserId != userId))
             .Take(10)
             .Select(a => new Select2
@@ -413,7 +414,8 @@ public class BaseController : Controller
                 image = a.User.ProfileImage,
                 initials = $"{a.FirstName.Substring(0, 1)} {a.LastName.Substring(0, 1)}"
             }).ToListAsync();
-        return Json(list);
+        list.Add(new Select2 { id = "", text = Resource.Choose });
+        return Json(list.OrderBy(a => a.id));
     }
 
     /// <summary>

@@ -2,32 +2,74 @@
     string action = (string)this.ViewContext.RouteData.Values["action"];
 }
 
-<div class="bs-stepper-header" role="tablist">
-    <div class='step @(action == "Register" ? "active" : "")' data-target="#register_form">
-        <a id="tab1" href="#">
-            <button type="button" class="step-trigger" role="tab" aria-controls="register_form" id="trigger_register_form" aria-selected='@(action == "Register" ? true : false)'>
-                <span id="icon_register" class="bs-stepper-circle"><span class="fas fa-id-card-alt" aria-hidden="true"></span></span>
-                <span class="bs-stepper-label">1. @Resource.PersonalData</span>
-            </button>
-        </a>
-    </div>
-    <div class="bs-stepper-line"></div>
-    <div class='step @(action == "Documents" ? "active" : "")' data-target="#document_form">
-        <a id="tab2" href="#">
-            <button type="button" class="step-trigger" role="tab" aria-controls="document_form" id="trigger_document_form" aria-selected='@(action == "Documents" ? true : false)'>
-                <span id="icon_document" class="bs-stepper-circle"><span class="fas fa-file-alt" aria-hidden="true"></span></span>
-                <span class="bs-stepper-label">3. @Resource.Documents</span>
-            </button>
-        </a>
-    </div>
-    <div class="bs-stepper-line"></div>
-    <div class='step @(action == "Departments" ? "active" : "")' data-target="#staff_department">
-        <a id="tab3" href="#">
-            <button type="button" class="step-trigger" role="tab" aria-controls="staff_department" id="trigger_staff_department" aria-selected='@(action == "Departments" ? true : false)'>
-                <span id="icon_department" class="bs-stepper-circle"><span class="fas fa-bookmark" aria-hidden="true"></span></span>
-                <span class="bs-stepper-label">4. @Resource.Department</span>
-            </button>
-        </a>
+<div class="wizard-nav border-bottom">
+    <div class="wizard-steps p-lg-3">
+        <div class="wizard-step" data-wizard-type="step" data-wizard-state="@(action == "Register" ? "current" : "done")">
+            <a id="f_tab">
+                <div class="wizard-label">
+                    <span class="wizard-icon svg-icon svg-icon-3x svg-icon-lg-5x wizard-arrow @(action != "Register" ? "svg-icon-success" : "")">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24" />
+                                <path d="M18,2 L20,2 C21.6568542,2 23,3.34314575 23,5 L23,19 C23,20.6568542 21.6568542,22 20,22 L18,22 L18,2 Z" fill="#000000" opacity="0.3" />
+                                <path d="M5,2 L17,2 C18.6568542,2 20,3.34314575 20,5 L20,19 C20,20.6568542 18.6568542,22 17,22 L5,22 C4.44771525,22 4,21.5522847 4,21 L4,3 C4,2.44771525 4.44771525,2 5,2 Z M12,11 C13.1045695,11 14,10.1045695 14,9 C14,7.8954305 13.1045695,7 12,7 C10.8954305,7 10,7.8954305 10,9 C10,10.1045695 10.8954305,11 12,11 Z M7.00036205,16.4995035 C6.98863236,16.6619875 7.26484009,17 7.4041679,17 C11.463736,17 14.5228466,17 16.5815,17 C16.9988413,17 17.0053266,16.6221713 16.9988413,16.5 C16.8360465,13.4332455 14.6506758,12 11.9907452,12 C9.36772908,12 7.21569918,13.5165724 7.00036205,16.4995035 Z" fill="#000000" />
+                            </g>
+                        </svg>
+                    </span>
+                    <h3 class="wizard-title text-black-50">1. @Resource.PersonalData</h3>
+                </div>
+            </a>
+            <span class="svg-icon svg-icon-xl svg-icon-primary wizard-arrow">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <polygon points="0 0 24 0 24 24 0 24"></polygon>
+                        <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-90.000000) translate(-12.000000, -12.000000)" x="11" y="5" width="2" height="14" rx="1"></rect>
+                        <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)"></path>
+                    </g>
+                </svg>
+            </span>
+        </div>
+        <div class="wizard-step" data-wizard-type="step" data-wizard-state="@(action == "Documents" ? "current" : (action == "Departments" ? "done" : "pending"))">
+            <a id="s_tab">
+                <div class="wizard-label">
+                    <span class="wizard-icon svg-icon svg-icon-3x svg-icon-lg-5x wizard-arrow @(action == "Departments" ? "svg-icon-success" : "")">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <polygon points="0 0 24 0 24 24 0 24" />
+                                <path d="M4.85714286,1 L11.7364114,1 C12.0910962,1 12.4343066,1.12568431 12.7051108,1.35473959 L17.4686994,5.3839416 C17.8056532,5.66894833 18,6.08787823 18,6.52920201 L18,19.0833333 C18,20.8738751 17.9795521,21 16.1428571,21 L4.85714286,21 C3.02044787,21 3,20.8738751 3,19.0833333 L3,2.91666667 C3,1.12612489 3.02044787,1 4.85714286,1 Z M8,12 C7.44771525,12 7,12.4477153 7,13 C7,13.5522847 7.44771525,14 8,14 L15,14 C15.5522847,14 16,13.5522847 16,13 C16,12.4477153 15.5522847,12 15,12 L8,12 Z M8,16 C7.44771525,16 7,16.4477153 7,17 C7,17.5522847 7.44771525,18 8,18 L11,18 C11.5522847,18 12,17.5522847 12,17 C12,16.4477153 11.5522847,16 11,16 L8,16 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                <path d="M6.85714286,3 L14.7364114,3 C15.0910962,3 15.4343066,3.12568431 15.7051108,3.35473959 L20.4686994,7.3839416 C20.8056532,7.66894833 21,8.08787823 21,8.52920201 L21,21.0833333 C21,22.8738751 20.9795521,23 19.1428571,23 L6.85714286,23 C5.02044787,23 5,22.8738751 5,21.0833333 L5,4.91666667 C5,3.12612489 5.02044787,3 6.85714286,3 Z M8,12 C7.44771525,12 7,12.4477153 7,13 C7,13.5522847 7.44771525,14 8,14 L15,14 C15.5522847,14 16,13.5522847 16,13 C16,12.4477153 15.5522847,12 15,12 L8,12 Z M8,16 C7.44771525,16 7,16.4477153 7,17 C7,17.5522847 7.44771525,18 8,18 L11,18 C11.5522847,18 12,17.5522847 12,17 C12,16.4477153 11.5522847,16 11,16 L8,16 Z" fill="#000000" fill-rule="nonzero" />
+                            </g>
+                        </svg>
+                    </span>
+                    <h3 class="wizard-title text-black-50">2. @Resource.Documents</h3>
+                </div>
+            </a>
+            <span class="svg-icon svg-icon-xl svg-icon-primary wizard-arrow">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <polygon points="0 0 24 0 24 24 0 24"></polygon>
+                        <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 12.000000) rotate(-90.000000) translate(-12.000000, -12.000000)" x="11" y="5" width="2" height="14" rx="1"></rect>
+                        <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)"></path>
+                    </g>
+                </svg>
+            </span>
+        </div>
+        <div class="wizard-step" data-wizard-type="step" data-wizard-state="@(action == "Departments" ? "current" : (action == "Register" || action == "Documents" ? "pending" : "done"))">
+            <a id="t_tab">
+                <div class="wizard-label">
+                    <span class="wizard-icon svg-icon svg-icon-3x svg-icon-lg-5x wizard-arrow">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24" />
+                                <path d="M10.5,5 L20.5,5 C21.3284271,5 22,5.67157288 22,6.5 L22,9.5 C22,10.3284271 21.3284271,11 20.5,11 L10.5,11 C9.67157288,11 9,10.3284271 9,9.5 L9,6.5 C9,5.67157288 9.67157288,5 10.5,5 Z M10.5,13 L20.5,13 C21.3284271,13 22,13.6715729 22,14.5 L22,17.5 C22,18.3284271 21.3284271,19 20.5,19 L10.5,19 C9.67157288,19 9,18.3284271 9,17.5 L9,14.5 C9,13.6715729 9.67157288,13 10.5,13 Z" fill="#000000" />
+                                <rect fill="#000000" opacity="0.3" x="2" y="5" width="5" height="14" rx="1" />
+                            </g>
+                        </svg>
+                    </span>
+                    <h3 class="wizard-title text-black-50">3. @Resource.Department</h3>
+                </div>
+            </a>
+        </div>
     </div>
 </div>
 <div class="progress">

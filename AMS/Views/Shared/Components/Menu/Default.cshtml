@@ -9,7 +9,7 @@
 <ul class="menu-nav">
     @foreach (var menu in Model)
     {
-        <li class="menu-item @(menu.HasSubMenu ? "menu-item-submenu" :"") menu-item-rel @(menu.Controller == (string)controller && menu.OpenFor.Split(",").Contains((string)action) ? "menu-item-active" :"")" aria-haspopup="true" @(menu.HasSubMenu ? "data-menu-toggle=click" : "")>
+        <li class="menu-item @(menu.HasSubMenu ? "menu-item-submenu" :"") menu-item-rel @(menu.Controller == (string)controller && menu.OpenFor.Split(",").Contains((string)action) ? "menu-item-active menu-item-open" :"")" aria-haspopup="true" @(menu.HasSubMenu ? "data-menu-toggle=click" : "")>
             <a href="@Url.Action(menu.Action, menu.Controller, new { area = menu.Area })" class="menu-link @(menu.HasSubMenu ? "menu-toggle" :"")">
                 <i class="@menu.Icon menu-icon mr-3"></i>
                 <span class="menu-text">@menu.Title</span>
@@ -24,7 +24,7 @@
                     <ul class="menu-subnav">
                         @foreach (var submenu in menu.SubMenus)
                         {
-                            <li class="@(submenu.Controller == (string)controller && submenu.OpenFor.Split(",").Contains((string)action) ? "menu-item-active" :"") menu-item" aria-haspopup="true">
+                            <li class="@(submenu.Controller == (string)controller && submenu.OpenFor.Split(",").Contains((string)action) ? "menu-item-active menu-item-open" :"") menu-item" aria-haspopup="true">
                                 <a asp-action="@submenu.Action" asp-controller="@submenu.Controller" asp-area="@submenu.Area" class="menu-link">
                                     <i class="@submenu.Icon menu-icon"></i>
                                     <span class="menu-text">@submenu.Title</span>

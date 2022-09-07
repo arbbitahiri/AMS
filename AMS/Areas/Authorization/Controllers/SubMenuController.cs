@@ -70,7 +70,8 @@ public class SubMenuController : BaseController
         var create = new Create
         {
             MenuIde = ide,
-            MenuTitle = user.Language == LanguageEnum.Albanian ? menu.NameSq : menu.NameEn
+            MenuTitle = user.Language == LanguageEnum.Albanian ? menu.NameSq : menu.NameEn,
+            HasSubMenu = menu.HasSubMenu
         };
         return PartialView(create);
     }

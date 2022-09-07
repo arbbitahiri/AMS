@@ -111,8 +111,8 @@ public class StaffController : BaseController
                     Lastname = a.LastName,
                     BirthDate = a.BirthDate.ToString("dd/MM/yyyy"),
                     GenderId = a.GenderId,
-                    Email = a.User.Email,
-                    PhoneNumber = a.User.PhoneNumber,
+                    Email = a.Email,
+                    PhoneNumber = a.PhoneNumber,
                     CityId = a.CityId,
                     CountryId = a.CountryId,
                     Address = a.Address,
@@ -133,129 +133,54 @@ public class StaffController : BaseController
         }
 
         string staffIde = string.Empty;
-        //if (await db.AspNetUsers.AnyAsync(a => a.PersonalNumber == staff.PersonalNumber))
-        //{
-            if (await db.Staff.AnyAsync(a => a.PersonalNumber == staff.PersonalNumber))
+        if (await db.Staff.AnyAsync(a => a.PersonalNumber == staff.PersonalNumber))
+        {
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.StaffWithPersonalExists });
+            return View(staff);
+        }
+
+        try
+        {
+            var newStaff = new Staff
             {
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.StaffWithPersonalExists });
-                return View(staff);
-            }
+                UserId = await db.AspNetUsers.Where(a => a.PersonalNumber == staff.PersonalNumber).Select(a => a.Id).FirstOrDefaultAsync(),
+                PersonalNumber = staff.PersonalNumber,
+                FirstName = staff.Firstname,
+                LastName = staff.Lastname,
+                BirthDate = DateTime.ParseExact(staff.BirthDate, "dd/MM/yyyy", null),
+                GenderId = staff.GenderId,
+                CityId = staff.CityId,
+                CountryId = staff.CountryId,
+                Address = staff.Address,
+                PostalCode = staff.PostalCode,
+                Email = staff.Email,
+                PhoneNumber = staff.PhoneNumber,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            };
 
-            try
+            db.Staff.Add(newStaff);
+            await db.SaveChangesAsync();
+
+            db.StaffRegistrationStatus.Add(new StaffRegistrationStatus
             {
-                var newStaff = new Staff
-                {
-                    UserId = await db.AspNetUsers.Where(a => a.PersonalNumber == staff.PersonalNumber).Select(a => a.Id).FirstOrDefaultAsync(),
-                    PersonalNumber = staff.PersonalNumber,
-                    FirstName = staff.Firstname,
-                    LastName = staff.Lastname,
-                    BirthDate = DateTime.ParseExact(staff.BirthDate, "dd/MM/yyyy", null),
-                    GenderId = staff.GenderId,
-                    CityId = staff.CityId,
-                    CountryId = staff.CountryId,
-                    Address = staff.Address,
-                    PostalCode = staff.PostalCode,
-                    Email = staff.Email,
-                    PhoneNumber = staff.PhoneNumber,
-                    InsertedDate = DateTime.Now,
-                    InsertedFrom = user.Id
-                };
+                StaffId = newStaff.StaffId,
+                StatusTypeId = (int)Status.Processing,
+                Active = true,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            });
 
-                db.Staff.Add(newStaff);
-                db.StaffRegistrationStatus.Add(new StaffRegistrationStatus
-                {
-                    StaffId = newStaff.StaffId,
-                    StatusTypeId = (int)Status.Processing,
-                    Active = true,
-                    InsertedDate = DateTime.Now,
-                    InsertedFrom = user.Id
-                });
+            await db.SaveChangesAsync();
 
-                await db.SaveChangesAsync();
-
-                staffIde = CryptoSecurity.Encrypt(newStaff.StaffId);
-            }
-            catch (Exception ex)
-            {
-                await LogError(ex);
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, Description = Resource.ErrorProcessingData });
-                return View(staff);
-            }
-        //}
-        //else
-        //{
-        //    var firstUser = new ApplicationUser
-        //    {
-        //        PersonalNumber = staff.PersonalNumber,
-        //        FirstName = staff.Firstname,
-        //        LastName = staff.Lastname,
-        //        Email = staff.Email,
-        //        EmailConfirmed = true,
-        //        PhoneNumber = staff.PhoneNumber,
-        //        UserName = staff.Email,
-        //        Language = LanguageEnum.Albanian,
-        //        AppMode = TemplateMode.Light,
-        //        InsertedDate = DateTime.Now,
-        //        InsertedFrom = user.Id
-        //    };
-
-        //    string errors = string.Empty;
-        //    var error = new ErrorVM { Status = ErrorStatus.Success, Description = Resource.AccountCreatedSuccessfully };
-
-        //    string password = FirstTimePassword(configuration, staff.Firstname, staff.Lastname);
-        //    var result = await userManager.CreateAsync(firstUser, password);
-        //    if (!result.Succeeded)
-        //    {
-        //        foreach (var identityError in result.Errors)
-        //        {
-        //            errors += $"{identityError.Description}. ";
-        //        }
-        //        error = new ErrorVM { Status = ErrorStatus.Warning, Description = errors };
-        //    }
-
-        //    try
-        //    {
-        //        var newStaff = new Staff
-        //        {
-        //            UserId = firstUser.Id,
-        //            PersonalNumber = staff.PersonalNumber,
-        //            FirstName = staff.Firstname,
-        //            LastName = staff.Lastname,
-        //            BirthDate = DateTime.ParseExact(staff.BirthDate, "dd/MM/yyyy", null),
-        //            GenderId = staff.GenderId,
-        //            CityId = staff.CityId,
-        //            CountryId = staff.CountryId,
-        //            Address = staff.Address,
-        //            PostalCode = staff.PostalCode,
-        //            Email = staff.Email,
-        //            PhoneNumber = staff.PhoneNumber,
-        //            InsertedDate = DateTime.Now,
-        //            InsertedFrom = user.Id
-        //        };
-
-        //        db.Staff.Add(newStaff);
-        //        await db.SaveChangesAsync();
-
-        //        db.StaffRegistrationStatus.Add(new StaffRegistrationStatus
-        //        {
-        //            StaffId = newStaff.StaffId,
-        //            StatusTypeId = (int)Status.Processing,
-        //            Active = true,
-        //            InsertedDate = DateTime.Now,
-        //            InsertedFrom = user.Id
-        //        });
-        //        await db.SaveChangesAsync();
-
-        //        staffIde = CryptoSecurity.Encrypt(newStaff.StaffId);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        await userManager.DeleteAsync(firstUser);
-        //        await LogError(ex);
-        //        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, Description = Resource.ErrorProcessingData });
-        //        return View(staff);
-        //    }
-        //}
+            staffIde = CryptoSecurity.Encrypt(newStaff.StaffId);
+        }
+        catch (Exception ex)
+        {
+            await LogError(ex);
+            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, Description = Resource.ErrorProcessingData });
+            return View(staff);
+        }
 
         return RedirectToAction(nameof(Documents), new { ide = staffIde });
     }
@@ -270,7 +195,6 @@ public class StaffController : BaseController
         }
 
         var staff = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(edit.StaffIde)).FirstOrDefaultAsync();
-        var userStaff = await db.AspNetUsers.FindAsync(staff.UserId);
 
         staff.PersonalNumber = edit.PersonalNumber;
         staff.FirstName = edit.Firstname;
@@ -282,8 +206,8 @@ public class StaffController : BaseController
         staff.PostalCode = edit.PostalCode;
         staff.Email = edit.Email;
         staff.PhoneNumber = edit.PhoneNumber;
-        userStaff.Email = edit.Email;
-        userStaff.PhoneNumber = edit.PhoneNumber;
+        staff.Email = edit.Email;
+        staff.PhoneNumber = edit.PhoneNumber;
         staff.UpdatedDate = DateTime.Now;
         staff.UpdatedFrom = user.Id;
         staff.UpdatedNo = UpdateNo(staff.UpdatedNo);
@@ -459,8 +383,9 @@ public class StaffController : BaseController
             {
                 StaffDepartmentIde = CryptoSecurity.Encrypt(a.StaffDepartmentId),
                 Department = user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn,
+                StaffType = user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn,
                 StartDate = a.StartDate.ToString("dd/MM/yyyy"),
-                EndDate = a.EndDate.ToString("dd/MM/yyyy"),
+                EndDate = a.EndDate.ToString("dd/MM/yyyy")
             }).ToListAsync();
 
         var departmentVM = new DepartmentVM

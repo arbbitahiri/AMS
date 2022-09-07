@@ -1,11 +1,11 @@
 {
   "sEmptyTable": "Nuk ka asnj\u00EB t\u00EB dh\u00EBn\u00EB n\u00EB tabel\u00EB",
-  "sInfo": "Duke treguar _START_ deri _END_ prej _TOTAL_ reshtave",
-  "sInfoEmpty": "Duke treguar 0 deri 0 prej 0 reshtave",
-  "sInfoFiltered": "(t\u00EB filtruara nga gjith\u00EBsej _MAX_ reshtave)",
+  "sInfo": "Duke treguar _START_ deri _END_ prej _TOTAL_ rreshtave",
+  "sInfoEmpty": "Duke treguar 0 deri 0 prej 0 rreshtave",
+  "sInfoFiltered": "(t\u00EB filtruara nga gjith\u00EBsej _MAX_ rreshtave)",
   "sInfoPostFix": "",
   "sInfoThousands": ",",
-  "sLengthMenu": "Shiko _MENU_ reshta",
+  "sLengthMenu": "Shiko _MENU_ rreshta",
   "sLoadingRecords": "Duke punuar...",
   "sProcessing": "<i class=\"fa fa-circle-notch fa-spin fa-2x fa-fw\"></i><span class=\"ml-2 pb-3\" style=\"vertical-align: middle;\">Duke procesuar...</span>",
   "sSearch": "K\u00EBrkoni:",
@@ -17,8 +17,8 @@
     "sPrevious": "Prapa"
   },
   "oAria": {
-    "sSortAscending": ": aktivizo p\u00EBr t\u00EB sortuar kolumnin me vlera n\u00EB ngritje",
-    "sSortDescending": ": aktivizo p\u00EBr t\u00EB sortuar kolumnin me vlera n\u00EB zbritje"
+    "sSortAscending": ": aktivizo p\u00EBr t\u00EB renditur kolon\u00EBn me vlera n\u00EB rritje",
+    "sSortDescending": ": aktivizo p\u00EBr t\u00EB renditur kolon\u00EBn me vlera n\u00EB zbritje"
   },
   "select": {
     "rows": {

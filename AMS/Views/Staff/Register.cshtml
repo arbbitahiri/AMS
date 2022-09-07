@@ -15,70 +15,75 @@
 
     <div class="row form-group">
         <div class="col-md-4">
-            <label asp-for="PersonalNumber"></label>
+            <label asp-for="PersonalNumber" class="required"></label>
             <input asp-for="PersonalNumber" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="PersonalNumber" class="text-danger"></span>
         </div>
         <div class="col-md-4">
-            <label asp-for="Firstname"></label>
+            <label asp-for="Firstname" class="required"></label>
             <input asp-for="Firstname" type="text" autocapitalize="on" autocomplete="off" class="form-control"/>
             <span asp-validation-for="Firstname" class="text-danger"></span>
         </div>
         <div class="col-md-4">
-            <label asp-for="Lastname"></label>
+            <label asp-for="Lastname" class="required"></label>
             <input asp-for="Lastname" type="text" autocapitalize="true" autocomplete="off" class="form-control"/>
             <span asp-validation-for="Lastname" class="text-danger"></span>
         </div>
     </div>
     <div class="row form-group">
         <div class="col-md-4">
-            <label asp-for="Email"></label>
+            <label asp-for="Email" class="required"></label>
             <input asp-for="Email" type="email" autocomplete="off" class="form-control"/>
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div class="col-md-4">
-            <label asp-for="PhoneNumber"></label>
+            <label asp-for="PhoneNumber" class="required"></label>
             <input asp-for="PhoneNumber" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
         <div class="col-md-4">
-            <label asp-for="BirthDate"></label>
-            <input asp-for="BirthDate" type="text" class="form-control datetimepicker-input" autocomplete="off" placeholder="dd/MM/yyyy" data-toggle="datetimepicker" data-target="#Birthdate"/>
+            <label asp-for="BirthDate" class="required"></label>
+            <div class="input-group date">
+                <input asp-for="BirthDate" type="text" placeholder="dd/MM/yyyy" value="@(string.IsNullOrEmpty(Model.BirthDate) ? "" : Model.BirthDate)" class="form-control" autocomplete="off" />
+                <div class="input-group-append">
+                    <span class="input-group-text"><i class="la la-calendar"></i></span>
+                </div>
+            </div>
             <span asp-validation-for="BirthDate" class="text-danger"></span>
         </div>
     </div>
     <div class="row form-group">
         <div class="col-md-4">
-            <label asp-for="GenderId"></label>
+            <label asp-for="GenderId" class="required"></label>
             <select asp-for="GenderId" asp-items='await repo.Genders(user.Language)' class="form-control select2"></select>
             <span asp-validation-for="GenderId" class="text-danger"></span>
         </div>
         <div class="col-md-4">
-            <label asp-for="CityId"></label>
+            <label asp-for="CityId" class="required"></label>
             <select asp-for="CityId" asp-items='await repo.Cities(user.Language)' class="form-control select2"></select>
             <span asp-validation-for="CityId" class="text-danger"></span>
         </div>
         <div class="col-md-4">
-            <label asp-for="CountryId"></label>
+            <label asp-for="CountryId" class="required"></label>
             <select asp-for="CountryId" asp-items='await repo.Countries(user.Language)' class="form-control select2"></select>
             <span asp-validation-for="CountryId" class="text-danger"></span>
         </div>
     </div>
     <div class="row form-group">
         <div class="col-md-4">
-            <label asp-for="Address"></label>
+            <label asp-for="Address" class="required"></label>
             <input asp-for="Address" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
         <div class="col-md-4">
-            <label asp-for="PostalCode"></label>
+            <label asp-for="PostalCode" class="required"></label>
             <input asp-for="PostalCode" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="PostalCode" class="text-danger"></span>
         </div>
     </div>
 
     <div class="d-flex justify-content-end border-top mt-5">
-        <input type="button" value="@Resource.Continue" onclick="continue_form()" class="btn btn-primary font-weight-bolder text-uppercase mt-2"/>
+        <input type="button" value="@Resource.Continue" onclick="continue_form()" class="btn btn-primary font-weight-bolder text-uppercase mt-2 btn-lg"/>
     </div>
 </form>
 
@@ -86,16 +91,13 @@
     <script>
         $(document).ready(function () {
             if (@Model.MethodType == MethodType.POST) {
-                $('#tab1').attr({ href: '', style: '' });
-                $('#tab2').attr({ href: '', style: 'cursor: default' });
-                $('#tab3').attr({ href: '', style: 'cursor: default' });
-
-                $('#trigger_document_form').attr({ disabled: true });
-                $('#trigger_staff_department').attr({ disabled: true });
+                $('#f_tab').attr({ href: '', style: '' });
+                $('#s_tab').attr({ href: '', style: 'cursor: default' });
+                $('#t_tab').attr({ href: '', style: 'cursor: default' });
             } else {
-                $('#tab1').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffIde&method=@Model.MethodType', style: "cursor: pointer" });
-                $('#tab2').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffIde&method=@Model.MethodType', style: "cursor: pointer" });
-                $('#tab3').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffIde&method=@Model.MethodType', style: "cursor: pointer" });
+                $('#f_tab').attr({ href: '@Url.Action("Register", "Staff")?ide=@Model.StaffIde&method=@Model.MethodType', style: "cursor: pointer" });
+                $('#s_tab').attr({ href: '@Url.Action("Documents", "Staff")?ide=@Model.StaffIde&method=@Model.MethodType', style: "cursor: pointer" });
+                $('#t_tab').attr({ href: '@Url.Action("Departments", "Staff")?ide=@Model.StaffIde&method=@Model.MethodType', style: "cursor: pointer" });
             }
 
             $.validator.setDefaults({ ignore: '' });
@@ -119,14 +121,19 @@
                 }
             });
 
-            $("#BirthDate").datetimepicker({
-                locale: cultureShort,
-                format: 'L',
-                dayViewHeaderFormat: "MMMM YYYY",
-                buttons: {
-                    showClear: true,
-                    showClose: true
-                },
+            var arrows = {
+                leftArrow: '<i class="la la-angle-left"></i>',
+                rightArrow: '<i class="la la-angle-right"></i>'
+            };
+
+            $("#BirthDate").datepicker({
+                language: cultureShort,
+                rtl: KTUtil.isRTL(),
+                todayBtn: "linked",
+                todayHighlight: true,
+                templates: arrows,
+                autoclose: true,
+                orientation: "bottom"
             }).inputmask("mask", {
                 mask: "99/99/9999",
                 placeholder: "dd/MM/yyyy"

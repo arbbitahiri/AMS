@@ -14,9 +14,7 @@ public class ErrorVM
 
     public string Icon { get; set; }
 
-    public string RequestId { get; set; }
-
-    public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
-
     public bool Dismissible { get; set; }
+
+    public bool Light { get; set; }
 }

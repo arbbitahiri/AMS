@@ -3,13 +3,13 @@
 
 <div class="modal-header">
     <h5 class="modal-title">@Resource.AddMenu</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <i aria-hidden="true" class="far fa-times-circle"></i>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="ki ki-close"></i>
     </button>
 </div>
 
 <form asp-action="Create" asp-controller="Menu" asp-area="Authorization" id="frm_CreateMenu" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="on_success_menu" role="form">
-    <div class="modal-body">
+    <div class="modal-body pb-0">
         @Html.AntiForgeryToken()
 
         <div class="row form-group">
@@ -57,9 +57,9 @@
                 <input asp-for="OpenFor" class="form-control" />
                 <span asp-validation-for="OpenFor" class="text-danger"></span>
             </div>
-            <div class="col-md-4 d-flex flex-column pl-2">
+            <div class="col-md-4 d-flex flex-column pl-5">
                 <label asp-for="HasSubMenu" class="required">@Resource.HasSubMenu</label>
-                <div class="icheck-primary d-inline">
+                <div class="d-inline">
                     <input asp-for="HasSubMenu" id="has_submenu" style="cursor: pointer;" type="checkbox">
                     <label asp-for="HasSubMenu" id="lbl_submenu" onclick="change_check(this)"></label>
                 </div>
@@ -67,8 +67,8 @@
             </div>
         </div>
     </div>
-    <div class="modal-footer justify-content-between">
-        <button type="button" class="btn btn-bold btn-pure btn-default" data-dismiss="modal">@Resource.Close</button>
+    <div class="modal-footer modal-footer-uniform w-full justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-secondary" data-bs-dismiss="modal">@Resource.Close</button>
         <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
     </div>
 </form>

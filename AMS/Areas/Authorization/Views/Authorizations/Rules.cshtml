@@ -32,9 +32,9 @@
             responsive: true,
             data: data,
             columnDefs: [
-                { targets: [0, 5, 6], className: "w-10 vertikal" },
-                { targets: [4], className: "w-25 vertikal" },
-                { targets: [1, 2, 3], className: "w-15 vertikal" },
+                { targets: [0, 5], className: "w-5" },
+                { targets: [1, 2, 3, 6], className: "w-15" },
+                { targets: [4], className: "w-25" },
                 { targets: "_all", defaultContent: "///" },
                 { targets: [0, 6], searchable: false }
             ],
@@ -70,7 +70,8 @@
                         var hasAccess = row.hasAccess ? "checked" : "";
                         return '<input data-switch="true" style="cursor: pointer; width: 90px;" type="checkbox" id="ch_hasAccess" ' +
                                 'onchange="change_access_method(this, \'' + row.policy + '\')" ' + hasAccess + ' ' +
-                                'data-bootstrap-switch data-off-color="warning" data-on-color="success">';
+                                'data-bootstrap-switch data-off-color="warning" data-on-color="success" data-handle-width="90" ' +
+                                'data-on-text="@Html.Raw(Resource.Yes)" data-off-text="@Html.Raw(Resource.No)"/>';
                     }
                 }
             ]

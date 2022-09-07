@@ -4,11 +4,6 @@
     ErrorVM error = (ErrorVM)ViewData["Error"] ?? new ErrorVM();
     var controller = this.ViewContext.RouteData.Values["controller"] ?? "";
     var action = this.ViewContext.RouteData.Values["action"] ?? "";
-
-    //string darkMode = user.Mode == TemplateMode.Dark ? "dark-mode" : "";
-    //string navMode = user.Mode == TemplateMode.Dark ? "navbar-dark" : "navbar-light navbar-white";
-    //string backTitleColour = user.Mode == TemplateMode.Dark ? "background-color: #7e8286; border-color: #7e8286 !important;" : "background-color: #eceded;";
-    //string backNavColour = user.Mode == TemplateMode.Dark ? "border-color: #7e8286 !important;" : "";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -38,6 +33,7 @@
         <link href="~/assets2/css/themes/layout/brand/dark.css" rel="stylesheet" type="text/css" asp-append-version="true" />
         <link href="~/assets2/css/themes/layout/aside/dark.css" rel="stylesheet" type="text/css" asp-append-version="true" />
     }
+    @*<link rel="stylesheet" type="text/css" asp-append-version="true" href="~/lib/datatables/dataTables.min.css"/>*@
     <link rel="stylesheet" type="text/css" asp-append-version="true" href="~/lib/datatables/css/dataTables.bootstrap4.min.css"/>
     <link rel="stylesheet" type="text/css" asp-append-version="true" href="~/lib/datatables/css/responsive.dataTables.min.css"/>
     <link rel="stylesheet" type="text/css" asp-append-version="true" href="~/lib/datatables/css/buttons.dataTables.min.css"/>
@@ -126,7 +122,7 @@
                                         </span>
                                     </div>
                                     <a href="/Home/Index" class="text-white">
-                                        <img src="~/Media/Manifest/android-chrome-512x512.png" asp-append-version="true" class="max-h-40px" />
+                                        <img src="~/favicon.ico" asp-append-version="true" class="max-h-40px" />
                                         AMS
                                     </a>
                                 </div>
@@ -180,7 +176,7 @@
                     @if (error.Status != 0)
                     {
                         <div class="alertMsg mb-6 mx-8">
-                            @*<partial name="_StatusMessage" model="error" />*@
+                            <partial name="_AlertMessage" model="error" />
                         </div>
                     }
                     <div class="main-body">
@@ -212,11 +208,19 @@
     <script asp-append-version="true" src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script asp-append-version="true" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script asp-append-version="true" src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script asp-append-version="true" src="~/lib/jquery-ui/jquery-ui.min.js"></script>
     <script asp-append-version="true" src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+    @*<script asp-append-version="true" src="~/lib/datatables/dataTables.min.js"></script>*@
+    <script asp-append-version="true" src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
+    <script asp-append-version="true" src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
+    <script asp-append-version="true" src="~/lib/datatables/js/dataTables.responsive.min.js"></script>
+    <script asp-append-version="true" src="~/lib/datatables/js/dataTables.buttons.min.js"></script>
+    <script asp-append-version="true" src="~/lib/datatables/js/buttons.flash.min.js"></script>
+    <script asp-append-version="true" src="~/lib/datatables/js/jszip.min.js"></script>
+    <script asp-append-version="true" src="~/lib/datatables/js/vfs_fonts.min.js"></script>
     <script asp-append-version="true" src="~/js/SignalRUtils.js"></script>
     <script asp-append-version="true" src="~/js/JQueryCustomValidation.js"></script>
     <script asp-append-version="true" src="~/js/site.js"></script>
+    <script asp-append-version="true" src="~/lib/lazysizes/lazysizes.min.js"></script>
 
     @*<script asp-append-version="true" src="~/assets2/plugins/global/plugins.bundle.js"></script>
     <script asp-append-version="true" src="~/assets2/js/scripts.bundle.js"></script>

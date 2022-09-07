@@ -2,20 +2,24 @@
     ViewData["Title"] = Resource.Attendance;
 }
 
-<div class="card card-primary card-outline card-outline-tabs" id="kt_navigation">
-    <div class="card-header p-0 card-header-tabs-line border-bottom-0">
-        <ul class="nav nav-tabs kt_tabs" role="tablist" id="kt_tabs">
-            <li class="nav-item">
-                <a href="/Attendance/SearchStaff" class="nav-link" role="tab" id="tab_menu" data-toggle="tab" data-target="#kt_staff">
-                    @Resource.StaffList
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="/Attendance/SearchAttendance" class="nav-link" role="tab" id="tab_apps" data-toggle="tab" data-target="#kt_attendance">
-                    @Resource.AttendanceList
-                </a>
-            </li>
-        </ul>
+<div class="card card-custom gutter-b">
+    <div class="card-header card-header-tabs-line border-0">
+        <div class="card-toolbar">
+            <ul class="nav nav-tabs nav-bold nav-tabs-line justify-content-center kt_tabs">
+                <li class="nav-item mx-2" id="kt_staff_tab">
+                    <a class="nav-link text-active-primary active" id="tab_staff" data-bs-toggle="tab" href="/Attendance/SearchStaff" data-target="#kt_staff">
+                        <span class="nav-icon mr-2"><i class="fas fa-users"></i></span>
+                        <span class="nav-text font-size-h6">@Resource.Staff</span>
+                    </a>
+                </li>
+                <li class="nav-item mx-2" id="kt_attendance_tab">
+                    <a class="nav-link text-active-primary" id="tab_attendance" data-bs-toggle="tab" href="/Attendance/SearchAttendance" data-target="#kt_attendance">
+                        <span class="nav-icon mr-2"><i class="fas fa-calendar-alt"></i></span>
+                        <span class="nav-text font-size-h6">@Resource.Attendance</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 
@@ -38,7 +42,7 @@
                 $($('.kt_tabs').find('a')[0]).trigger('click');
             }, 150);
 
-            $('[data-toggle="tab"]').click(function(e) {
+            $('[data-bs-toggle="tab"]').click(function (e) {
                 e.preventDefault();
                 load_url = $(this).attr('href'),
                 target = $(this).attr('data-target');
@@ -54,31 +58,12 @@
             });
         });
 
-        function menu_tab() {
-            $("#kt_menu").load('@Url.Action("Search", "Authorizations")', {
-                Role: $('#Role').val(),
-                "__RequestVerificationToken": $("[name='__RequestVerificationToken']").val()
-                }, function() {
-                    sessionStorage.setItem("tab_auth", "tab_menu");
-            });
-        }
-
-        function auth_tab() {
-            $("#kt_apps").load('@Url.Action("Rules", "Authorizations")', {
-                role: $('#Role').val()
-                }, function() {
-                    sessionStorage.setItem("tab_auth", "tab_apps");
-            });
-        }
-
         function format_repo(repo) {
             if (repo.loading) {
                 return repo.text;
             }
 
-            var $container = $(
-                '<span class="d-flex align-items-center">' + repo.text + '</span>'
-            );
+            var $container = $('<span class="d-flex align-items-center">' + repo.text + '</span>');
             return $container;
         }
 

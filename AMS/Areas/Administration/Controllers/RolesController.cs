@@ -43,10 +43,10 @@ public class RolesController : BaseController
 
     #region Create
 
-    [Authorize(Policy = "42:c"), Description("Arb Tahiri", "Form to create a role.")]
+    [Authorize(Policy = "32:c"), Description("Arb Tahiri", "Form to create a role.")]
     public IActionResult _CreateRole() => PartialView();
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "42:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "32:c")]
     [Description("Arb Tahiri", "Action to create a role.")]
     public async Task<IActionResult> CreateRole(Create create)
     {
@@ -119,7 +119,7 @@ public class RolesController : BaseController
 
     #region Delete
 
-    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "42:c")]
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "32:d")]
     [Description("Arb Tahiri", "Action to delete a role.")]
     public async Task<IActionResult> Delete(string rIde)
     {

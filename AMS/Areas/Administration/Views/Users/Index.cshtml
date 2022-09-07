@@ -6,10 +6,10 @@
     UserModel user = (UserModel)ViewData["User"];
 }
 
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title pt-2">@Resource.SearchParameters</h3>
-        <div class="card-tools pr-3">
+<div class="card card-custom gutter-b">
+    <div class="card-header d-flex justify-content-between">
+        <h3 class="card-title">@Resource.SearchParameters</h3>
+        <div class="card-toolbar">
             <a asp-action="Create" class="btn btn-primary float-right">@Resource.AddUser</a>
         </div>
     </div>
@@ -18,38 +18,38 @@
             @Html.AntiForgeryToken()
             <div class="row">
                 <div class="col-3 form-group">
-                    <label asp-for="Role"></label>
+                    <label asp-for="Role">@Resource.Role</label>
                     <select asp-for="Role" asp-items="await repo.Roles(user.Language)" multiple class="form-control select2">
                         <option value="">@Resource.Choose</option>
                     </select>
                 </div>
                 <div class="col-3 form-group">
-                    <label asp-for="PersonalNumber"></label>
+                    <label asp-for="PersonalNumber">@Resource.PersonalNumber</label>
                     <input asp-for="PersonalNumber" type="text" class="form-control"/>
                 </div>
                 <div class="col-3 form-group">
-                    <label asp-for="Firstname"></label>
+                    <label asp-for="Firstname">@Resource.Firstname</label>
                     <input asp-for="Firstname" type="text" class="form-control"/>
                 </div>
                 <div class="col-3 form-group">
-                    <label asp-for="Lastname"></label>
+                    <label asp-for="Lastname">@Resource.Lastname</label>
                     <input asp-for="Lastname" type="text" class="form-control"/>
                 </div>
                 <div class="col-3 form-group">
-                    <label asp-for="Email"></label>
+                    <label asp-for="Email">@Resource.Email</label>
                     <input asp-for="Email" type="text" class="form-control"/>
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="col-3">
                     <label asp-for="Firstname" style="visibility:hidden"></label><br />
-                    <button type="submit" class="btn btn-primary">@Resource.Search</button>
+                    <button type="submit" class="btn btn-primary btn-block">@Resource.Search</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
 
-<div class="card" id="search_result">
+<div class="card card-custom" id="search_result">
     <div class="card-header">
         <h3 class="card-title">@Resource.SearchResult</h3>
     </div>
@@ -111,9 +111,10 @@
                 data: data,
                 deferRender: true,
                 columnDefs: [
-                    { targets: [0, 5, 6], className: "w5 vertikal" },
-                    { targets: [2, 3, 4], className: "w20 vertikal" },
-                    { targets: [1], className: "w30 vertikal" },
+                    { targets: [0, 5, 6], width: "5%" },
+                    { targets: [2, 3, 4], width: "20%" },
+                    { targets: [1], width: "30%" },
+                    { targets: [6], className: "button-td text-center" },
                     { targets: "_all", defaultContent: "///" }
                 ],
                 order: [[0, "asc"]],
@@ -166,18 +167,18 @@
                             let dateTimeNow = new Date();
                             var lockoutDate = new Date(row.lockoutEnd);
 
-                            var dropdown = '<div class="input-group-prepend">' +
-                                '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
-                                '<div class="dropdown-menu" role="menu">' +
-                                '<button type="button" class="dropdown-item" onclick="edit_user(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-pencil-alt"></i></span><span class="p-1">@Resource.Edit</span></button>' +
-                                '<button type="button" class="dropdown-item" onclick="setPassword(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-key"></i></span><span class="p-1">@Resource.SetPassword</span></button>';
+                            var dropdown = '<div class="dropdown dropleft cursor-pointer">' +
+                                '<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                                '<div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">' +
+                                '<button class="dropdown-item cursor-pointer" type="button" onclick="edit_user(\'' + row.userId + '\')">@Html.Raw(ActionButton.Edit.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Edit</span></button>' +
+                                '<button class="dropdown-item cursor-pointer" type="button" onclick="setPassword(\'' + row.userId + '\')">@Html.Raw(ActionButton.Key.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.SetPassword</span></button>';
                             if (lockoutDate <= dateTimeNow) {
-                                dropdown += '<button type="button" class="dropdown-item" onclick="lock_user(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-lock"></i></span><span class="p-1">@Resource.LockAccount</span></button>';
+                                dropdown += '<button class="dropdown-item cursor-pointer" type="button" onclick="lock_user(\'' + row.userId + '\')">@Html.Raw(ActionButton.Lock.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.LockAccount</span></button>';
                             } else {
-                                dropdown += '<button type="button" class="dropdown-item" onclick="unlock_user(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-unlock"></i></span><span class="p-1">@Resource.UnlockAccount</span></button>';
+                                dropdown += '<button class="dropdown-item cursor-pointer" type="button" onclick="unlock_user(\'' + row.userId + '\')">@Html.Raw(ActionButton.Unlock.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.UnlockAccount</span></button>';
                             }
-                            dropdown += '<button type="button" class="dropdown-item" onclick="addRole(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-user-tag"></i></span><span class="p-1">@Resource.AddRole</span></button>' +
-                                '<button type="button" class="dropdown-item" onclick="delete_user(\'' + row.userId + '\')"><span class="mr-1"><i class="fas fa-trash"></i></span><span class="p-1">@Resource.Delete</span></button>' +
+                            dropdown += '<button class="dropdown-item cursor-pointer" type="button" onclick="addRole(\'' + row.userId + '\')">@Html.Raw(ActionButton.Role.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.AddRole</span></button>' +
+                                '<button class="dropdown-item cursor-pointer" type="button" onclick="delete_user(\'' + row.userId + '\')">@Html.Raw(ActionButton.Delete.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Delete</span></button>' +
                                 '</div></div>';
                             return dropdown;
                         }
@@ -191,14 +192,14 @@
         }
 
         function setPassword(ide) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_SetPassword", "Users")?uIde=' + ide, function () {
-                $('#modal-lg').modal('toggle');
+            $('#modal-large').find('.modal-content').load('@Url.Action("_SetPassword", "Users")?uIde=' + ide, function () {
+                $('#modal-large').modal('toggle');
             });
         }
 
         function addRole(ide) {
-            $('#modal-lg').find('.modal-content').load('@Url.Action("_AddRole", "Users")?uIde=' + ide, function () {
-                $('#modal-lg').modal('toggle');
+            $('#modal-large').find('.modal-content').load('@Url.Action("_AddRole", "Users")?uIde=' + ide, function () {
+                $('#modal-large').modal('toggle');
             });
         }
 

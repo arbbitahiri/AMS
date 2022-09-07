@@ -18,7 +18,9 @@
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-sm-6 form-group">
                     <label asp-for="AStaffId">@Resource.Staff</label>
-                    <select asp-for="AStaffId" class="form-control select2"></select>
+                    <select asp-for="AStaffId" class="form-control select2">
+                        <option value="">@Resource.Choose</option>
+                    </select>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6 form-group">
                     <label asp-for="ADepartmentId">@Resource.Department</label>
@@ -63,26 +65,26 @@
     </div>
 </div>
 
-<div class="card" style="display: none;" id="kt_attendance_search">
+<div class="card card-custom" style="display: none;" id="kt_attendance_search">
     <div class="card-header">
-        <h3 class="card-title mt-1">@Resource.SearchResult</h3>
-        <div class="card-tools mr-2">
-            <div class="input-group-prepend">
-                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">@Resource.Download</button>
-                <div class="dropdown-menu dropdown-menu-sm" role="menu">
+        <h3 class="card-title">@Resource.SearchResult</h3>
+        <div class="card-toolbar">
+            <div class="btn-group dropleft">
+                <button type="button" class="btn btn-primary font-weight-bold btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@Resource.Download</button>
+                <div class="dropdown-menu dropdown-menu-sm p-0" role="menu">
                     <div class="d-flex">
                         <button class="dropdown-item d-flex flex-column" type="button" onclick="get_attendance_report(ReportType.PDF)">
-                            <span style="margin: auto;"><i class="fa fa-file-pdf fa-2x"></i></span>
+                            <img src="~/media/extensions/pdf.png" class="btn-download" asp-append-version="true" />
                             <span class="title text-center w-100">PDF</span>
                         </button>
                         <button class="dropdown-item d-flex flex-column" type="button" onclick="get_attendance_report(ReportType.EXCEL)">
-                            <span style="margin: auto;"><i class="fa fa-file-excel fa-2x"></i></span>
+                            <img src="~/media/extensions/xls.png" class="btn-download" asp-append-version="true" />
                             <span class="title text-center w-100">Excel</span>
                         </button>
                     </div>
                     <div class="d-flex">
                         <button class="dropdown-item d-flex flex-column" type="button" onclick="get_attendance_report(ReportType.WORD)">
-                            <span style="margin: auto;"><i class="fa fa-file-word fa-2x"></i></span>
+                            <img src="~/media/extensions/doc.png" class="btn-download" asp-append-version="true" />
                             <span class="title text-center w-100">Word</span>
                         </button>
                     </div>
@@ -117,14 +119,27 @@
             }
         });
 
-        $("#AStartDate, #AEndDate").datetimepicker({
-            locale: cultureShort,
-            format: 'L',
-            dayViewHeaderFormat: "MMMM YYYY",
-            buttons: {
-                showClear: true,
-                showClose: true
-            },
+        $("#AStartDate").datepicker({
+            language: cultureShort,
+            rtl: KTUtil.isRTL(),
+            todayBtn: "linked",
+            todayHighlight: true,
+            templates: arrows,
+            autoclose: true,
+            orientation: "bottom"
+        }).inputmask("mask", {
+            mask: "99/99/9999",
+            placeholder: "dd/MM/yyyy"
+        });
+
+        $("#AEndDate").datepicker({
+            language: cultureShort,
+            rtl: KTUtil.isRTL(),
+            todayBtn: "linked",
+            todayHighlight: true,
+            templates: arrows,
+            autoclose: true,
+            orientation: "bottom"
         }).inputmask("mask", {
             mask: "99/99/9999",
             placeholder: "dd/MM/yyyy"
@@ -140,7 +155,7 @@
         });
 
         $('#btn_search_a').on('click', function() {
-            $('#kt_attendance_search').slideDown(500);
+            $('#kt_attendance_search').show(500);
         });
     });
 
@@ -192,10 +207,8 @@
             data: data,
             deferRender: true,
             columnDefs: [
-                { className: "w5 vertikal button-td text-center", targets: [4] },
-                { className: "w5 vertikal", targets: [0, 3] },
-                { className: "w10 vertikal", targets: [2] },
-                { className: "w20 vertikal", targets: [1] },
+                { className: "button-td text-center", targets: [4] },
+                { width: "5%", targets: [0, 4] },
                 { defaultContent: "///", targets: "_all" }
             ],
             order: [[0, "asc"]],
@@ -223,10 +236,10 @@
                 { data: "absent" },
                 {
                     data: function (row, type, set) {
-                        var dropdown = '<div class="input-group-prepend" style="justify-content: center;">' +
-                            '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
-                            '<div class="dropdown-menu" role="menu">'+
-                            '<button type="button" class="dropdown-item" onclick="details_attendance(\'' + row.staffAttendanceIde + '\')"><span class="mr-1"><i class="fas fa-info-circle"></i></span><span class="p-1">@Resource.Details</span></button>' +
+                        var dropdown = '<div class="dropdown dropleft cursor-pointer">' +
+                            '<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                            '<div class="dropdown-menu dropdown-grid" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">' +
+                            '<button type="button" class="dropdown-item cursor-pointer" onclick="details_attendance(\'' + row.staffAttendanceIde + '\')">@Html.Raw(ActionButton.Details.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Details</span></button>' +
                             '</div></div>';
                         return dropdown;
                     }
@@ -236,7 +249,9 @@
     }
 
     function details_attendance(ide) {
-
+        $('#modal-large').find('.modal-content').load('@Url.Action("_Details", "Attendance")?ide=' + ide, function () {
+            $('#modal-large').modal('toggle');
+        });
     }
 
     function get_attendance_report(type) {
