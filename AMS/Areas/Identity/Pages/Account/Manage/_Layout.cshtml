@@ -1,6 +1,9 @@
-﻿@{
+﻿@using AMS.Data.Core
+@using System.Security.Claims
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ErrorVM error = (ErrorVM)ViewData["ErrorIdentity"] ?? new ErrorVM();
+    ApplicationUser user = (ApplicationUser)ViewData["InternalUser"];
 }
 
 @if (error.Status != 0)
@@ -10,11 +13,34 @@
     </div>
 }
 
-<div class="row">
-    <div class="col-md-3">
-        <partial name="_Navigation" />
+<div class="d-flex flex-row">
+    <div class="flex-row-auto offcanvas-mobile w-300px w-xl-350px">
+        <div class="card card-custom card-stretch">
+            <div class="card-body pt-10">
+                <div class="d-flex align-items-center">
+                    <div class="symbol symbol-60 symbol-xxl-100 mr-5 align-self-start align-self-xxl-center">
+                        <div class="symbol-label shadow" style="background-image:url('../../../../../@Url.Content(user.ProfileImage ?? "assets2/media/users/default.jpg")')"></div>
+                    </div>
+                    <div>
+                        <a href="#" class="font-weight-bolder font-size-h5 text-dark-75 text-hover-primary">@user.FirstName @user.LastName</a>
+                        <div class="text-muted">@User.FindFirstValue(ClaimTypes.Role)</div>
+                    </div>
+                </div>
+                <div class="py-9">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="font-weight-bold mr-2">@Resource.Email:</span>
+                        <a href="#" class="text-muted text-hover-primary">@user.Email</a>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <span class="font-weight-bold mr-2">@Resource.PhoneNumber:</span>
+                        <span class="text-muted">@(user.PhoneNumber ?? "///")</span>
+                    </div>
+                </div>
+                <partial name="_Navigation" />
+            </div>
+        </div>
     </div>
-    <div class="col-md-9">
+    <div class="flex-row-fluid ml-lg-8">
         @RenderBody()
     </div>
 </div>

@@ -8,30 +8,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@Resource.Login</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="stylesheet" href="~/assets/plugins/fontawesome-free/css/all.min.css">
-    <link rel="stylesheet" href="~/assets/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+
+    <link rel="stylesheet" asp-append-version="true" href="~/assets2/css/pages/login/login-4.css" />
+    <link rel="stylesheet" asp-append-version="true" href="~/assets2/plugins/global/plugins.bundle.css">
+    <link rel="stylesheet" asp-append-version="true" href="~/assets2/css/style.bundle.css">
 </head>
-<body class="hold-transition login-page">
-    <img src="/images/login-background.jpg" style="position: absolute; width: 100%; height: inherit;"/>
-    <div class="login-box">
-        <div class="card card-outline card-primary">
-            <div class="card-header text-center">
-                <a href="#" class="h1"><b>AMS</b></a>
+<body class="d-flex flex-column flex-root">
+    <div class="login login-4 wizard d-flex flex-column flex-lg-row flex-column-fluid">
+        <div class="login-container order-2 order-lg-1 d-flex flex-center flex-row-fluid px-7 pt-lg-0 pb-lg-0 pt-4 pb-6 bg-white">
+            <div class="login-content d-flex flex-column pt-lg-0 pt-12">
+                <a href="#" class="login-logo pb-xl-20 pb-15 d-flex justify-content-start align-items-center">
+                    <img src="~/favicon.ico" class="max-h-70px" alt="">
+                    <h3 class="font-weight-bolder text-dark font-size-h2 font-size-h1-lg ml-4 mb-0">AMS</h3>
+                </a>
+                <div class="login-form">
+                    @RenderBody()
+                </div>
             </div>
-            @RenderBody()
+        </div>
+        <div class="login-aside order-1 order-lg-2 bgi-no-repeat bgi-position-x-right" style="width: 1200px !important;">
+            <div class="login-conteiner bgi-no-repeat bgi-position-x-right bgi-position-y-bottom" style="background-image: url(/assets2/media/svg/illustrations/login-visual-4.svg);">
+                <h3 class="pt-lg-40 pl-lg-20 pb-lg-0 pl-10 py-20 m-0 d-flex justify-content-lg-start font-weight-boldest display5 display1-lg text-white">
+                    Attendance<br />Management<br />System
+                </h3>
+            </div>
         </div>
     </div>
 
     <partial name="_LoadingPartial" />
 
-    <script src="~/assets/plugins/jquery/jquery.min.js"></script>
-    <script src="~/assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="~/assets/dist/js/adminlte.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js" asp-append-version="true"></script>
-    <script src="~/js/login.js" asp-append-version="true"></script>
+    <script asp-append-version="true" src="~/assets2/plugins/global/plugins.bundle.js"></script>
+    <script asp-append-version="true" src="~/assets2/js/scripts.bundle.js"></script>
+    <script asp-append-version="true" src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script asp-append-version="true" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script asp-append-version="true" src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+    <script asp-append-version="true" src="~/js/login.js"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+</html>

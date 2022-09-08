@@ -466,6 +466,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ndrysho.
+        /// </summary>
+        public static string Change {
+            get {
+                return ResourceManager.GetString("Change", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ndrysho grupin.
         /// </summary>
         public static string ChangeRole {
@@ -1632,6 +1641,15 @@ namespace AMS.Resources {
         public static string Register {
             get {
                 return ResourceManager.GetString("Register", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Largo.
+        /// </summary>
+        public static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
             }
         }
         

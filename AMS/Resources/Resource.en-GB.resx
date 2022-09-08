@@ -858,4 +858,10 @@
   <data name="Hi" xml:space="preserve">
     <value>Hi</value>
   </data>
+  <data name="Change" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
 </root>

@@ -31,7 +31,10 @@ public class BaseIModel : PageModel
     public override async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
     {
         user = await userManager.GetUserAsync(context.HttpContext.User);
-        await signInManager.RefreshSignInAsync(user);
+        if (user != null)
+        {
+            await signInManager.RefreshSignInAsync(user);
+        }
 
         ViewData["Title"] = "Manage your account.";
         ViewData["InternalUser"] = user;

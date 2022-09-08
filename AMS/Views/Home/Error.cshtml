@@ -6,44 +6,30 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System error - HRMS Riinvest</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <link rel="stylesheet" href="~/css/assets2/bootstrap.css">
+    <meta charset="utf-8" />
+    <title>@Resource.SystemError - AMS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <style>
-        .center {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 60% !important;
-            height: 60% !important;
-        }
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
 
-        .img {
-            width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" asp-append-version="true" href="~/assets2/css/pages/error/error-6.css" />
+    <link rel="stylesheet" asp-append-version="true" href="~/assets2/css/style.bundle.css" />
+    <link rel="stylesheet" asp-append-version="true" href="~/assets2/plugins/global/plugins.bundle.css" />
+    <link rel="stylesheet" asp-append-version="true" href="~/assets2/plugins/custom/prismjs/prismjs.bundle.css" />
 </head>
 
-<body>
-    <div id="error p-0">
-        <div class="error-page container">
-            <div class="col-md-8 col-12 offset-md-2">
-                <div class="d-flex justify-content-center mb-5">
-                    <img class="img-error img" style="width: 90% !important;" src="~/images/error/error-500.png" asp-append-version="true" width="75%" alt="Not Found" class="center">
-                </div>
-                <div class="text-center">
-                    <h1 class="error-title">@Resource.SystemError</h1>
-                    <p class="fs-5 text-gray-600">@Resource.ThereHasBeenSystemError<br />@Resource.PleaseTryAgainLater</p>
-                    <a href="/Home/Index" class="btn btn-lg btn-outline-primary mt-3">@Resource.GoHome</a>
+<body id="kt_body" class="header-fixed header-mobile-fixed subheader-enabled subheader-fixed aside-enabled aside-fixed aside-minimize-hoverable page-loading">
+    <div class="d-flex flex-column flex-root">
+        <div class="error error-6 d-flex flex-row-fluid bgi-size-cover bgi-position-center" style="background-image: url(/assets2/media/error/bg6.jpg);">
+            <div class="d-flex flex-column flex-row-fluid text-center">
+                <h1 class="error-title font-weight-boldest text-white mb-12" style="margin-top: 12rem; font-size: 8rem !important;">@Resource.SystemError</h1>
+                <p class="display-4 font-weight-bold text-white">@Resource.ThereHasBeenSystemError<br />@Resource.PleaseTryAgainLater</p>
+                <div class="mt-15">
+                    <a href="/Home/Index" class="btn btn-light-warning btn-lg font-size-h3 font-weight-bold mr-2 shadow">@Resource.GoHome</a>
                 </div>
             </div>
         </div>
     </div>
 </body>
-
 </html>

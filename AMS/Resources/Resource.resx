@@ -252,6 +252,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Anulo</value>
   </data>
+  <data name="Change" xml:space="preserve">
+    <value>Ndrysho</value>
+  </data>
   <data name="ChangeRole" xml:space="preserve">
     <value>Ndrysho grupin</value>
   </data>
@@ -641,6 +644,9 @@
   </data>
   <data name="Register" xml:space="preserve">
     <value>Regjistro</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Largo</value>
   </data>
   <data name="RequiredField" xml:space="preserve">
     <value>Kjo fushë është obligative!</value>

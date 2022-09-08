@@ -63,6 +63,7 @@ public class ChangePasswordModel : BaseIModel
     {
         if (!ModelState.IsValid)
         {
+            TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, Description = Resource.InvalidData });
             return Page();
         }
 

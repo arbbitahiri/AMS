@@ -61,7 +61,7 @@ public partial class IndexModel : BaseIModel
     {
         Input = new InputModel
         {
-            PhoneNumber = user.PhoneNumber,
+            PhoneNumber = string.IsNullOrEmpty(user.PhoneNumber) ? "///" : $"+{user.PhoneNumber}",
             ImagePath = user.ProfileImage,
             FirstName = user.FirstName,
             LastName = user.LastName
@@ -96,6 +96,7 @@ public partial class IndexModel : BaseIModel
         if (!ModelState.IsValid)
         {
             LoadAsync(user);
+            TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.InvalidData });
             return Page();
         }
 

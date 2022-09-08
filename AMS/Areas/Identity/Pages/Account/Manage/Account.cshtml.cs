@@ -54,6 +54,7 @@ public class AccountModel : BaseIModel
                 AllowNotification = user.AllowNotification,
                 Username = user.UserName
             };
+            TempData.Set("ErrorIdentity", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.InvalidData });
             return Page();
         }
 
