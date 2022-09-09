@@ -19,7 +19,7 @@
                     <h3 class="wizard-title text-black-50">1. @Resource.PersonalData</h3>
                 </div>
             </a>
-            <span class="svg-icon svg-icon-xl svg-icon-primary wizard-arrow">
+            <span class="svg-icon svg-icon-xl @(action != "Register" ? "svg-icon-success" : "svg-icon-primary") wizard-arrow">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <polygon points="0 0 24 0 24 24 0 24"></polygon>
@@ -44,7 +44,7 @@
                     <h3 class="wizard-title text-black-50">2. @Resource.Documents</h3>
                 </div>
             </a>
-            <span class="svg-icon svg-icon-xl svg-icon-primary wizard-arrow">
+            <span class="svg-icon svg-icon-xl @(action == "Documents" ? "svg-icon-primary" : (action == "Departments" ? "svg-icon-success" : "")) wizard-arrow">
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <polygon points="0 0 24 0 24 24 0 24"></polygon>

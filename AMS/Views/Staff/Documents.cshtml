@@ -104,7 +104,7 @@
                     { data: "documentType" },
                     {
                         data: function(row, type, set) {
-                            return '<a onclick="download_doc(\'' + row.staffDocumentIde + '\', \'' + row.pathExtension + '\')" href="' + row.path + '" download="' + row.title + '" target="_blank" class="btn btn-primary">@Resource.Download</button>'
+                            return '<a onclick="download_doc(\'' + row.staffDocumentIde + '\', \'' + row.pathExtension + '\')" href="' + row.path + '" download="' + row.title + '" target="_blank" class="btn btn-icon btn-success btn-circle mr-2"><i class="fas fa-arrow-down"></i></a>'
                         }
                     },
                     {
@@ -127,7 +127,6 @@
                     },
                     {
                         data: function (row, type, set) {
-                            var dnone = row.active ? "" : "d-none";
                             var dropdown = '<div class="dropdown dropleft cursor-pointer">' +
                                 '<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                                 '<div class="dropdown-menu dropdown-grid" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">' +

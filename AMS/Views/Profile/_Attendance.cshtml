@@ -1,0 +1,63 @@
+﻿@using AMS.Models.Profile
+@model AttendanceVM
+@{
+}
+<input asp-for="StaffIde" type="hidden" />
+<div class="d-flex justify-content-start align-items-center my-5">
+    <h3 class="card-title font-weight-bolder text-dark-75 text-hover-primary font-size-h4 m-0">@Resource.AttendanceList</h3>
+</div>
+<table id="tbl_attendance" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>@Resource.StartDate</th>
+            <th>@Resource.EndDate</th>
+            <th>@Resource.ConsecutiveDays</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<script>
+    $(document).ready(function() {
+        render_attendance_tbl(@Json.Serialize(Model.Attendances));
+    });
+
+    function render_attendance_tbl(data) {
+        $('#tbl_attendance').DataTable({
+            destroy: true,
+            language: {
+                url: `/Culture/DataTable/${culture}.json`
+            },
+            keys: true,
+            responsive: true,
+            pageLength: 20,
+            data: data,
+            deferRender: true,
+            columnDefs: [
+                { width: "5%", targets: [0] },
+                { width: "20%", targets: [3] },
+                { defaultContent: "///", targets: "_all" }
+            ],
+            order: [[0, "asc"]],
+            columns: [
+                {
+                    data: function (data, type, row, meta) {
+                        return meta.row + meta.settings._iDisplayStart + 1;
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        return moment(row.startDate).format('DD/MM/YYYY');
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        return moment(row.endDate).format('DD/MM/YYYY');
+                    }
+                },
+                { data: "workingSince" }
+            ]
+        });
+    }
+</script>

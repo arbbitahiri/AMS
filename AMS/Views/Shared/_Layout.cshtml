@@ -33,34 +33,9 @@
         <link href="~/assets2/css/themes/layout/brand/dark.css" rel="stylesheet" type="text/css" asp-append-version="true" />
         <link href="~/assets2/css/themes/layout/aside/dark.css" rel="stylesheet" type="text/css" asp-append-version="true" />
     }
-    @*<link rel="stylesheet" type="text/css" asp-append-version="true" href="~/lib/datatables/dataTables.min.css"/>*@
     <link rel="stylesheet" type="text/css" asp-append-version="true" href="~/lib/datatables/css/dataTables.bootstrap4.min.css"/>
     <link rel="stylesheet" type="text/css" asp-append-version="true" href="~/lib/datatables/css/responsive.dataTables.min.css"/>
     <link rel="stylesheet" type="text/css" asp-append-version="true" href="~/lib/datatables/css/buttons.dataTables.min.css"/>
-
-    @*<link rel="stylesheet" asp-append-version="true" href="~/assets2/plugins/global/plugins.bundle.css"/>
-    <link rel="stylesheet" asp-append-version="true" href="~/assets2/css/style.bundle.css" />
-    <link rel="stylesheet" asp-append-version="true" href="~/assets2/plugins/custom/prismjs/prismjs.bundle.css" />
-    <link rel="stylesheet" asp-append-version="true" href="~/assets2/plugins/custom/datatables/datatables.bundle.css" />
-    <link rel="stylesheet" asp-append-version="true" href="~/assets2/plugins/custom/sweetalert/sweetalert.css" />*@
-
-    @*<link rel="stylesheet" asp-append-version="true" href="~/css/site.css">
-    <link rel="stylesheet" href="~/assets/plugins/fontawesome-free/css/all.min.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/plugins/pace-progress/themes/blue/pace-theme-minimal.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/plugins/select2/css/select2.min.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/plugins/sweetalert2/sweetalert2.min.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/plugins/chart.js/Chart.min.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/plugins/bs-stepper/css/bs-stepper.min.css" asp-append-version="true"/>
-    <link rel="stylesheet" href="~/assets/dist/css/adminlte.min.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/plugins/daterangepicker/daterangepicker.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/plugins/toastr/toastr.min.css" asp-append-version="true">
-    <link rel="stylesheet" href="~/assets/plugins/jquery-ui/jquery-ui.min.css" asp-append-version="true">*@
 
     <style>
         .custom-file-input:lang(en) ~ .custom-file-label::after {
@@ -183,6 +158,18 @@
                         @RenderBody()
                     </div>
                 </div>
+
+                <div class="footer bg-white py-4 d-flex flex-lg-column shadow" id="kt_footer">
+                    <div class="container-fluid d-flex flex-column flex-md-row align-items-center justify-content-between">
+                        <div class="text-dark order-2 order-md-1">
+                            <span class="text-muted font-weight-bold mr-2">@DateTime.Now.Year©</span>
+                            <a href="#" target="_blank" class="text-dark-75 text-hover-primary">AMS</a>
+                        </div>
+                        <div class="nav nav-dark">
+                            <a href="#" target="_blank" class="nav-link pl-0 pr-5">@Resource.DevelopedBy: &nbsp;<b>Arb Tahiri</b></a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -209,7 +196,6 @@
     <script asp-append-version="true" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script asp-append-version="true" src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script asp-append-version="true" src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
-    @*<script asp-append-version="true" src="~/lib/datatables/dataTables.min.js"></script>*@
     <script asp-append-version="true" src="~/lib/datatables/js/jquery.dataTables.min.js"></script>
     <script asp-append-version="true" src="~/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
     <script asp-append-version="true" src="~/lib/datatables/js/dataTables.responsive.min.js"></script>
@@ -221,51 +207,6 @@
     <script asp-append-version="true" src="~/js/JQueryCustomValidation.js"></script>
     <script asp-append-version="true" src="~/js/site.js"></script>
     <script asp-append-version="true" src="~/lib/lazysizes/lazysizes.min.js"></script>
-
-    @*<script asp-append-version="true" src="~/assets2/plugins/global/plugins.bundle.js"></script>
-    <script asp-append-version="true" src="~/assets2/js/scripts.bundle.js"></script>
-    <script asp-append-version="true" src="~/assets/plugins/custom/prismjs/prismjs.bundle.js"></script>
-    <script asp-append-version="true" src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script asp-append-version="true" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    <script asp-append-version="true" src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script asp-append-version="true" src="~/lib/jquery-ui/jquery-ui.min.js"></script>
-    <script asp-append-version="true" src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
-    <script asp-append-version="true" src="~/assets/plugins/custom/datatables/datatables.bundle.js"></script>
-    <script asp-append-version="true" src="~/js/SignalRUtils.js"></script>
-    <script asp-append-version="true" src="~/js/JQueryCustomValidation.js"></script>
-    <script asp-append-version="true" src="~/js/site.js"></script>
-
-    <script src="~/assets/plugins/jquery/jquery.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/jquery-ui/jquery-ui.min.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
-    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/datatables/jquery.dataTables.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/datatables-responsive/js/dataTables.responsive.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/pace-progress/pace.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/jquery-ui/jquery-ui.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/chart.js/Chart.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/moment/moment.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/moment/locale/sq.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/moment/locale/en-gb.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/sweetalert2/sweetalert2.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/select2/js/select2.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/bootstrap-switch/js/bootstrap-switch.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/inputmask/jquery.inputmask.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/bs-stepper/js/bs-stepper.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/daterangepicker/daterangepicker.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js" asp-append-version="true"></script>
-    <script src="~/assets/plugins/toastr/toastr.min.js" asp-append-version="true"></script>
-    <script src="~/assets/dist/js/adminlte.js" asp-append-version="true"></script>
-    <script src="~/js/jquery.toast.js" asp-append-version="true"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="~/js/jquery.repeater.js" asp-append-version="true"></script>
-    <script src="~/js/SignalRUtils.js" asp-append-version="true"></script>
-    <script src="~/js/notify.min.js" asp-append-version="true"></script>
-    <script src="~/js/JQueryCustomValidation.js" asp-append-version="true"></script>*@
 
     <script>
         var culture = '@System.Globalization.CultureInfo.CurrentCulture.Name';

@@ -8,7 +8,7 @@
 }
 
 <form asp-page="Login" asp-route-returnUrl="@Model.ReturnUrl" class="form fv-plugins-bootstrap fv-plugins-framework" id="frm_Login" data-ajax="true" data-ajax-success="onSuccessLogin">
-    <div id="status"></div>
+    <div class="mb-10" id="status"></div>
 
     @Html.AntiForgeryToken()
     <input asp-for="Input.returnUrl" type="hidden" />
@@ -27,11 +27,11 @@
             <label class="font-size-h6 font-weight-bolder text-dark pt-5">@Resource.Password</label>
             <a href="/Identity/Account/ForgotPassword" class="text-primary font-size-h6 font-weight-bolder text-hover-primary pt-5">@Resource.ForgotPassword</a>
         </div>
-        <input asp-for="Input.Password" class="form-control form-control-solid h-auto py-7 px-6 rounded-lg border-0" type="password" autocomplete="nope">
+        <input asp-for="Input.Password" class="form-control form-control-solid h-auto py-7 px-6 rounded-lg border-0" type="password" autocomplete="off" tabindex="0">
         <span asp-validation-for="Input.Password" class="text-danger"></span>
     </div>
     <div class="pb-lg-0 pb-5">
-        <button type="submit" id="btn_SubmitLogin" class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-3">@Resource.Login</button>
+        <button type="submit" id="btn_SubmitLogin" class="btn btn-primary font-weight-bolder font-size-h6 px-8 py-4 my-3 mr-3" tabindex="2">@Resource.Login</button>
     </div>
 </form>
 
@@ -49,11 +49,16 @@
         });
 
         function onSuccessLogin(data) {
+            show_loading();
             $('#btn_SubmitLogin')[0].disablde = true;
             if (data.status == ErrorStatus.SUCCESS) {
                 $('#status').html('');
                 window.location.href = '/Home/Index';
+                hide_loading();
             } else {
+                hide_loading();
+                $('#btn_SubmitLogin').removeClass('spinner spinner-right spinner-white pr-15');
+                $('#btn_SubmitLogin').html('@Html.Raw(Resource.Login)');
                 $.post('/Identity/Account/Message?handler=Filter', {
                     Title: data.title,
                     Status: data.status,

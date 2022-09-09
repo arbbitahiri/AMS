@@ -38,6 +38,11 @@ const StatusType = {
     PENDING: 3
 }
 
+var arrows = {
+    leftArrow: '<i class="la la-angle-left"></i>',
+    rightArrow: '<i class="la la-angle-right"></i>'
+};
+
 $(document).ready(function () {
     $('.fade-in').hide().fadeIn(2000);
 

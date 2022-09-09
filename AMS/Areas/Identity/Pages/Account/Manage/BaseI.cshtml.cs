@@ -31,9 +31,9 @@ public class BaseIModel : PageModel
     public override async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
     {
         user = await userManager.GetUserAsync(context.HttpContext.User);
+        await signInManager.RefreshSignInAsync(user);
         if (user != null)
         {
-            await signInManager.RefreshSignInAsync(user);
         }
 
         ViewData["Title"] = "Manage your account.";
@@ -47,8 +47,8 @@ public class BaseIModel : PageModel
             FirstName = user.FirstName ?? "",
             LastName = user.LastName ?? "",
             ImageProfile = user.ProfileImage,
-            Mode = user.AppMode,
-            Language = user.Language,
+            Mode = user != null ? user.AppMode : TemplateMode.Light,
+            Language = user != null ? user.Language : LanguageEnum.Albanian,
             Notification = user.AllowNotification,
             PersonalNumber = user.PersonalNumber
         };

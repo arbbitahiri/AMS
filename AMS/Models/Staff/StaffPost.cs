@@ -1,4 +1,5 @@
 ﻿using AMS.Resources;
+using AMS.Utilities.Validation;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -25,7 +26,6 @@ public class StaffPost
 
     [Display(Name = "Birthdate", ResourceType = typeof(Resource))]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
-    //[Remote("CheckBirthdate", "Staff", ErrorMessageResourceName = "MustBe18YearsOld", ErrorMessageResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string BirthDate { get; set; }
 
@@ -34,9 +34,11 @@ public class StaffPost
     public int GenderId { get; set; }
 
     [Display(Name = "City", ResourceType = typeof(Resource))]
+    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public int CityId { get; set; }
 
     [Display(Name = "Country", ResourceType = typeof(Resource))]
+    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public int CountryId { get; set; }
 
     [Display(Name = "Address", ResourceType = typeof(Resource))]
@@ -53,4 +55,11 @@ public class StaffPost
     [Display(Name = "PhoneNumber", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string PhoneNumber { get; set; }
+
+    [Display(Name = "Username", ResourceType = typeof(Resource))]
+    [RequiredIf(nameof(NewUser), "true", ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+    public string Username { get; set; }
+
+    [Display(Name = "NewUser", ResourceType = typeof(Resource))]
+    public bool NewUser { get; set; }
 }

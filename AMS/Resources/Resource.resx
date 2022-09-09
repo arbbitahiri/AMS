@@ -285,11 +285,17 @@
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Konfirmo fjalëkalimin</value>
   </data>
+  <data name="ConsecutiveDays" xml:space="preserve">
+    <value>Ditë të njëpasnjëshme</value>
+  </data>
   <data name="Continue" xml:space="preserve">
     <value>Vazhdo</value>
   </data>
   <data name="Controller" xml:space="preserve">
     <value>Kontrolleri</value>
+  </data>
+  <data name="CouldNotAddRole" xml:space="preserve">
+    <value>Nuk mund të shtoheshin grupet për llogarinë e krijuar të stafit. Grupet mund t'i shtoni në listën e përdorusve.</value>
   </data>
   <data name="Country" xml:space="preserve">
     <value>Shteti</value>
@@ -570,6 +576,9 @@
   <data name="NewPassword" xml:space="preserve">
     <value>Fjalëkalimi i ri</value>
   </data>
+  <data name="NewUser" xml:space="preserve">
+    <value>Përdorues të ri</value>
+  </data>
   <data name="No" xml:space="preserve">
     <value>Jo</value>
   </data>
@@ -729,6 +738,9 @@
   <data name="Staff" xml:space="preserve">
     <value>Stafi</value>
   </data>
+  <data name="StaffExistsWithRole" xml:space="preserve">
+    <value>{0} ekziston me grupin e selektuar!</value>
+  </data>
   <data name="StaffList" xml:space="preserve">
     <value>Lista stafit</value>
   </data>
@@ -770,6 +782,9 @@
   </data>
   <data name="SureYouWantToDeleteMenu" xml:space="preserve">
     <value>A jeni i sigurt për fshirjen e menysë?</value>
+  </data>
+  <data name="SureYouWantToDeleteStaff" xml:space="preserve">
+    <value>A jeni i sigurt për fshirjen e stafit?</value>
   </data>
   <data name="SureYouWantToDeleteSubMenu" xml:space="preserve">
     <value>A jeni i sigurt për fshirjen e nënmenysë?</value>

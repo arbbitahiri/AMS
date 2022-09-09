@@ -15,7 +15,7 @@
             <span class="text-muted font-weight-bold font-size-sm mt-1">@Resource.UpdatePersonalData</span>
         </div>
         <div class="card-toolbar">
-            <button type="button" class="btn btn-primary mr-2" onclick="$('#frm_personal_info').trigger('submit')">@Resource.Save</button>
+            <button type="button" class="btn btn-primary mr-2" onclick="submit_index()">@Resource.Save</button>
             <button type="button" class="btn btn-secondary" onclick="$('#frm_personal_info').trigger('reset')">@Resource.Cancel</button>
         </div>
     </div>
@@ -103,16 +103,9 @@
             });
         });
 
-        function read_image(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#img_upload').prop('src', e.target.result);
-                }
-                reader.readAsDataURL(input.files[0]);
-            } else {
-                $('#img_upload').prop('src', '~/images/user-default.png');
-            }
+        function submit_index() {
+            show_loading();
+            $('#frm_personal_info').trigger('submit');
         }
     </script>
 }

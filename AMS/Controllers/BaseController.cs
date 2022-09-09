@@ -6,6 +6,7 @@ using AMS.Resources;
 using AMS.Utilities;
 using AMS.Utilities.General;
 using AMS.Utilities.NotificationUtil;
+using AMS.Utilities.Security;
 using ImageMagick;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -121,6 +122,50 @@ public class BaseController : Controller
 
     #region General methods
 
+    #region Role
+
+    protected string GetRoleFromStaffType(int staffType) =>
+        staffType switch
+        {
+            (int)StaffTypeEnum.Administrator => "6dce687e-0a9c-4bcf-aa79-65c13a8b8db0",
+            _ => ""
+        };
+
+    [HttpPost, Description("Arb Tahiri", "Action to change actual role.")]
+    public async Task<IActionResult> ChangeRole(string ide)
+    {
+        string roleId = CryptoSecurity.Decrypt<string>(ide.Replace("\\", ""));
+        var realRoles = await db.RealRole.Include(t => t.Role).Where(t => t.UserId == user.Id).ToListAsync();
+
+        if (!realRoles.Any(t => t.RoleId == roleId))
+        {
+            return Unauthorized();
+        }
+
+        var currentRole = User.Claims.Where(t => t.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").FirstOrDefault();
+        string role = realRoles.Where(t => t.RoleId == roleId).Select(t => t.Role.Name).FirstOrDefault();
+
+        var error = new ErrorVM { Status = ErrorStatus.Success, Description = string.Format(Resource.RoleChangedSuccess, role) };
+
+        var result = await userManager.RemoveFromRoleAsync(user, currentRole.Value);
+        if (!result.Succeeded)
+        {
+            error = new ErrorVM { Status = ErrorStatus.Error, Description = Resource.ThereWasAnError };
+        }
+        else
+        {
+            result = await userManager.AddToRoleAsync(user, role);
+            if (!result.Succeeded)
+            {
+                await userManager.AddToRoleAsync(user, currentRole.Value);
+                error = new ErrorVM { Status = ErrorStatus.Error, Description = Resource.ThereWasAnError };
+            }
+        }
+        return Json(error);
+    }
+
+    #endregion
+
     #region Language
 
     [Description("Arb Tahiri", "Change language.")]
@@ -202,13 +247,6 @@ public class BaseController : Controller
 
     protected int? UpdateNo(int? updateNo) =>
         updateNo.HasValue ? ++updateNo : 1;
-
-    protected string GetRoleFromStaffType(int staffType) =>
-        staffType switch
-        {
-            (int)StaffTypeEnum.Administrator => "6dce687e-0a9c-4bcf-aa79-65c13a8b8db0",
-            _ => ""
-        };
 
     protected double WorkingDays(DateTime startDate, DateTime endDate)
     {

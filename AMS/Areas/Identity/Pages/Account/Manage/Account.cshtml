@@ -16,7 +16,7 @@
             <small class="text-muted font-weight-bold font-size-sm mt-1">@Resource.UpdateAccountData</small>
         </div>
         <div class="card-toolbar">
-            <button type="button" class="btn btn-primary mr-2" onclick="$('#frm_account_info').trigger('submit')">@Resource.Save</button>
+            <button type="button" class="btn btn-primary mr-2" onclick="submit_account()">@Resource.Save</button>
             <button type="button" class="btn btn-secondary" onclick="$('#frm_account_info').trigger('reset')">@Resource.Cancel</button>
         </div>
     </div>
@@ -79,5 +79,10 @@
             form.removeData('unobtrusiveValidation');
             $.validator.unobtrusive.parse(form);
         });
+
+        function submit_account() {
+            show_loading();
+            $('#frm_account_info').trigger('submit');
+        }
     </script>
 }

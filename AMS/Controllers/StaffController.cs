@@ -41,7 +41,8 @@ public class StaffController : BaseController
     public async Task<IActionResult> Search(Search search)
     {
         var staffList = await db.StaffDepartment
-            .Where(a => a.DepartmentId == (search.Department ?? a.DepartmentId)
+            .Where(a => !a.Staff.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Deleted)
+                && a.DepartmentId == (search.Department ?? a.DepartmentId)
                 && a.StaffTypeId == (search.StaffType ?? a.StaffTypeId)
                 && a.EndDate >= DateTime.Now
                 && (string.IsNullOrEmpty(search.PersonalNumber) || a.Staff.PersonalNumber == search.PersonalNumber)
@@ -139,11 +140,52 @@ public class StaffController : BaseController
             return View(staff);
         }
 
+        string userId = null;
+        var firstUser = new ApplicationUser();
+        if (staff.NewUser)
+        {
+            if (await db.AspNetUsers.AnyAsync(a => a.PersonalNumber == staff.PersonalNumber))
+            {
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.StaffWithPersonalExists });
+                return View(staff);
+            }
+
+            firstUser = new ApplicationUser
+            {
+                PersonalNumber = staff.PersonalNumber,
+                FirstName = staff.Firstname,
+                LastName = staff.Lastname,
+                Email = staff.Email,
+                EmailConfirmed = true,
+                PhoneNumber = staff.PhoneNumber,
+                UserName = staff.Username,
+                Language = LanguageEnum.Albanian,
+                AppMode = TemplateMode.Light,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            };
+
+            string errors = string.Empty;
+
+            string password = FirstTimePassword(configuration, staff.Firstname, staff.Lastname);
+            var result = await userManager.CreateAsync(firstUser, password);
+            if (!result.Succeeded)
+            {
+                foreach (var identityError in result.Errors)
+                {
+                    errors += $"{identityError.Description}. ";
+                }
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Warning, Description = errors });
+                return View(staff);
+            }
+            userId = firstUser.Id;
+        }
+
         try
         {
             var newStaff = new Staff
             {
-                UserId = await db.AspNetUsers.Where(a => a.PersonalNumber == staff.PersonalNumber).Select(a => a.Id).FirstOrDefaultAsync(),
+                UserId = userId,
                 PersonalNumber = staff.PersonalNumber,
                 FirstName = staff.Firstname,
                 LastName = staff.Lastname,
@@ -158,7 +200,6 @@ public class StaffController : BaseController
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id
             };
-
             db.Staff.Add(newStaff);
             await db.SaveChangesAsync();
 
@@ -170,13 +211,17 @@ public class StaffController : BaseController
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id
             });
-
             await db.SaveChangesAsync();
 
             staffIde = CryptoSecurity.Encrypt(newStaff.StaffId);
         }
         catch (Exception ex)
         {
+            if (staff.NewUser)
+            {
+                await userManager.DeleteAsync(firstUser);
+            }
+
             await LogError(ex);
             TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, Description = Resource.ErrorProcessingData });
             return View(staff);
@@ -367,8 +412,9 @@ public class StaffController : BaseController
     [Description("Arb Tahiri", "Entry form for department. Fourth step of registration/editation of staff.")]
     public async Task<IActionResult> Departments(string ide)
     {
+        var staffId = CryptoSecurity.Decrypt<int>(ide);
         var staff = await db.Staff
-            .Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
+            .Where(a => a.StaffId == staffId)
             .Select(a => new StaffDetails
             {
                 Ide = ide,
@@ -378,7 +424,7 @@ public class StaffController : BaseController
             }).FirstOrDefaultAsync();
 
         var departments = await db.StaffDepartment
-            .Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide) && a.EndDate >= DateTime.Now)
+            .Where(a => a.StaffId == staffId && a.EndDate >= DateTime.Now)
             .Select(a => new Departments
             {
                 StaffDepartmentIde = CryptoSecurity.Encrypt(a.StaffDepartmentId),
@@ -423,26 +469,22 @@ public class StaffController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var getRole = GetRoleFromStaffType(add.StaffTypeId);
-        var staffDepartment = await db.StaffDepartment.Include(a => a.Staff).Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(add.StaffIde)).ToListAsync();
+        var staffId = CryptoSecurity.Decrypt<int>(add.StaffIde);
 
-        foreach (var item in staffDepartment)
+        var getRole = GetRoleFromStaffType(add.StaffTypeId);
+        if (await db.StaffDepartment.AnyAsync(a => a.StaffId == staffId && a.StaffTypeId == add.StaffTypeId && a.EndDate >= DateTime.Now))
         {
-            if (await db.StaffDepartment.AnyAsync(a => a.StaffId == item.StaffId && a.StaffTypeId == item.StaffTypeId && a.EndDate >= DateTime.Now))
-            {
-                var role = GetRoleFromStaffType(item.StaffTypeId);
-                var staffRoleName = await db.AspNetRoles.Where(a => a.Id == role).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync();
-                return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = string.Format(Resource.ExistsStaffRole, item.Staff.FirstName, item.Staff.LastName, staffRoleName) }); //$"{item.Staff.FirstName} {item.Staff.LastName} ekziston si {staffRoleName}. Duhet të pasivizoni këtë për të regjistruar pastaj!"
-            }
+            var staffName = await db.Staff.Where(a => a.StaffId == staffId).Select(a => $"{a.FirstName} {a.LastName}").FirstOrDefaultAsync();
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = string.Format(Resource.StaffExistsWithRole, staffName) });
         }
 
-        //var userId = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(add.StaffIde)).Select(a => a.UserId).FirstOrDefaultAsync();
-        //var newUser = await userManager.FindByIdAsync(userId);
-        //var getRoles = await userManager.GetRolesAsync(newUser);
+        var userId = await db.Staff.Where(a => a.StaffId == staffId).Select(a => a.UserId).FirstOrDefaultAsync();
+        var newUser = await userManager.FindByIdAsync(userId);
+        var getRoles = await userManager.GetRolesAsync(newUser);
 
         var newStaffDepartment = new StaffDepartment
         {
-            StaffId = CryptoSecurity.Decrypt<int>(add.StaffIde),
+            StaffId = staffId,
             StaffTypeId = add.StaffTypeId,
             DepartmentId = add.DepartmentId,
             StartDate = DateTime.ParseExact(add.StartDate, "dd/MM/yyyy", null),
@@ -452,27 +494,26 @@ public class StaffController : BaseController
             InsertedFrom = user.Id
         };
 
-        //// TODO: try catch, if error, delete roles
-        //if (!getRoles.Any())
-        //{
-        //    var role = await db.AspNetRoles.Where(a => a.Id == getRole).Select(a => a.NormalizedName).ToListAsync();
-        //    var result = await userManager.AddToRolesAsync(newUser, role);
-        //    if (!result.Succeeded)
-        //    {
-        //        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}</li>" + "</ul>" });
-        //    }
-        //}
+        if (!getRoles.Any())
+        {
+            var role = await db.AspNetRoles.Where(a => a.Id == getRole).Select(a => a.NormalizedName).ToListAsync();
+            var result = await userManager.AddToRolesAsync(newUser, role);
+            if (!result.Succeeded)
+            {
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}</li>" + "</ul>" });
+            }
+        }
 
-        //if (!getRoles.Any(a => a == getRole))
-        //{
-        //    db.RealRole.Add(new RealRole
-        //    {
-        //        UserId = userId,
-        //        RoleId = getRole,
-        //        InsertedDate = DateTime.Now,
-        //        InsertedFrom = user.Id
-        //    });
-        //}
+        if (!getRoles.Any(a => a == getRole))
+        {
+            db.RealRole.Add(new RealRole
+            {
+                UserId = userId,
+                RoleId = getRole,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            });
+        }
 
         db.StaffDepartment.Add(newStaffDepartment);
         await db.SaveChangesAsync();
@@ -512,7 +553,50 @@ public class StaffController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        var department = await db.StaffDepartment.Where(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(edit.StaffDepartmentIde)).FirstOrDefaultAsync();
+        var staffDepartmentId = CryptoSecurity.Decrypt<int>(edit.StaffDepartmentIde);
+
+        var department = await db.StaffDepartment.FirstOrDefaultAsync(a => a.StaffDepartmentId == staffDepartmentId);
+
+        if (department.StaffTypeId != edit.StaffTypeId)
+        {
+            var userForRoles = await userManager.FindByIdAsync(department.Staff.UserId);
+            var rolesToRemove = await userManager.GetRolesAsync(userForRoles);
+
+            var getRole = GetRoleFromStaffType(edit.StaffTypeId);
+            var realRole = await db.RealRole.FirstOrDefaultAsync(a => a.UserId == department.Staff.UserId && a.RoleId == getRole);
+            if (realRole != null)
+            {
+                db.RealRole.Remove(realRole);
+                await db.SaveChangesAsync();
+
+                var roles = await db.AspNetRoles.Where(a => rolesToRemove.Contains(a.Id)).Select(a => a.NormalizedName).ToListAsync();
+                var result = await userManager.RemoveFromRolesAsync(userForRoles, roles);
+                if (!result.Succeeded)
+                {
+                    TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
+                }
+
+                var anotherRole = await db.RealRole.Where(a => a.UserId == department.Staff.UserId).ToListAsync();
+                if (anotherRole.Any())
+                {
+                    var otherRole = await db.AspNetRoles.Where(a => a.Id == anotherRole.Select(a => a.RoleId).FirstOrDefault()).Select(a => a.NormalizedName).FirstOrDefaultAsync();
+                    var otherresult = await userManager.AddToRoleAsync(userForRoles, otherRole);
+                    if (!result.Succeeded)
+                    {
+                        TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
+                    }
+                }
+            }
+
+            db.RealRole.Add(new RealRole
+            {
+                UserId = userForRoles.Id,
+                RoleId = getRole,
+                InsertedDate = DateTime.Now,
+                InsertedFrom = user.Id
+            });
+        }
+
         department.DepartmentId = edit.DepartmentId;
         department.StaffTypeId = edit.StaffTypeId;
         department.StartDate = DateTime.ParseExact(edit.StartDate, "dd/MM/yyyy", null);
@@ -533,39 +617,41 @@ public class StaffController : BaseController
     [Description("Arb Tahiri", "Action to delete a department.")]
     public async Task<IActionResult> DeleteDepartment(string ide)
     {
-        var department = await db.StaffDepartment.Include(a => a.Staff).FirstOrDefaultAsync(a => a.StaffDepartmentId == CryptoSecurity.Decrypt<int>(ide));
+        var staffDepartmentId = CryptoSecurity.Decrypt<int>(ide);
+        var department = await db.StaffDepartment.FirstOrDefaultAsync(a => a.StaffDepartmentId == staffDepartmentId);
         department.EndDate = DateTime.Now.AddDays(-1);
         department.UpdatedDate = DateTime.Now;
         department.UpdatedFrom = user.Id;
         department.UpdatedNo = UpdateNo(department.UpdatedNo);
 
-        //var userToRemove = await userManager.FindByIdAsync(department.Staff.UserId);
-        //var rolesToRemove = await userManager.GetRolesAsync(userToRemove);
+        var userForRoles = await userManager.FindByIdAsync(department.Staff.UserId);
+        var rolesToRemove = await userManager.GetRolesAsync(userForRoles);
 
-        //var realRoles = await db.RealRole.FirstOrDefaultAsync(a => a.UserId == department.Staff.UserId);
-        //if (realRoles != null)
-        //{
-        //    db.RealRole.Remove(realRoles);
-        //    await db.SaveChangesAsync();
+        var getRole = GetRoleFromStaffType(department.StaffTypeId);
+        var realRole = await db.RealRole.FirstOrDefaultAsync(a => a.UserId == department.Staff.UserId && a.RoleId == getRole);
+        if (realRole != null)
+        {
+            db.RealRole.Remove(realRole);
+            await db.SaveChangesAsync();
 
-        //    var anotherRealRoles = await db.RealRole.Where(a => a.UserId == department.Staff.UserId).ToListAsync();
-        //    if (anotherRealRoles.Count == 0)
-        //    {
-        //        var result = await userManager.RemoveFromRolesAsync(userToRemove, db.AspNetRoles.Where(a => rolesToRemove.Contains(a.Id)).Select(a => a.NormalizedName).ToList());
-        //        if (!result.Succeeded)
-        //        {
-        //            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
-        //        }
-        //    }
-        //    else
-        //    {
-        //        var result = await userManager.AddToRoleAsync(userToRemove, db.AspNetRoles.Where(a => a.Id == anotherRealRoles.Select(a => a.RoleId).FirstOrDefault()).Select(a => a.NormalizedName).FirstOrDefault());
-        //        if (!result.Succeeded)
-        //        {
-        //            TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
-        //        }
-        //    }
-        //}
+            var roles = await db.AspNetRoles.Where(a => rolesToRemove.Contains(a.Id)).Select(a => a.NormalizedName).ToListAsync();
+            var result = await userManager.RemoveFromRolesAsync(userForRoles, roles);
+            if (!result.Succeeded)
+            {
+                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
+            }
+
+            var anotherRole = await db.RealRole.Where(a => a.UserId == department.Staff.UserId).ToListAsync();
+            if (anotherRole.Any())
+            {
+                var otherRole = await db.AspNetRoles.Where(a => a.Id == anotherRole.Select(a => a.RoleId).FirstOrDefault()).Select(a => a.NormalizedName).FirstOrDefaultAsync();
+                var otherresult = await userManager.AddToRoleAsync(userForRoles, otherRole);
+                if (!result.Succeeded)
+                {
+                    TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + "</ul>" });
+                }
+            }
+        }
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
@@ -587,13 +673,41 @@ public class StaffController : BaseController
         }
 
         var staffId = CryptoSecurity.Decrypt<int>(ide);
-        var registeredInDepartment = await db.StaffDepartment.AnyAsync(a => a.EndDate >= DateTime.Now && a.StaffId == staffId);
-        if (!registeredInDepartment)
+        if (!await db.StaffDepartment.AnyAsync(a => a.EndDate >= DateTime.Now && a.StaffId == staffId))
         {
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.StaffNotComplete });
         }
 
-        var staffRegistrationStatus = await db.StaffRegistrationStatus.FirstOrDefaultAsync(a => a.Active && a.StaffId == staffId);
+        var staffRegistrationStatus = await db.StaffRegistrationStatus.Include(a => a.Staff).FirstOrDefaultAsync(a => a.Active && a.StaffId == staffId);
+
+        if (!await db.StaffRegistrationStatus.AnyAsync(a => a.Active && a.StatusTypeId == (int)Status.Finished))
+        {
+            var userForRoles = await userManager.FindByIdAsync(staffRegistrationStatus.Staff.UserId);
+            var staffDepartments = await db.StaffDepartment.Include(a => a.Staff).Where(a => a.EndDate >= DateTime.Now && a.StaffId == staffId).ToListAsync();
+
+            foreach (var staff in staffDepartments)
+            {
+                var roleId = GetRoleFromStaffType(staff.StaffTypeId);
+                if (!await db.RealRole.AnyAsync(a => a.RoleId == roleId))
+                {
+                    db.RealRole.Add(new RealRole
+                    {
+                        UserId = staff.Staff.UserId,
+                        RoleId = roleId,
+                        InsertedDate = DateTime.Now,
+                        InsertedFrom = user.Id
+                    });
+                }
+
+                var otherRoleId = await db.AspNetRoles.Where(a => a.Id == roleId).Select(a => a.NormalizedName).FirstOrDefaultAsync();
+                var result = await userManager.RemoveFromRoleAsync(userForRoles, otherRoleId);
+                if (!result.Succeeded)
+                {
+                    TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.CouldNotAddRole });
+                }
+            }
+        }
+
         staffRegistrationStatus.Active = false;
         staffRegistrationStatus.UpdatedDate = DateTime.Now;
         staffRegistrationStatus.UpdatedFrom = user.Id;
@@ -601,7 +715,7 @@ public class StaffController : BaseController
 
         db.StaffRegistrationStatus.Add(new StaffRegistrationStatus
         {
-            StaffId = CryptoSecurity.Decrypt<int>(ide),
+            StaffId = staffId,
             StatusTypeId = (int)Status.Finished,
             Active = true,
             InsertedDate = DateTime.Now,
@@ -615,27 +729,47 @@ public class StaffController : BaseController
 
     #endregion
 
+    #region Delete
+
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "7:d")]
+    [Description("Arb Tahiri", "Action to add finished status in staff registration.")]
+    public async Task<IActionResult> Delete(string ide)
+    {
+        var staffId = CryptoSecurity.Decrypt<int>(ide);
+        var staffRegistrationStatus = await db.StaffRegistrationStatus.FirstOrDefaultAsync(a => a.Active && a.StaffId == staffId);
+        staffRegistrationStatus.Active = false;
+        staffRegistrationStatus.UpdatedDate = DateTime.Now;
+        staffRegistrationStatus.UpdatedFrom = user.Id;
+        staffRegistrationStatus.UpdatedNo = UpdateNo(staffRegistrationStatus.UpdatedNo);
+
+        db.StaffRegistrationStatus.Add(new StaffRegistrationStatus
+        {
+            StaffId = staffId,
+            StatusTypeId = (int)Status.Deleted,
+            Active = true,
+            InsertedDate = DateTime.Now,
+            InsertedFrom = user.Id
+        });
+        await db.SaveChangesAsync();
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
+    }
+
+    #endregion
+
     #region Remote
 
-    //[Description("Arb Tahiri", "Method to check birthday.")]
-    //public IActionResult CheckBirthdate(string BirthDate)
-    //{
-    //    var birthdate = DateTime.ParseExact(BirthDate, "dd/MM/yyyy", null);
-
-    //    if (birthdate >= DateTime.Now)
-    //    {
-    //        return Json(Resource.NotAllowedGreaterDate);
-    //    }
-
-    //    if (birthdate <= DateTime.Now.AddYears(-18))
-    //    {
-    //        return Json(true);
-    //    }
-    //    else
-    //    {
-    //        return Json(false);
-    //    }
-    //}
+    [Description("Arb Tahiri", "Method to check for username.")]
+    public async Task<IActionResult> CheckUsername(string Username)
+    {
+        if (await db.AspNetUsers.AnyAsync(a => a.UserName == Username))
+        {
+            return Json(true);
+        }
+        else
+        {
+            return Json(false);
+        }
+    }
 
     [Description("Arb Tahiri", "Method to check end date of subject.")]
     public IActionResult CheckEndDate(DateTime DepartmentEndDate, string EndDate, string StartDate)

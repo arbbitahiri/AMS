@@ -76,9 +76,24 @@
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
         <div class="col-md-4">
-            <label asp-for="PostalCode" class="required"></label>
+            <label asp-for="PostalCode"></label>
             <input asp-for="PostalCode" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="PostalCode" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="NewUser"></label><br />
+            <input asp-for="NewUser" data-switch="true" style="cursor: pointer; width: 90px;"
+                type="checkbox" id="ch_hasAccess" onchange="change_new_user(this)"
+                data-bootstrap-switch data-off-color="warning" data-on-color="success" data-handle-width="90"
+                data-on-text="@Html.Raw(Resource.Yes)" data-off-text="@Html.Raw(Resource.No)" />
+            <span asp-validation-for="NewUser" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="row form-group for-user" style="display: none;">
+        <div class="col-md-4">
+            <label asp-for="Username" class="required"></label>
+            <input asp-for="Username" type="text" autocomplete="off" class="form-control"/>
+            <span asp-validation-for="Username" class="text-danger"></span>
         </div>
     </div>
 
@@ -90,6 +105,8 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            $("input[data-bootstrap-switch]").bootstrapSwitch();
+
             if (@Model.MethodType == MethodType.POST) {
                 $('#f_tab').attr({ href: '', style: '' });
                 $('#s_tab').attr({ href: '', style: 'cursor: default' });
@@ -143,6 +160,14 @@
         function continue_form() {
             if($('#frm_staff_registration').valid()) {
                 $('#frm_staff_registration').submit();
+            }
+        }
+
+        function change_new_user(e) {
+            if ($(e).is(':checked')) {
+                $('.for-user').show(250);
+            } else {
+                $('.for-user').hide(250);
             }
         }
     </script>

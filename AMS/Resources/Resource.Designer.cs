@@ -565,6 +565,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ditë të njëpasnjëshme.
+        /// </summary>
+        public static string ConsecutiveDays {
+            get {
+                return ResourceManager.GetString("ConsecutiveDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vazhdo.
         /// </summary>
         public static string Continue {
@@ -579,6 +588,15 @@ namespace AMS.Resources {
         public static string Controller {
             get {
                 return ResourceManager.GetString("Controller", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nuk mund të shtoheshin grupet për llogarinë e krijuar të stafit. Grupet mund t&apos;i shtoni në listën e përdorusve..
+        /// </summary>
+        public static string CouldNotAddRole {
+            get {
+                return ResourceManager.GetString("CouldNotAddRole", resourceCulture);
             }
         }
         
@@ -1420,6 +1438,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Përdorues të ri.
+        /// </summary>
+        public static string NewUser {
+            get {
+                return ResourceManager.GetString("NewUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Jo.
         /// </summary>
         public static string No {
@@ -1897,6 +1924,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} ekziston me grupin e selektuar!.
+        /// </summary>
+        public static string StaffExistsWithRole {
+            get {
+                return ResourceManager.GetString("StaffExistsWithRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lista stafit.
         /// </summary>
         public static string StaffList {
@@ -2019,6 +2055,15 @@ namespace AMS.Resources {
         public static string SureYouWantToDeleteMenu {
             get {
                 return ResourceManager.GetString("SureYouWantToDeleteMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A jeni i sigurt për fshirjen e stafit?.
+        /// </summary>
+        public static string SureYouWantToDeleteStaff {
+            get {
+                return ResourceManager.GetString("SureYouWantToDeleteStaff", resourceCulture);
             }
         }
         
