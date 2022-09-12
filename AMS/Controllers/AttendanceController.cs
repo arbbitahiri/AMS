@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.CodeAnalysis;
 
 namespace AMS.Controllers;
 
@@ -40,22 +39,23 @@ public class AttendanceController : BaseController
     [Description("Arb Tahiri", "Form to display list of staff attendance.")]
     public async Task<IActionResult> SearchStaff(SearchStaff search)
     {
-        var attendance = (await function.StaffConsecutiveDays(search.SStaffId, search.SDepartmentId, search.SStaffId, user.Language))
-            .OrderByDescending(a => a.EndDate)
+        var staffList = await db.Staff
+            .Where(a => a.StaffDepartment.Any(b => b.EndDate.Date >= DateTime.Now.Date)
+                && a.StaffId == (search.SStaffId ?? a.StaffId)
+                && a.StaffDepartment.Any(b => b.DepartmentId == (search.SDepartmentId ?? b.DepartmentId))
+                && a.StaffDepartment.Any(b => b.StaffTypeId == (search.SStaffTypeId ?? b.StaffTypeId)))
+            .OrderBy(a => a.FirstName)
             .Select(a => new StaffList
             {
-                StaffDepartmentIde = CryptoSecurity.Encrypt(a.StaffDepartmentId),
+                StaffIde = CryptoSecurity.Encrypt(a.StaffId),
                 PersonalNumber = a.PersonalNumber,
                 FirstName = a.FirstName,
                 LastName = a.LastName,
-                Department = a.Department,
-                StaffType = a.StaffType,
-                StartDate = a.StartDate,
-                EndDate = a.EndDate,
-                WorkingSince = a.WorkingSince
-            }).ToList();
-
-        return Json(attendance);
+                BirthDate = a.BirthDate,
+                Department = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).ToList()),
+                Attended = a.StaffAttendance.Any(a => a.Active && a.InsertedDate.Date == DateTime.Now.Date)
+            }).ToListAsync();
+        return Json(staffList);
     }
 
     #endregion
@@ -69,17 +69,20 @@ public class AttendanceController : BaseController
     [Description("Arb Tahiri", "Form to display list of staff attendance.")]
     public async Task<IActionResult> SearchAttendance(SearchAttendance search)
     {
-        var attendance = (await function.StaffConsecutiveDays(search.AStaffId, search.ADepartmentId, search.AStaffId, user.Language))
+        var attendance = (await function.StaffConsecutiveDays(search.AStaffId, search.ADepartmentId, search.AStaffTypeId, search.AStartDate, search.AEndDate, user.Language))
             .OrderByDescending(a => a.EndDate)
             .Select(a => new StaffList
             {
-                StaffDepartmentIde = CryptoSecurity.Encrypt(a.StaffDepartmentId),
                 PersonalNumber = a.PersonalNumber,
                 FirstName = a.FirstName,
                 LastName = a.LastName,
+                Department = a.Department,
+                StaffType = a.StaffType,
                 StartDate = a.StartDate,
+                EndDate = a.EndDate,
                 WorkingSince = a.WorkingSince
-            }).Distinct(new DistinctComparer()).ToList();
+            }).ToList();
+
         return Json(attendance);
     }
 
@@ -98,13 +101,13 @@ public class AttendanceController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
         }
 
-        int staffDepartmentId = CryptoSecurity.Decrypt<int>(ide);
-        var attendance = await db.StaffDepartmentAttendance.FirstOrDefaultAsync(a => a.Active && a.StaffDepartmentId == staffDepartmentId && a.InsertedDate.Date == DateTime.Now.Date);
+        int staffId = CryptoSecurity.Decrypt<int>(ide);
+        var attendance = await db.StaffAttendance.FirstOrDefaultAsync(a => a.Active && a.StaffId == staffId && a.InsertedDate.Date == DateTime.Now.Date);
         if (attendance is null)
         {
-            db.StaffDepartmentAttendance.Add(new StaffDepartmentAttendance
+            db.StaffAttendance.Add(new StaffAttendance
             {
-                StaffDepartmentId = staffDepartmentId,
+                StaffId = staffId,
                 Absent = attended,
                 Active = true,
                 InsertedDate = DateTime.Now,
@@ -118,9 +121,9 @@ public class AttendanceController : BaseController
             attendance.UpdatedFrom = user.Id;
             attendance.UpdatedNo = UpdateNo(attendance.UpdatedNo);
 
-            db.StaffDepartmentAttendance.Add(new StaffDepartmentAttendance
+            db.StaffAttendance.Add(new StaffAttendance
             {
-                StaffDepartmentId = staffDepartmentId,
+                StaffId = staffId,
                 Absent = attended,
                 Active = true,
                 InsertedDate = DateTime.Now,
@@ -145,12 +148,12 @@ public class AttendanceController : BaseController
         }
 
         int attendanceId = CryptoSecurity.Decrypt<int>(ide);
-        var attendance = await db.StaffDepartmentAttendance
-            .Where(a => a.StaffDepartmentAttendanceId == attendanceId)
-            .Select(a => new StaffAttendance
+        var attendance = await db.StaffAttendance
+            .Where(a => a.StaffAttendanceId == attendanceId)
+            .Select(a => new AttendanceDetails
             {
                 AttendanceIde = ide,
-                StaffName = $"{a.StaffDepartment.Staff.FirstName} {a.StaffDepartment.Staff.LastName} - ({a.StaffDepartment.Staff.PersonalNumber})",
+                StaffName = $"{a.Staff.FirstName} {a.Staff.LastName} - ({a.Staff.PersonalNumber})",
                 AttendanceDate = a.InsertedDate.ToString("dd/MM/yyyy"),
                 AbsentTypeId = a.AbsentTypeId,
                 Description = a.Description
@@ -160,7 +163,7 @@ public class AttendanceController : BaseController
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "8:e")]
     [Description("Arb Tahiri", "Action to add absent type and add description for staff.")]
-    public async Task<IActionResult> StaffAttendance(StaffAttendance attendance)
+    public async Task<IActionResult> StaffAttendance(AttendanceDetails attendance)
     {
         if (!ModelState.IsValid)
         {
@@ -168,7 +171,7 @@ public class AttendanceController : BaseController
         }
 
         int attendanceId = CryptoSecurity.Decrypt<int>(attendance.AttendanceIde);
-        var staffAttendance = await db.StaffDepartmentAttendance.FirstOrDefaultAsync(a => a.StaffDepartmentAttendanceId == attendanceId);
+        var staffAttendance = await db.StaffAttendance.FirstOrDefaultAsync(a => a.StaffAttendanceId == attendanceId);
         staffAttendance.AbsentTypeId = attendance.AbsentTypeId;
         staffAttendance.Description = attendance.Description;
         staffAttendance.UpdatedDate = DateTime.Now;
@@ -180,17 +183,4 @@ public class AttendanceController : BaseController
     }
 
     #endregion
-}
-
-public class DistinctComparer : IEqualityComparer<StaffList>
-{
-    public bool Equals(StaffList x, StaffList y)
-    {
-        return x.StaffDepartmentIde == y.StaffDepartmentIde && x.EndDate >= y.EndDate;
-    }
-
-    public int GetHashCode([DisallowNull] StaffList obj)
-    {
-        return obj.StaffDepartmentIde.GetHashCode();
-    }
 }

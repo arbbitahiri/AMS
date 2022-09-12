@@ -7,7 +7,7 @@ namespace AMS.Data.General
     {
         public AbsentType()
         {
-            StaffDepartmentAttendance = new HashSet<StaffDepartmentAttendance>();
+            StaffAttendance = new HashSet<StaffAttendance>();
         }
 
         public int AbsentTypeId { get; set; }
@@ -22,6 +22,6 @@ namespace AMS.Data.General
 
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
-        public virtual ICollection<StaffDepartmentAttendance> StaffDepartmentAttendance { get; set; }
+        public virtual ICollection<StaffAttendance> StaffAttendance { get; set; }
     }
 }

@@ -30,8 +30,8 @@ namespace AMS.Data.General
             RealRoleInsertedFromNavigation = new HashSet<RealRole>();
             RealRoleUpdatedFromNavigation = new HashSet<RealRole>();
             RealRoleUser = new HashSet<RealRole>();
-            StaffDepartmentAttendanceInsertedFromNavigation = new HashSet<StaffDepartmentAttendance>();
-            StaffDepartmentAttendanceUpdatedFromNavigation = new HashSet<StaffDepartmentAttendance>();
+            StaffAttendanceInsertedFromNavigation = new HashSet<StaffAttendance>();
+            StaffAttendanceUpdatedFromNavigation = new HashSet<StaffAttendance>();
             StaffDepartmentInsertedFromNavigation = new HashSet<StaffDepartment>();
             StaffDepartmentUpdatedFromNavigation = new HashSet<StaffDepartment>();
             StaffDocumentInsertedFromNavigation = new HashSet<StaffDocument>();
@@ -99,8 +99,8 @@ namespace AMS.Data.General
         public virtual ICollection<RealRole> RealRoleInsertedFromNavigation { get; set; }
         public virtual ICollection<RealRole> RealRoleUpdatedFromNavigation { get; set; }
         public virtual ICollection<RealRole> RealRoleUser { get; set; }
-        public virtual ICollection<StaffDepartmentAttendance> StaffDepartmentAttendanceInsertedFromNavigation { get; set; }
-        public virtual ICollection<StaffDepartmentAttendance> StaffDepartmentAttendanceUpdatedFromNavigation { get; set; }
+        public virtual ICollection<StaffAttendance> StaffAttendanceInsertedFromNavigation { get; set; }
+        public virtual ICollection<StaffAttendance> StaffAttendanceUpdatedFromNavigation { get; set; }
         public virtual ICollection<StaffDepartment> StaffDepartmentInsertedFromNavigation { get; set; }
         public virtual ICollection<StaffDepartment> StaffDepartmentUpdatedFromNavigation { get; set; }
         public virtual ICollection<StaffDocument> StaffDocumentInsertedFromNavigation { get; set; }

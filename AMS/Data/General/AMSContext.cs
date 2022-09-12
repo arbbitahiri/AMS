@@ -32,8 +32,8 @@ public partial class AMSContext : DbContext
     public virtual DbSet<Notification> Notification { get; set; }
     public virtual DbSet<RealRole> RealRole { get; set; }
     public virtual DbSet<Staff> Staff { get; set; }
+    public virtual DbSet<StaffAttendance> StaffAttendance { get; set; }
     public virtual DbSet<StaffDepartment> StaffDepartment { get; set; }
-    public virtual DbSet<StaffDepartmentAttendance> StaffDepartmentAttendance { get; set; }
     public virtual DbSet<StaffDocument> StaffDocument { get; set; }
     public virtual DbSet<StaffRegistrationStatus> StaffRegistrationStatus { get; set; }
     public virtual DbSet<StaffType> StaffType { get; set; }
@@ -717,6 +717,49 @@ public partial class AMSContext : DbContext
                 .HasConstraintName("FK_Staff_AspNetUsers");
         });
 
+        modelBuilder.Entity<StaffAttendance>(entity =>
+        {
+            entity.Property(e => e.StaffAttendanceId).HasColumnName("StaffAttendanceID");
+
+            entity.Property(e => e.AbsentTypeId).HasColumnName("AbsentTypeID");
+
+            entity.Property(e => e.Description).HasMaxLength(2048);
+
+            entity.Property(e => e.InsertedDate).HasColumnType("datetime");
+
+            entity.Property(e => e.InsertedFrom)
+                .IsRequired()
+                .HasMaxLength(450);
+
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
+
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+            entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
+            entity.HasOne(d => d.AbsentType)
+                .WithMany(p => p.StaffAttendance)
+                .HasForeignKey(d => d.AbsentTypeId)
+                .HasConstraintName("FK_StaffDepartmentAttendance_AbsentType");
+
+            entity.HasOne(d => d.InsertedFromNavigation)
+                .WithMany(p => p.StaffAttendanceInsertedFromNavigation)
+                .HasForeignKey(d => d.InsertedFrom)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_StaffDepartmentAttendance_AspNetUsers_Inserted");
+
+            entity.HasOne(d => d.Staff)
+                .WithMany(p => p.StaffAttendance)
+                .HasForeignKey(d => d.StaffId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_StaffAttendance_Staff");
+
+            entity.HasOne(d => d.UpdatedFromNavigation)
+                .WithMany(p => p.StaffAttendanceUpdatedFromNavigation)
+                .HasForeignKey(d => d.UpdatedFrom)
+                .HasConstraintName("FK_StaffDepartmentAttendance_AspNetUsers_Updated");
+        });
+
         modelBuilder.Entity<StaffDepartment>(entity =>
         {
             entity.Property(e => e.StaffDepartmentId).HasColumnName("StaffDepartmentID");
@@ -771,49 +814,6 @@ public partial class AMSContext : DbContext
                 .WithMany(p => p.StaffDepartmentUpdatedFromNavigation)
                 .HasForeignKey(d => d.UpdatedFrom)
                 .HasConstraintName("FK_StaffDepartment_AspNetUsers_Updated");
-        });
-
-        modelBuilder.Entity<StaffDepartmentAttendance>(entity =>
-        {
-            entity.Property(e => e.StaffDepartmentAttendanceId).HasColumnName("StaffDepartmentAttendanceID");
-
-            entity.Property(e => e.AbsentTypeId).HasColumnName("AbsentTypeID");
-
-            entity.Property(e => e.Description).HasMaxLength(2048);
-
-            entity.Property(e => e.InsertedDate).HasColumnType("datetime");
-
-            entity.Property(e => e.InsertedFrom)
-                .IsRequired()
-                .HasMaxLength(450);
-
-            entity.Property(e => e.StaffDepartmentId).HasColumnName("StaffDepartmentID");
-
-            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
-
-            entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
-
-            entity.HasOne(d => d.AbsentType)
-                .WithMany(p => p.StaffDepartmentAttendance)
-                .HasForeignKey(d => d.AbsentTypeId)
-                .HasConstraintName("FK_StaffDepartmentAttendance_AbsentType");
-
-            entity.HasOne(d => d.InsertedFromNavigation)
-                .WithMany(p => p.StaffDepartmentAttendanceInsertedFromNavigation)
-                .HasForeignKey(d => d.InsertedFrom)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_StaffDepartmentAttendance_AspNetUsers_Inserted");
-
-            entity.HasOne(d => d.StaffDepartment)
-                .WithMany(p => p.StaffDepartmentAttendance)
-                .HasForeignKey(d => d.StaffDepartmentId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_StaffDepartmentAttendance_StaffDepartment");
-
-            entity.HasOne(d => d.UpdatedFromNavigation)
-                .WithMany(p => p.StaffDepartmentAttendanceUpdatedFromNavigation)
-                .HasForeignKey(d => d.UpdatedFrom)
-                .HasConstraintName("FK_StaffDepartmentAttendance_AspNetUsers_Updated");
         });
 
         modelBuilder.Entity<StaffDocument>(entity =>

@@ -36,18 +36,18 @@
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6 form-group">
                     <label class="invisible">//</label>
-                    <button type="submit" id="btn_search_s" class="btn btn-primary btn-block">@Resource.Search</button>
+                    <button type="submit" id="btn_search_a" class="btn btn-primary btn-block">@Resource.Search</button>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6 form-group">
                     <label class="invisible">//</label>
-                    <button type="button" id="btn_clear_s" class="btn btn-secondary btn-block">@Resource.Clear</button>
+                    <button type="button" id="btn_clear_a" class="btn btn-secondary btn-block">@Resource.Clear</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
 
-<div class="card card-custom" style="display: none;" id="kt_staff_search">
+<div class="card card-custom d-none" id="kt_staff_search">
     <div class="card-header">
         <h3 class="card-title">@Resource.SearchResult</h3>
         <div class="card-toolbar">
@@ -80,11 +80,9 @@
                 <tr>
                     <th>#</th>
                     <th>@Resource.Name</th>
+                    <th>@Resource.Birthdate</th>
                     <th>@Resource.Department</th>
-                    <th>@Resource.StaffType</th>
-                    <th>@Resource.StartDate</th>
-                    <th>@Resource.EndDate</th>
-                    <th>@Resource.WorkingSince</th>
+                    <th data-orderable="false">@Resource.Actions</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -103,24 +101,23 @@
             }
         });
 
-        change_staff_s();
+        change_staff_a();
 
-        $('#btn_clear_s').on('click', function() {
+        $('#btn_clear_a').on('click', function() {
             $('#frm_search_staff').trigger("reset");
             $('form select').each(function() {
                 $(this).val('').change();
             });
         });
 
-        $('#btn_search_s').on('click', function() {
-            $('#kt_staff_search').slideDown(500);
+        $('#btn_search_a').on('click', function() {
+            $('#kt_staff_search').removeClass('d-none');
         });
     });
 
-    function change_staff_s() {
+    function change_staff_a() {
         $('#SStaffId').select2({
             width: "100%",
-            allowClear: true,
             language: {
                 noResults: function () {
                     return '@Html.Raw(Resource.NoResultsFound)';
@@ -163,13 +160,14 @@
             pageLength: 15,
             data: data,
             deferRender: true,
+            columnDefs: [
+                { width: "5%", targets: [0, 4] },
+                { defaultContent: "///", targets: "_all" }
+            ],
+            order: [[0, "asc"]],
             drawCallback: function () {
                 $("input[data-bootstrap-switch]").bootstrapSwitch();
             },
-            columnDefs: [
-                { targets: "_all", defaultContent: "///" }
-            ],
-            order: [[0, "asc"]],
             columns: [
                 {
                     data: function (data, type, row, meta) {
@@ -179,35 +177,33 @@
                 {
                     data: function (row, type, set) {
                         var name = '<div class="d-flex align-items-center">' +
-                            '<div class="">' +
+                            '<div class="ml-2">' +
                             '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstName + ' ' + row.lastName + '</div>' +
                             '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
                             '</div></div>';
                         return name;
                     }
                 },
+                {
+                    data: function(row, type, set) {
+                        return moment(row.birthDate).format('DD/MM/YYYY');
+                    }
+                },
                 { data: "department" },
-                { data: "staffType" },
                 {
-                    data: function(row, type, set) {
-                        return moment(row.startDate).format('DD/MM/YYYY');
-                    }
-                },
-                {
-                    data: function(row, type, set) {
-                        return moment(row.endDate).format('DD/MM/YYYY');
-                    }
-                },
-                {
-                    data: function(row, type, set) {
-                        return row.workingSince + " " + (row.workingSince > 1 ? "@Html.Raw(Resource.Days)" : "@Html.Raw(Resource.Day)");
+                    data: function (row, type, set) {
+                        var attended = row.attended ? "checked" : "";
+                        return '<input data-switch="true" style="cursor: pointer; width: 90px;" type="checkbox" id="ch_hasAccess" ' +
+                                'onchange="change_attendance(this, \'' + row.staffIde + '\')" ' + attended + ' ' +
+                                'data-bootstrap-switch data-off-color="warning" data-on-color="success" data-handle-width="90" ' +
+                                'data-on-text="@Html.Raw(Resource.Yes)" data-off-text="@Html.Raw(Resource.No)"/>';
                     }
                 }
             ]
         });
     }
 
-    function add_attendance(e, ide) {
+    function change_attendance(e, ide) {
         $.post('@Url.Action("ChangeAttendance", "Attendance")', {
                 ide: ide,
                 attended: $(e).is(":checked"),
@@ -226,7 +222,7 @@
         $('#stype').val(type);
         $('#frm_search_staff').submit();
         $('#frm_search_staff').attr('data-ajax', true);
-        $('#frm_search_staff').attr('action', '@Url.Action("Attendance", "SearchStaff")');
+        $('#frm_search_staff').attr('action', '@Url.Action("Attendance", "SearchAttendance")');
         $('#frm_search_staff').removeAttr('target');
         $('#frm_search_staff').removeClass('noLoading');
     }

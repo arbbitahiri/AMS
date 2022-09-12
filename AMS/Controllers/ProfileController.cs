@@ -54,7 +54,7 @@ public class ProfileController : BaseController
     public async Task<IActionResult> _Attendance(string ide)
     {
         int staffId = CryptoSecurity.Decrypt<int>(ide);
-        var attendances = (await function.StaffConsecutiveDays(staffId, null, null, user.Language))
+        var attendances = (await function.StaffConsecutiveDays(staffId, null, null, null, null, user.Language))
             .Select(a => new AttendanceDetails
             {
                 StartDate = a.StartDate,

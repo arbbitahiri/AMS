@@ -23,6 +23,6 @@ public class FunctionRepository : IFunctionRepository
     public async Task<List<Logs>> Logs(string roleId, string userId, DateTime startDate, DateTime endDate, string ip, string controller, string action, string httpMethod, bool error) =>
         await db.Set<Logs>().FromSqlInterpolated(sql: $"SELECT * FROM [Logs] ({roleId}, {userId}, {startDate}, {endDate}, {ip}, {controller}, {action}, {httpMethod}, {error})").ToListAsync();
 
-    public async Task<List<StaffConsecutiveDays>> StaffConsecutiveDays(int? staffId, int? departmentId, int? staffTypeId, LanguageEnum language) =>
+    public async Task<List<StaffConsecutiveDays>> StaffConsecutiveDays(int? staffId, int? departmentId, int? staffTypeId, DateTime? startDate, DateTime? endDate, LanguageEnum language) =>
         await db.Set<StaffConsecutiveDays>().FromSqlInterpolated(sql: $"SELECT * FROM [StaffConsecutiveDays] ({staffId}, {departmentId}, {staffTypeId}, {language})").ToListAsync();
 }

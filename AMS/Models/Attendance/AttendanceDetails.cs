@@ -1,6 +1,6 @@
 ﻿namespace AMS.Models.Attendance;
 
-public class StaffAttendance
+public class AttendanceDetails
 {
     public string AttendanceIde { get; set; }
     public string StaffName { get; set; }

@@ -7,6 +7,7 @@ namespace AMS.Data.General
     {
         public Staff()
         {
+            StaffAttendance = new HashSet<StaffAttendance>();
             StaffDepartment = new HashSet<StaffDepartment>();
             StaffDocument = new HashSet<StaffDocument>();
             StaffRegistrationStatus = new HashSet<StaffRegistrationStatus>();
@@ -37,6 +38,7 @@ namespace AMS.Data.General
         public virtual AspNetUsers InsertedFromNavigation { get; set; }
         public virtual AspNetUsers UpdatedFromNavigation { get; set; }
         public virtual AspNetUsers User { get; set; }
+        public virtual ICollection<StaffAttendance> StaffAttendance { get; set; }
         public virtual ICollection<StaffDepartment> StaffDepartment { get; set; }
         public virtual ICollection<StaffDocument> StaffDocument { get; set; }
         public virtual ICollection<StaffRegistrationStatus> StaffRegistrationStatus { get; set; }
