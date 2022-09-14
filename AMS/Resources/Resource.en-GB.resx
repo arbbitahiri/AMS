@@ -879,4 +879,16 @@
   <data name="CouldNotAddRole" xml:space="preserve">
     <value>Could not add roles for the created staff account. You can add roles to the user list.</value>
   </data>
+  <data name="AMSTitle" xml:space="preserve">
+    <value>Attendance Management System</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>History</value>
+  </data>
+  <data name="AttendanceHistory" xml:space="preserve">
+    <value>Attendance history</value>
+  </data>
+  <data name="For" xml:space="preserve">
+    <value>For</value>
+  </data>
 </root>

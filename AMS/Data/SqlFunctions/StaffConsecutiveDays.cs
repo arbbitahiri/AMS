@@ -2,7 +2,7 @@
 
 public class StaffConsecutiveDays
 {
-    public int StaffDepartmentId { get; set; }
+    public int StaffId { get; set; }
     public string PersonalNumber { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }

@@ -40,27 +40,30 @@ public class StaffController : BaseController
     [Description("Arb Tahiri", "Form to list searched list of staff.")]
     public async Task<IActionResult> Search(Search search)
     {
-        var staffList = await db.StaffDepartment
-            .Where(a => !a.Staff.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Deleted)
-                && a.DepartmentId == (search.Department ?? a.DepartmentId)
-                && a.StaffTypeId == (search.StaffType ?? a.StaffTypeId)
-                && a.EndDate >= DateTime.Now
-                && (string.IsNullOrEmpty(search.PersonalNumber) || a.Staff.PersonalNumber == search.PersonalNumber)
-                && (string.IsNullOrEmpty(search.Firstname) || a.Staff.FirstName.Contains(search.Firstname))
-                && (string.IsNullOrEmpty(search.Lastname) || a.Staff.LastName.Contains(search.Lastname)))
+        var firstName = string.IsNullOrEmpty(search.Firstname) ? search.Firstname : search.Firstname.ToLower();
+        var lastName = string.IsNullOrEmpty(search.Lastname) ? search.Lastname : search.Lastname.ToLower();
+
+        var staffList = await db.Staff
+            .Where(a => a.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId != (int)Status.Deleted)
+                && a.StaffDepartment.Any(b => b.DepartmentId == (search.Department ?? b.DepartmentId))
+                && a.StaffDepartment.Any(b => b.StaffTypeId == (search.StaffType ?? b.StaffTypeId))
+                && a.StaffDepartment.Any(b => b.EndDate.Date >= DateTime.Now.Date)
+                && (string.IsNullOrEmpty(search.PersonalNumber) || a.PersonalNumber == search.PersonalNumber)
+                && (string.IsNullOrEmpty(search.Firstname) || a.FirstName.ToLower().Contains(firstName))
+                && (string.IsNullOrEmpty(search.Lastname) || a.LastName.ToLower().Contains(lastName)))
             .AsSplitQuery()
             .Select(a => new StaffDetails
             {
                 Ide = CryptoSecurity.Encrypt(a.StaffId),
-                Firstname = a.Staff.FirstName,
-                Lastname = a.Staff.LastName,
-                PersonalNumber = a.Staff.PersonalNumber,
-                ProfileImage = a.Staff.User.ProfileImage,
-                Gender = user.Language == LanguageEnum.Albanian ? a.Staff.Gender.NameSq : a.Staff.Gender.NameEn,
-                Department = user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn,
-                Email = a.Staff.Email,
-                PhoneNumber = a.Staff.PhoneNumber,
-                StaffType = string.Join(", ", user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn)
+                Firstname = a.FirstName,
+                Lastname = a.LastName,
+                PersonalNumber = a.PersonalNumber,
+                ProfileImage = a.User.ProfileImage,
+                Gender = user.Language == LanguageEnum.Albanian ? a.Gender.NameSq : a.Gender.NameEn,
+                Department = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).ToList()),
+                Email = a.Email,
+                PhoneNumber = a.PhoneNumber,
+                StaffType = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn).ToList())
             }).ToListAsync();
         return Json(staffList);
     }
@@ -849,7 +852,8 @@ public class StaffController : BaseController
     public async Task<IActionResult> Report(Search search, ReportType reportType)
     {
         var staffList = await db.StaffDepartment
-            .Where(a => a.DepartmentId == (search.Department ?? a.DepartmentId)
+            .Where(a => a.Staff.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId != (int)Status.Deleted)
+                && a.DepartmentId == (search.Department ?? a.DepartmentId)
                 && a.StaffTypeId == (search.Department ?? a.StaffTypeId)
                 && a.EndDate >= DateTime.Now
                 && (string.IsNullOrEmpty(search.PersonalNumber) || a.Staff.PersonalNumber.Contains(search.PersonalNumber))
@@ -858,30 +862,35 @@ public class StaffController : BaseController
             .AsSplitQuery()
             .Select(a => new ReportVM
             {
-                StaffId = a.StaffId,
                 DepartmentId = a.DepartmentId,
                 Department = user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn,
                 PersonalNumber = a.Staff.PersonalNumber,
                 FirstName = a.Staff.FirstName,
                 LastName = a.Staff.LastName,
                 BirthDate = a.Staff.BirthDate.ToString("dd/MM/yyyy"),
+                City = user.Language == LanguageEnum.Albanian ? a.Staff.City.NameSq : a.Staff.City.NameEn,
                 Gender = user.Language == LanguageEnum.Albanian ? a.Staff.Gender.NameSq : a.Staff.Gender.NameEn,
-                Email = a.Staff.User.Email,
-                PhoneNumber = a.Staff.User.PhoneNumber,
-                User = $"{user.FirstName} {user.LastName}"
+                Email = a.Staff.Email ?? "///",
+                PhoneNumber = string.IsNullOrEmpty(a.Staff.PhoneNumber) ? "///" : $"+{a.Staff.PhoneNumber}"
             }).ToListAsync();
 
         var dataSource = new List<ReportDataSource>() { new ReportDataSource("StaffDetails", staffList) };
         var parameters = new List<ReportParameter>()
         {
-            new ReportParameter("Department",search.Department.HasValue ? await db.Department.Where(a => a.DepartmentId == search.Department.Value).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync() : "///"),
-            new ReportParameter("StaffType", search.StaffType.HasValue ? await db.StaffType.Where(a => a.StaffTypeId == search.StaffType.Value).Select(a => user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn).FirstOrDefaultAsync() : "///"),
-            new ReportParameter("PersonalNumber", search.PersonalNumber ?? "///"),
-            new ReportParameter("Firstname", search.Firstname ?? "///"),
-            new ReportParameter("Lastname", search.Lastname ?? "///")
+            new ReportParameter("PrintedFrom", $"{user.FirstName} {user.LastName}"),
+            new ReportParameter("PersonalNumber", Resource.PersonalNumber),
+            new ReportParameter("FirstName", Resource.Firstname),
+            new ReportParameter("LastName", Resource.Lastname),
+            new ReportParameter("BirthDate", Resource.Birthdate),
+            new ReportParameter("Gender", Resource.Gender),
+            new ReportParameter("Email", Resource.Email),
+            new ReportParameter("PhoneNumber", Resource.PhoneNumber),
+            new ReportParameter("ListOfStaff", Resource.StaffList),
+            new ReportParameter("AMS", Resource.AMSTitle),
+            new ReportParameter("City", Resource.City)
         };
 
-        var reportByte = RDLCReport.GenerateReport("StaffList.rdlc", dataSource, parameters, reportType, ReportOrientation.Portrait);
+        var reportByte = RDLCReport.GenerateReport("StaffList.rdl", dataSource, parameters, reportType, ReportOrientation.Portrait);
         string contentType = reportType switch
         {
             ReportType.PDF => "application/pdf",

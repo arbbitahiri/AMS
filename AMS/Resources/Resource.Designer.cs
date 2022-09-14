@@ -322,6 +322,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sistemi për Menaxhimin e Pjesëmarrjes.
+        /// </summary>
+        public static string AMSTitle {
+            get {
+                return ResourceManager.GetString("AMSTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Parametrat e aplikacionit.
         /// </summary>
         public static string ApplicationSetings {
@@ -372,6 +381,15 @@ namespace AMS.Resources {
         public static string AttendanceChangedSuccessfully {
             get {
                 return ResourceManager.GetString("AttendanceChangedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Historia e pjesëmarrjes.
+        /// </summary>
+        public static string AttendanceHistory {
+            get {
+                return ResourceManager.GetString("AttendanceHistory", resourceCulture);
             }
         }
         
@@ -943,6 +961,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Për.
+        /// </summary>
+        public static string For {
+            get {
+                return ResourceManager.GetString("For", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Keni harruar fjalëkalimin?.
         /// </summary>
         public static string ForgotPassword {
@@ -1002,6 +1029,15 @@ namespace AMS.Resources {
         public static string Hi {
             get {
                 return ResourceManager.GetString("Hi", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Historia.
+        /// </summary>
+        public static string History {
+            get {
+                return ResourceManager.GetString("History", resourceCulture);
             }
         }
         

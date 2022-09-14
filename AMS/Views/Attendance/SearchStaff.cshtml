@@ -216,7 +216,7 @@
 
     function get_staff_report(type) {
         $('#frm_search_staff').attr('data-ajax', false);
-        $('#frm_search_staff').attr('action', '@Url.Action("Attendance", "ReportAttendance")');
+        $('#frm_search_staff').attr('action', '@Url.Action("Attendance", "ReportStaff")');
         $('#frm_search_staff').attr('target', '_blank');
         $('#frm_search_staff').addClass('noLoading');
         $('#stype').val(type);

@@ -7,6 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Reports\StaffAttended.rdl" />
+    <None Remove="Reports\StaffList.rdl" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\StaffAttended.rdl" />
+    <EmbeddedResource Include="Reports\StaffList.rdl" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="11.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.5" />
@@ -48,7 +58,6 @@
     <Folder Include="Areas\Administration\Views\" />
     <Folder Include="Areas\Trace\Views\" />
     <Folder Include="Scripts\" />
-    <Folder Include="Reports\" />
     <Folder Include="wwwroot\assets\" />
   </ItemGroup>
 

@@ -204,6 +204,9 @@
   <data name="AMS" xml:space="preserve">
     <value>Sistemi për menaxhimin e pjesmarrjes</value>
   </data>
+  <data name="AMSTitle" xml:space="preserve">
+    <value>Sistemi për Menaxhimin e Pjesëmarrjes</value>
+  </data>
   <data name="ApplicationSetings" xml:space="preserve">
     <value>Parametrat e aplikacionit</value>
   </data>
@@ -221,6 +224,9 @@
   </data>
   <data name="AttendanceChangedSuccessfully" xml:space="preserve">
     <value>Pjesëmarrja u ndryshua me sukses</value>
+  </data>
+  <data name="AttendanceHistory" xml:space="preserve">
+    <value>Historia e pjesëmarrjes</value>
   </data>
   <data name="AttendanceList" xml:space="preserve">
     <value>Lista e pjesëmarrjes</value>
@@ -411,6 +417,9 @@
   <data name="FirstStepStaffRegistration" xml:space="preserve">
     <value>1. Të dhënat personale</value>
   </data>
+  <data name="For" xml:space="preserve">
+    <value>Për</value>
+  </data>
   <data name="ForgotPassword" xml:space="preserve">
     <value>Keni harruar fjalëkalimin?</value>
   </data>
@@ -431,6 +440,9 @@
   </data>
   <data name="Hi" xml:space="preserve">
     <value>Tung</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>Historia</value>
   </data>
   <data name="HomePage" xml:space="preserve">
     <value>Ballina</value>

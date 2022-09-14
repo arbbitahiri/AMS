@@ -2,9 +2,6 @@
 
 public class AttendanceDetails
 {
-    public string AttendanceIde { get; set; }
-    public string StaffName { get; set; }
-    public string AttendanceDate { get; set; }
-    public int? AbsentTypeId { get; set; }
-    public string Description { get; set; }
+    public string Name { get; set; }
+    public List<AttendanceList> AttendanceList { get; set; }
 }

@@ -1,0 +1,69 @@
+﻿@using AMS.Models.Attendance
+@model AbsentDetails
+@inject IDDLRepository repo
+@{
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">@Resource.Details @Resource.For.ToLower() @Model.StaffName</h5>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="ki ki-close"></i>
+    </button>
+</div>
+
+<form asp-action="StaffAttendance" asp-controller="Attendance" id="frm_staff_absent" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_staff_absent" role="form">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <input asp-for="AttendanceIde" type="hidden" />
+
+        <div class="row pl-2 pr-2">
+            <div class="col-md-6 form-group">
+                <label asp-for="AttendanceDate" class="required"></label>
+                <input asp-for="AttendanceDate" type="text" class="form-control" disabled autocomplete="off" />
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="AbsentTypeId" class="required"></label>
+                <select asp-for="AbsentTypeId" asp-items="await repo.AbsentTypes(user.Language)" class="form-control select2">
+                    <option value="">@Resource.Choose</option>
+                </select>
+                <span asp-validation-for="AbsentTypeId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row form-group pl-2 pr-2 pt-2">
+            <div class="col-md-12">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" type="text" rows="2" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer modal-footer-uniform w-full justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-secondary" data-bs-dismiss="modal">@Resource.Close</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Save</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $.validator.setDefaults({ ignore: '' });
+        var form = $('#frm_staff_absent');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+
+        $(".select2").select2({
+            width: "100%",
+            language: {
+                noResults: function () {
+                    return '@Html.Raw(Resource.NoResultsFound)';
+                },
+            }
+        });
+    });
+
+    function success_staff_absent(data) {
+        handle_success(data, SubmitPathType.RELOAD, "");
+    }
+</script>

@@ -72,4 +72,11 @@ public class DDLRepository : IDDLRepository
                 Value = a.DocumentTypeId.ToString(),
                 Text = language == LanguageEnum.Albanian ? a.NameSq : a.NameEn
             }).ToListAsync();
+
+    public async Task<List<SelectListItem>> AbsentTypes(LanguageEnum language) =>
+        await db.AbsentType.Select(a => new SelectListItem
+        {
+            Value = a.AbsentTypeId.ToString(),
+            Text = language == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+        }).OrderBy(a => a.Text).ToListAsync();
 }
