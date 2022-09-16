@@ -1,0 +1,52 @@
+﻿@using AMS.Areas.Administration.Models.Roles
+@model Create
+
+<div class="modal-header">
+    <h5 class="modal-title">@Resource.Edit</h5>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="ki ki-close"></i>
+    </button>
+</div>
+
+<form asp-action="Create" asp-controller="Roles" id="frm_add_role" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_add_role" role="form">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <input asp-for="RoleIde" type="hidden" />
+
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label asp-for="NameSQ" class="required">@Resource.NameSq</label>
+                <input asp-for="NameSQ" class="form-control" />
+                <span asp-validation-for="NameSQ" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="NameEN" class="required">@Resource.NameEn</label>
+                <input asp-for="NameEN" class="form-control" />
+                <span asp-validation-for="NameEN" class="text-danger"></span>
+            </div>
+            <div class="col-md-12 form-group">
+                <label asp-for="Description" class="required">@Resource.Description</label>
+                <textarea asp-for="Description" spellcheck="false" rows="2" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer modal-footer-uniform w-full justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-secondary" data-bd-dismiss="modal">@Resource.Close</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Set</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        var form = $('#frm_add_role');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+    });
+
+    function success_add_role(data) {
+        handle_success(data, SubmitPathType.RELOAD, "");
+    }
+</script>

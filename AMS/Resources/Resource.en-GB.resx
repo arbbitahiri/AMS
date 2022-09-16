@@ -891,4 +891,19 @@
   <data name="For" xml:space="preserve">
     <value>For</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="NormalizedName" xml:space="preserve">
+    <value>Normalized name</value>
+  </data>
+  <data name="SureYouWantToDeleteRole" xml:space="preserve">
+    <value>Are you sure you want to delete the role?</value>
+  </data>
+  <data name="ImageChangedSuccess" xml:space="preserve">
+    <value>Image changed successfully!</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value>ImageChangedSuccess</value>
+  </data>
 </root>

@@ -1096,6 +1096,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Foto u ndryshua me sukses!.
+        /// </summary>
+        public static string ImageChangedSuccess {
+            get {
+                return ResourceManager.GetString("ImageChangedSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fjalëkalimi i pasaktë!.
         /// </summary>
         public static string IncorrectPassword {
@@ -1146,6 +1155,15 @@ namespace AMS.Resources {
         public static string Key {
             get {
                 return ResourceManager.GetString("Key", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gjuha.
+        /// </summary>
+        public static string Language {
+            get {
+                return ResourceManager.GetString("Language", resourceCulture);
             }
         }
         
@@ -1506,6 +1524,15 @@ namespace AMS.Resources {
         public static string NoResultsFound {
             get {
                 return ResourceManager.GetString("NoResultsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Emri normalizuar.
+        /// </summary>
+        public static string NormalizedName {
+            get {
+                return ResourceManager.GetString("NormalizedName", resourceCulture);
             }
         }
         
@@ -2091,6 +2118,15 @@ namespace AMS.Resources {
         public static string SureYouWantToDeleteMenu {
             get {
                 return ResourceManager.GetString("SureYouWantToDeleteMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A jeni i sigurt për fshirjen e grupit?.
+        /// </summary>
+        public static string SureYouWantToDeleteRole {
+            get {
+                return ResourceManager.GetString("SureYouWantToDeleteRole", resourceCulture);
             }
         }
         

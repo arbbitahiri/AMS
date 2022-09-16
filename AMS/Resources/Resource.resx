@@ -462,6 +462,9 @@
   <data name="Icon" xml:space="preserve">
     <value>Ikona</value>
   </data>
+  <data name="ImageChangedSuccess" xml:space="preserve">
+    <value>Foto u ndryshua me sukses!</value>
+  </data>
   <data name="IncorrectPassword" xml:space="preserve">
     <value>Fjalëkalimi i pasaktë!</value>
   </data>
@@ -479,6 +482,9 @@
   </data>
   <data name="Key" xml:space="preserve">
     <value>Qelësi</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Gjuha</value>
   </data>
   <data name="Lastname" xml:space="preserve">
     <value>Mbiemri</value>
@@ -599,6 +605,9 @@
   </data>
   <data name="NoResultsFound" xml:space="preserve">
     <value>Nuk u gjetë rezultate!</value>
+  </data>
+  <data name="NormalizedName" xml:space="preserve">
+    <value>Emri normalizuar</value>
   </data>
   <data name="NotAllowedGreaterDate" xml:space="preserve">
     <value>Nuk lejohet data më e madhe se sot!</value>
@@ -794,6 +803,9 @@
   </data>
   <data name="SureYouWantToDeleteMenu" xml:space="preserve">
     <value>A jeni i sigurt për fshirjen e menysë?</value>
+  </data>
+  <data name="SureYouWantToDeleteRole" xml:space="preserve">
+    <value>A jeni i sigurt për fshirjen e grupit?</value>
   </data>
   <data name="SureYouWantToDeleteStaff" xml:space="preserve">
     <value>A jeni i sigurt për fshirjen e stafit?</value>

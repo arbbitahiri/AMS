@@ -44,11 +44,11 @@ public class RolesController : BaseController
     #region Create
 
     [Authorize(Policy = "32:c"), Description("Arb Tahiri", "Form to create a role.")]
-    public IActionResult _CreateRole() => PartialView();
+    public IActionResult Create() => PartialView();
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "32:c")]
     [Description("Arb Tahiri", "Action to create a role.")]
-    public async Task<IActionResult> CreateRole(Create create)
+    public async Task<IActionResult> Create(Create create)
     {
         if (!ModelState.IsValid)
         {
@@ -76,7 +76,7 @@ public class RolesController : BaseController
     #region Edit
 
     [Authorize(Policy = "32:e"), Description("Arb Tahiri", "Form to edit a role.")]
-    public async Task<IActionResult> _EditRole(string rIde)
+    public async Task<IActionResult> Edit(string rIde)
     {
         var roleId = CryptoSecurity.Decrypt<string>(rIde);
         var role = await roleManager.Roles
@@ -93,7 +93,7 @@ public class RolesController : BaseController
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "32:e")]
     [Description("Arb Tahiri", "Action to edit a role.")]
-    public async Task<IActionResult> EditRole(Create edit)
+    public async Task<IActionResult> Edit(Create edit)
     {
         if (!ModelState.IsValid)
         {

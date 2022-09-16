@@ -46,7 +46,7 @@ var arrows = {
 $(document).ready(function () {
     $('.fade-in').hide().fadeIn(2000);
 
-    resources = $.getJSON(`/Culture/General/${culture}.json`);
+    resources = $.getJSON(`/culture/General/${culture}.json`);
 
     if (culture == 'sq-AL') {
         $("input[type='text']").prop('spellcheck', false);
