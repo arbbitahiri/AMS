@@ -583,6 +583,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Radhazi.
+        /// </summary>
+        public static string Consecutive {
+            get {
+                return ResourceManager.GetString("Consecutive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ditë të njëpasnjëshme.
         /// </summary>
         public static string ConsecutiveDays {
@@ -615,6 +624,24 @@ namespace AMS.Resources {
         public static string CouldNotAddRole {
             get {
                 return ResourceManager.GetString("CouldNotAddRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri gjurmëve sot.
+        /// </summary>
+        public static string CountOfLogsToday {
+            get {
+                return ResourceManager.GetString("CountOfLogsToday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri përdoruesve.
+        /// </summary>
+        public static string CountOfUsers {
+            get {
+                return ResourceManager.GetString("CountOfUsers", resourceCulture);
             }
         }
         
@@ -822,6 +849,15 @@ namespace AMS.Resources {
         public static string Edit {
             get {
                 return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ndrysho dokumentin.
+        /// </summary>
+        public static string EditDocument {
+            get {
+                return ResourceManager.GetString("EditDocument", resourceCulture);
             }
         }
         
@@ -1132,6 +1168,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data e insertimit.
+        /// </summary>
+        public static string InsertedDate {
+            get {
+                return ResourceManager.GetString("InsertedDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Të dhënat nuk janë valide!.
         /// </summary>
         public static string InvalidData {
@@ -1200,6 +1245,15 @@ namespace AMS.Resources {
         public static string ListOfDepartments {
             get {
                 return ResourceManager.GetString("ListOfDepartments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lista e gjurmëve.
+        /// </summary>
+        public static string ListOfLogs {
+            get {
+                return ResourceManager.GetString("ListOfLogs", resourceCulture);
             }
         }
         
@@ -1551,6 +1605,78 @@ namespace AMS.Resources {
         public static string Notifications {
             get {
                 return ResourceManager.GetString("Notifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri pjesëmarrjes.
+        /// </summary>
+        public static string NumberOfAttendance {
+            get {
+                return ResourceManager.GetString("NumberOfAttendance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri pjesëmarrjes sipas ditëve.
+        /// </summary>
+        public static string NumberOfAttendanceByDate {
+            get {
+                return ResourceManager.GetString("NumberOfAttendanceByDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri pjesëmarrjes sipas ditëve për një javë.
+        /// </summary>
+        public static string NumberOfAttendanceByDateForWeek {
+            get {
+                return ResourceManager.GetString("NumberOfAttendanceByDateForWeek", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri pjesëmarrjes sot.
+        /// </summary>
+        public static string NumberOfAttendanceToday {
+            get {
+                return ResourceManager.GetString("NumberOfAttendanceToday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri dokumenteve.
+        /// </summary>
+        public static string NumberOfDocuments {
+            get {
+                return ResourceManager.GetString("NumberOfDocuments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri stafit.
+        /// </summary>
+        public static string NumberOfStaff {
+            get {
+                return ResourceManager.GetString("NumberOfStaff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri përdoruesve.
+        /// </summary>
+        public static string NumberOfUsers {
+            get {
+                return ResourceManager.GetString("NumberOfUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri përdoruesve sipas grupeve.
+        /// </summary>
+        public static string NumberOfUsersByGroups {
+            get {
+                return ResourceManager.GetString("NumberOfUsersByGroups", resourceCulture);
             }
         }
         
@@ -2235,6 +2361,15 @@ namespace AMS.Resources {
         public static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lloji.
+        /// </summary>
+        public static string Type {
+            get {
+                return ResourceManager.GetString("Type", resourceCulture);
             }
         }
         

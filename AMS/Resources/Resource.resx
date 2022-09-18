@@ -291,6 +291,9 @@
   <data name="ConfirmPassword" xml:space="preserve">
     <value>Konfirmo fjalëkalimin</value>
   </data>
+  <data name="Consecutive" xml:space="preserve">
+    <value>Radhazi</value>
+  </data>
   <data name="ConsecutiveDays" xml:space="preserve">
     <value>Ditë të njëpasnjëshme</value>
   </data>
@@ -302,6 +305,12 @@
   </data>
   <data name="CouldNotAddRole" xml:space="preserve">
     <value>Nuk mund të shtoheshin grupet për llogarinë e krijuar të stafit. Grupet mund t'i shtoni në listën e përdorusve.</value>
+  </data>
+  <data name="CountOfLogsToday" xml:space="preserve">
+    <value>Numri gjurmëve sot</value>
+  </data>
+  <data name="CountOfUsers" xml:space="preserve">
+    <value>Numri përdoruesve</value>
   </data>
   <data name="Country" xml:space="preserve">
     <value>Shteti</value>
@@ -371,6 +380,9 @@
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Ndrysho</value>
+  </data>
+  <data name="EditDocument" xml:space="preserve">
+    <value>Ndrysho dokumentin</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
@@ -474,6 +486,9 @@
   <data name="InputEmailToResetPassword" xml:space="preserve">
     <value>Shkruani email-in tuaj për të dërguar linkun për ndryshimin e fjalëkalimit</value>
   </data>
+  <data name="InsertedDate" xml:space="preserve">
+    <value>Data e insertimit</value>
+  </data>
   <data name="InvalidData" xml:space="preserve">
     <value>Të dhënat nuk janë valide!</value>
   </data>
@@ -497,6 +512,9 @@
   </data>
   <data name="ListOfDepartments" xml:space="preserve">
     <value>Lista e departamenteve</value>
+  </data>
+  <data name="ListOfLogs" xml:space="preserve">
+    <value>Lista e gjurmëve</value>
   </data>
   <data name="ListOfMenus" xml:space="preserve">
     <value>Lista e menyve</value>
@@ -614,6 +632,30 @@
   </data>
   <data name="Notifications" xml:space="preserve">
     <value>Njoftimet</value>
+  </data>
+  <data name="NumberOfAttendance" xml:space="preserve">
+    <value>Numri pjesëmarrjes</value>
+  </data>
+  <data name="NumberOfAttendanceByDate" xml:space="preserve">
+    <value>Numri pjesëmarrjes sipas ditëve</value>
+  </data>
+  <data name="NumberOfAttendanceByDateForWeek" xml:space="preserve">
+    <value>Numri pjesëmarrjes sipas ditëve për një javë</value>
+  </data>
+  <data name="NumberOfAttendanceToday" xml:space="preserve">
+    <value>Numri pjesëmarrjes sot</value>
+  </data>
+  <data name="NumberOfDocuments" xml:space="preserve">
+    <value>Numri dokumenteve</value>
+  </data>
+  <data name="NumberOfStaff" xml:space="preserve">
+    <value>Numri stafit</value>
+  </data>
+  <data name="NumberOfUsers" xml:space="preserve">
+    <value>Numri përdoruesve</value>
+  </data>
+  <data name="NumberOfUsersByGroups" xml:space="preserve">
+    <value>Numri përdoruesve sipas grupeve</value>
   </data>
   <data name="OFF" xml:space="preserve">
     <value>JO</value>
@@ -842,6 +884,9 @@
   </data>
   <data name="Title" xml:space="preserve">
     <value>Titulli</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Lloji</value>
   </data>
   <data name="TypePasswordToSession" xml:space="preserve">
     <value>Shkruaj fjalëkalimin për të rikthyer sesionin</value>

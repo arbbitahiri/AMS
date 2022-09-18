@@ -1,7 +1,9 @@
 ﻿using AMS.Data.Core;
 using AMS.Data.General;
 using AMS.Models;
+using AMS.Models.Home;
 using AMS.Models.Shared;
+using AMS.Repositories;
 using AMS.Resources;
 using AMS.Utilities;
 using AMS.Utilities.General;
@@ -17,9 +19,13 @@ namespace AMS.Controllers;
 [Authorize]
 public class HomeController : BaseController
 {
-    public HomeController(AMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+    private readonly IFunctionRepository function;
+
+    public HomeController(IFunctionRepository function,
+        AMSContext db, SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         : base(db, signInManager, userManager)
     {
+        this.function = function;
     }
 
     [Description("Arb Tahiri", "Entry home.")]
@@ -27,13 +33,13 @@ public class HomeController : BaseController
     {
         ViewData["Title"] = Resource.HomePage;
 
-        //var getRole = User.Claims.FirstOrDefault(a => a.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
-        //return getRole.Value switch
-        //{
-        //    "Administrator" => RedirectToAction(nameof(Administrator)),
-        //    _ => View()
-        //};
-        return View();
+        var getRole = User.Claims.FirstOrDefault(a => a.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role");
+        return getRole.Value switch
+        {
+            "Administrator" => RedirectToAction(nameof(Administrator)),
+            "Developer" => RedirectToAction(nameof(Developer)),
+            _ => View()
+        };
     }
 
     #region Dashboard
@@ -42,68 +48,63 @@ public class HomeController : BaseController
     public async Task<IActionResult> Administrator()
     {
         ViewData["Title"] = Resource.HomePage;
-        return View();
+
+        int? staffId = await db.Staff.Where(a => a.UserId == user.Id).Select(a => a.StaffId).FirstOrDefaultAsync();
+        var administrator = new AdministratorVM
+        {
+            StaffCount = await db.Staff.CountAsync(a => a.StaffDepartment.Any(a => a.EndDate.Date >= DateTime.Now.Date)),
+            DocumentsCount = await db.StaffDocument.CountAsync(),
+            AttendanceCount = await db.StaffAttendance.CountAsync(a => a.InsertedDate.Date == DateTime.Now.Date),
+            WorkingSince = (await function.AttendanceConsecutiveDays(staffId, null, null, null, null, user.Language)).Select(a => a.WorkingSince).FirstOrDefault(),
+            WeekAttandance = (await function.AttendanceConsecutiveDays(null, null, null, DateTime.Now.AddDays(-7), DateTime.Now, user.Language))
+                .GroupBy(a => a.EndDate)
+                .Select(a => new AttendanceVM
+                {
+                    Count = a.Count(),
+                    Date = a.Key.ToString("dd/MM/yyyy")
+                }).ToList(),
+            Logs = await db.Log
+                .OrderBy(a => a.InsertedDate)
+                .Take(25)
+                .Select(a => new LogVM
+                {
+                    Action = a.Action,
+                    Description = a.Description,
+                    InsertedDate = a.InsertedDate
+                }).ToListAsync()
+        };
+        return View(administrator);
     }
 
-    #endregion
-
-    #region General methods
-
-    [HttpPost, Description("Arb Tahiri", "Action to change actual role.")]
-    public async Task<IActionResult> ChangeRole(string ide)
+    [HttpGet, Description("Arb Tahiri", "Home page for developer.")]
+    public async Task<IActionResult> Developer()
     {
-        string roleId = CryptoSecurity.Decrypt<string>(ide.Replace("\\", ""));
-        var realRoles = await db.RealRole.Include(t => t.Role).Where(t => t.UserId == user.Id).ToListAsync();
+        ViewData["Title"] = Resource.HomePage;
 
-        if (!realRoles.Any(t => t.RoleId == roleId))
+        int? staffId = await db.Staff.Where(a => a.UserId == user.Id).Select(a => a.StaffId).FirstOrDefaultAsync();
+        var developer = new DeveloperVM
         {
-            return Unauthorized();
-        }
-
-        var currentRole = User.Claims.Where(t => t.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role").FirstOrDefault();
-        string role = realRoles.Where(t => t.RoleId == roleId).Select(t => t.Role.Name).FirstOrDefault();
-
-        var error = new ErrorVM { Status = ErrorStatus.Success, Description = string.Format(Resource.RoleChangedSuccess, role) };
-
-        var result = await userManager.RemoveFromRoleAsync(user, currentRole.Value);
-        if (!result.Succeeded)
-        {
-            error = new ErrorVM { Status = ErrorStatus.Error, Description = Resource.ThereWasAnError };
-        }
-        else
-        {
-            result = await userManager.AddToRoleAsync(user, role);
-            if (!result.Succeeded)
-            {
-                await userManager.AddToRoleAsync(user, currentRole.Value);
-                error = new ErrorVM { Status = ErrorStatus.Error, Description = Resource.ThereWasAnError };
-            }
-        }
-        return Json(error);
+            UsersCount = await db.AspNetUser.CountAsync(),
+            LogsCount = await db.Log.CountAsync(a => a.InsertedDate.Date == DateTime.Now.Date),
+            WorkingSince = (await function.AttendanceConsecutiveDays(staffId, null, null, null, null, user.Language)).Select(a => a.WorkingSince).FirstOrDefault(),
+            UserRoles = await db.AspNetRoles
+                .Select(a => new UserRolesVM
+                {
+                    Count = a.User.Count,
+                    Role = user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+                }).ToListAsync(),
+            Logs = await db.Log
+                .OrderBy(a => a.InsertedDate)
+                .Take(25)
+                .Select(a => new LogVM
+                {
+                    Action = a.Action,
+                    Description = a.Description,
+                    InsertedDate = a.InsertedDate
+                }).ToListAsync()
+        };
+        return View(developer);
     }
-
-    [HttpPost, Description("Arb Tahiri", "Action to change actual role.")]
-    public async Task<IActionResult> ChangeMode(bool mode)
-    {
-        var currentUser = await db.AspNetUsers.FindAsync(user.Id);
-        currentUser.AppMode = (int)(mode ? TemplateMode.Dark : TemplateMode.Light);
-        await db.SaveChangesAsync();
-        return Json(new ErrorVM { Status = ErrorStatus.Success });
-    }
-
-    [Route("404"), Description("Arb Tahiri", "When page is not found.")]
-    public IActionResult PageNotFound()
-    {
-        if (HttpContext.Items.ContainsKey("originalPath"))
-        {
-            _ = HttpContext.Items["originalPath"] as string;
-        }
-        return View();
-    }
-
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    [Description("Arb Tahiri", "Error view")]
-    public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 
     #endregion
 

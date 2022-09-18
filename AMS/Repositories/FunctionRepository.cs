@@ -23,6 +23,9 @@ public class FunctionRepository : IFunctionRepository
     public async Task<List<Logs>> Logs(string roleId, string userId, DateTime startDate, DateTime endDate, string ip, string controller, string action, string httpMethod, bool error) =>
         await db.Set<Logs>().FromSqlInterpolated(sql: $"SELECT * FROM [Logs] ({roleId}, {userId}, {startDate}, {endDate}, {ip}, {controller}, {action}, {httpMethod}, {error})").ToListAsync();
 
-    public async Task<List<StaffConsecutiveDays>> StaffConsecutiveDays(int? staffId, int? departmentId, int? staffTypeId, DateTime? startDate, DateTime? endDate, LanguageEnum language) =>
+    public async Task<List<AttendanceConsecutiveDays>> AttendanceConsecutiveDays(int? staffId, int? departmentId, int? staffTypeId, DateTime? startDate, DateTime? endDate, LanguageEnum language) =>
+        await db.Set<AttendanceConsecutiveDays>().FromSqlInterpolated(sql: $"SELECT * FROM [AttendanceConsecutiveDays] ({staffId}, {departmentId}, {staffTypeId}, {startDate}, {endDate}, {language})").ToListAsync();
+
+    public async Task<List<StaffConsecutiveDays>> StaffConsecutiveDays(int? staffId, int? departmentId, int? staffTypeId, LanguageEnum language) =>
         await db.Set<StaffConsecutiveDays>().FromSqlInterpolated(sql: $"SELECT * FROM [StaffConsecutiveDays] ({staffId}, {departmentId}, {staffTypeId}, {language})").ToListAsync();
 }

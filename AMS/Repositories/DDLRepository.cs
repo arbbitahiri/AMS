@@ -63,7 +63,7 @@ public class DDLRepository : IDDLRepository
             Text = language == LanguageEnum.Albanian ? a.NameSq : a.NameEn
         }).OrderBy(a => a.Text).ToListAsync();
 
-    public async Task<List<SelectListItem>> DocumentTypesFor(LanguageEnum language) =>
+    public async Task<List<SelectListItem>> DocumentTypes(LanguageEnum language) =>
         await db.DocumentType
             .OrderBy(a => language == LanguageEnum.Albanian ? a.NameSq : a.NameEn)
             .Where(a => a.Active)

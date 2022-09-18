@@ -41,12 +41,7 @@ public class AttendanceController : BaseController
     [Description("Arb Tahiri", "Form to display list of staff attendance.")]
     public async Task<IActionResult> SearchStaff(SearchStaff search)
     {
-        var staffList = await db.Staff
-            .Where(a => a.StaffDepartment.Any(b => b.EndDate.Date >= DateTime.Now.Date)
-                && a.StaffId == (search.SStaffId ?? a.StaffId)
-                && a.StaffDepartment.Any(b => b.DepartmentId == (search.SDepartmentId ?? b.DepartmentId))
-                && a.StaffDepartment.Any(b => b.StaffTypeId == (search.SStaffTypeId ?? b.StaffTypeId)))
-            .OrderBy(a => a.FirstName)
+        var staffList = (await function.StaffConsecutiveDays(search.SStaffId, search.SDepartmentId, search.SStaffTypeId, user.Language))
             .Select(a => new StaffList
             {
                 StaffIde = CryptoSecurity.Encrypt(a.StaffId),
@@ -54,9 +49,10 @@ public class AttendanceController : BaseController
                 FirstName = a.FirstName,
                 LastName = a.LastName,
                 BirthDate = a.BirthDate,
-                Department = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).ToList()),
-                Attended = a.StaffAttendance.Any(a => a.Active && a.InsertedDate.Date == DateTime.Now.Date)
-            }).ToListAsync();
+                Department = a.Department,
+                WorkingSince = a.WorkingSince,
+                Attended = a.Attended
+            }).ToList();
         return Json(staffList);
     }
 
@@ -71,7 +67,7 @@ public class AttendanceController : BaseController
     [Description("Arb Tahiri", "Form to display list of staff attendance.")]
     public async Task<IActionResult> SearchAttendance(SearchAttendance search)
     {
-        var attendance = (await function.StaffConsecutiveDays(search.AStaffId, search.ADepartmentId, search.AStaffTypeId, search.AStartDate, search.AEndDate, user.Language))
+        var attendance = (await function.AttendanceConsecutiveDays(search.AStaffId, search.ADepartmentId, search.AStaffTypeId, search.AStartDate, search.AEndDate, user.Language))
             .OrderByDescending(a => a.EndDate)
             .Select(a => new StaffList
             {
@@ -110,7 +106,7 @@ public class AttendanceController : BaseController
             db.StaffAttendance.Add(new StaffAttendance
             {
                 StaffId = staffId,
-                Absent = attended,
+                Absent = !attended,
                 Active = true,
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id,
@@ -126,7 +122,7 @@ public class AttendanceController : BaseController
             db.StaffAttendance.Add(new StaffAttendance
             {
                 StaffId = staffId,
-                Absent = attended,
+                Absent = !attended,
                 Active = true,
                 InsertedDate = DateTime.Now,
                 InsertedFrom = user.Id,
@@ -140,13 +136,14 @@ public class AttendanceController : BaseController
 
     #region Attendance details
 
-    [HttpGet, Description("Arb Tahiri", "Form to display staff attendance details.")]
-    public async Task<IActionResult> History(string ide)
+    [HttpGet, Authorize(Policy = "8:h")]
+    [Description("Arb Tahiri", "Form to display staff attendance details.")]
+    public async Task<IActionResult> History(string ide, DateTime startDate, DateTime endDate)
     {
         var staffId = CryptoSecurity.Decrypt<int>(ide);
 
         var attendance = await db.StaffAttendance
-            .Where(a => a.StaffId == staffId)
+            .Where(a => a.StaffId == staffId && startDate.Date <= a.InsertedDate && a.InsertedDate <= endDate.Date)
             .GroupBy(a => a.StaffId)
             .Select(a => new AttendanceDetails
             {
@@ -268,7 +265,7 @@ public class AttendanceController : BaseController
     [Description("Arb Tahiri", "Report for list of staff depending of the search.")]
     public async Task<IActionResult> ReportAttendance(SearchAttendance search, ReportType atype)
     {
-        var attendance = (await function.StaffConsecutiveDays(search.AStaffId, search.ADepartmentId, search.AStaffTypeId, search.AStartDate, search.AEndDate, user.Language))
+        var attendance = (await function.AttendanceConsecutiveDays(search.AStaffId, search.ADepartmentId, search.AStaffTypeId, search.AStartDate, search.AEndDate, user.Language))
             .OrderByDescending(a => a.EndDate)
             .Select(a => new StaffList
             {

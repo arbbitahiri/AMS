@@ -482,8 +482,6 @@ public class StaffController : BaseController
         }
 
         var userId = await db.Staff.Where(a => a.StaffId == staffId).Select(a => a.UserId).FirstOrDefaultAsync();
-        var newUser = await userManager.FindByIdAsync(userId);
-        var getRoles = await userManager.GetRolesAsync(newUser);
 
         var newStaffDepartment = new StaffDepartment
         {
@@ -497,25 +495,31 @@ public class StaffController : BaseController
             InsertedFrom = user.Id
         };
 
-        if (!getRoles.Any())
+        if (!string.IsNullOrEmpty(userId))
         {
-            var role = await db.AspNetRoles.Where(a => a.Id == getRole).Select(a => a.NormalizedName).ToListAsync();
-            var result = await userManager.AddToRolesAsync(newUser, role);
-            if (!result.Succeeded)
-            {
-                TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}</li>" + "</ul>" });
-            }
-        }
+            var newUser = await userManager.FindByIdAsync(userId);
+            var getRoles = await userManager.GetRolesAsync(newUser);
 
-        if (!getRoles.Any(a => a == getRole))
-        {
-            db.RealRole.Add(new RealRole
+            if (!getRoles.Any())
             {
-                UserId = userId,
-                RoleId = getRole,
-                InsertedDate = DateTime.Now,
-                InsertedFrom = user.Id
-            });
+                var role = await db.AspNetRoles.Where(a => a.Id == getRole).Select(a => a.NormalizedName).ToListAsync();
+                var result = await userManager.AddToRolesAsync(newUser, role);
+                if (!result.Succeeded)
+                {
+                    TempData.Set("Error", new ErrorVM { Status = ErrorStatus.Error, Title = Resource.Error, RawContent = true, Description = "<ul>" + string.Join("", result.Errors.Select(a => "<li>" + a.Description + "</li>").ToArray()) + $"<li>{Resource.RolesAddThroughList}</li>" + "</ul>" });
+                }
+            }
+
+            if (!getRoles.Any(a => a == getRole))
+            {
+                db.RealRole.Add(new RealRole
+                {
+                    UserId = userId,
+                    RoleId = getRole,
+                    InsertedDate = DateTime.Now,
+                    InsertedFrom = user.Id
+                });
+            }
         }
 
         db.StaffDepartment.Add(newStaffDepartment);
@@ -683,7 +687,7 @@ public class StaffController : BaseController
 
         var staffRegistrationStatus = await db.StaffRegistrationStatus.Include(a => a.Staff).FirstOrDefaultAsync(a => a.Active && a.StaffId == staffId);
 
-        if (!await db.StaffRegistrationStatus.AnyAsync(a => a.Active && a.StatusTypeId == (int)Status.Finished))
+        if (!await db.StaffRegistrationStatus.AnyAsync(a => a.Active && a.StatusTypeId == (int)Status.Finished) && !string.IsNullOrEmpty(staffRegistrationStatus.Staff.UserId))
         {
             var userForRoles = await userManager.FindByIdAsync(staffRegistrationStatus.Staff.UserId);
             var staffDepartments = await db.StaffDepartment.Include(a => a.Staff).Where(a => a.EndDate >= DateTime.Now && a.StaffId == staffId).ToListAsync();

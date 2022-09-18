@@ -903,7 +903,52 @@
   <data name="ImageChangedSuccess" xml:space="preserve">
     <value>Image changed successfully!</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value>ImageChangedSuccess</value>
+  <data name="EditDocument" xml:space="preserve">
+    <value>Edit document</value>
+  </data>
+  <data name="InsertedDate" xml:space="preserve">
+    <value>Inserted date</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="Area" xml:space="preserve">
+    <value>Area</value>
+  </data>
+  <data name="Consecutive" xml:space="preserve">
+    <value>Consecutive</value>
+  </data>
+  <data name="CountOfLogsToday" xml:space="preserve">
+    <value>Log count today</value>
+  </data>
+  <data name="CountOfUsers" xml:space="preserve">
+    <value>Number of users</value>
+  </data>
+  <data name="ListOfLogs" xml:space="preserve">
+    <value>List of logs</value>
+  </data>
+  <data name="NumberOfAttendance" xml:space="preserve">
+    <value>Number of attendance</value>
+  </data>
+  <data name="NumberOfAttendanceByDate" xml:space="preserve">
+    <value>Number of attendance by date</value>
+  </data>
+  <data name="NumberOfAttendanceByDateForWeek" xml:space="preserve">
+    <value>Number of attendance by date for one week</value>
+  </data>
+  <data name="NumberOfAttendanceToday" xml:space="preserve">
+    <value>Number of attendance today</value>
+  </data>
+  <data name="NumberOfDocuments" xml:space="preserve">
+    <value>Number of documents</value>
+  </data>
+  <data name="NumberOfStaff" xml:space="preserve">
+    <value>Number of staff</value>
+  </data>
+  <data name="NumberOfUsers" xml:space="preserve">
+    <value>Number of users</value>
+  </data>
+  <data name="NumberOfUsersByGroups" xml:space="preserve">
+    <value>Number of users by groups</value>
   </data>
 </root>

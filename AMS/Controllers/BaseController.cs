@@ -1,5 +1,6 @@
 ﻿using AMS.Data.Core;
 using AMS.Data.General;
+using AMS.Models;
 using AMS.Models.Notification;
 using AMS.Models.Shared;
 using AMS.Resources;
@@ -17,10 +18,12 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Net;
 using System.Net.Mail;
+using System.Runtime.Versioning;
 
 namespace AMS.Controllers;
 
@@ -117,9 +120,6 @@ public class BaseController : Controller
         await db.SaveChangesAsync();
     }
 
-    [AllowAnonymous, Description("Arb Tahiri", "Error status message.")]
-    public IActionResult _AlertMessage(ErrorVM error) => PartialView(error);
-
     #region General methods
 
     #region Role
@@ -163,6 +163,40 @@ public class BaseController : Controller
         }
         return Json(error);
     }
+
+    #endregion
+
+    #region Application mode
+
+    [HttpPost, Description("Arb Tahiri", "Action to change actual role.")]
+    public async Task<IActionResult> ChangeMode(bool mode)
+    {
+        var currentUser = await db.AspNetUsers.FindAsync(user.Id);
+        currentUser.AppMode = (int)(mode ? TemplateMode.Dark : TemplateMode.Light);
+        await db.SaveChangesAsync();
+        return Json(new ErrorVM { Status = ErrorStatus.Success });
+    }
+
+    #endregion
+
+    #region Error
+
+    [AllowAnonymous, Description("Arb Tahiri", "Error status message.")]
+    public IActionResult _AlertMessage(ErrorVM error) => PartialView(error);
+
+    [Route("404"), Description("Arb Tahiri", "When page is not found.")]
+    public IActionResult PageNotFound()
+    {
+        if (HttpContext.Items.ContainsKey("originalPath"))
+        {
+            _ = HttpContext.Items["originalPath"] as string;
+        }
+        return View();
+    }
+
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    [Description("Arb Tahiri", "Error view")]
+    public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 
     #endregion
 
@@ -281,6 +315,7 @@ public class BaseController : Controller
 
     #region Save file
 
+    [SupportedOSPlatform("windows")]
     protected async Task<string> SaveFile(IWebHostEnvironment environment, IConfiguration configuration, IFormFile file, string folder, string fileTitle, int type = 512)
     {
         int maxKB = int.Parse(configuration["AppSettings:FileMaxKB"]);
@@ -310,6 +345,7 @@ public class BaseController : Controller
         else return null;
     }
 
+    [SupportedOSPlatform("windows")]
     protected async Task ResizeImage(IFormFile file, string filePath, int size)
     {
         var stream = new MemoryStream();
@@ -335,6 +371,7 @@ public class BaseController : Controller
         resizer.Write(filePath);
     }
 
+    [SupportedOSPlatform("windows")]
     protected async Task<string> SaveImage(IWebHostEnvironment environment, IFormFile file, string folder, int type = 512)
     {
         //string fileName = Path.GetFileNameWithoutExtension(file.FileName);
