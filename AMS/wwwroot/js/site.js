@@ -266,3 +266,18 @@ function display_notification(description, title, url, target, notification_type
 
     $('.swal2-backdrop-show').css("cursor", "pointer");
 }
+
+function format_repo(repo) {
+    if (repo.loading) {
+        return repo.text;
+    }
+
+    var $container = $(
+        '<span class="d-flex align-items-center">' + (repo.image == null ? ('<div class="symbol symbol-40 symbol-sm flex-shrink-0 mr-3"><span class="symbol-label font-size-h5 font-weight-boldest">' + repo.initials + '</span></div>') : ('<img src="../..' + repo.image +'" height="40" class="flag-icon circle rounded rounded-circle" style="object-fit: cover; width: 36px; margin-right: 10px;"/>')) + repo.text + '</span>'
+    );
+    return $container;
+}
+
+function format_repo_selection(repo) {
+    return repo.text;
+}

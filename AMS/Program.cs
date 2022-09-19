@@ -87,10 +87,6 @@ builder.Services.Configure<IISServerOptions>(options =>
     options.MaxRequestBodySize = long.MaxValue;
 });
 
-builder.Services.AddResponseCaching();
-builder.Services.AddResponseCompression();
-builder.Services.AddMemoryCache();
-
 var app = builder.Build();
 
 app.Use(async (context, next) =>
@@ -135,7 +131,7 @@ else
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseExceptionHandlerMiddleware();
 
 app.UseStaticFiles(new StaticFileOptions()
@@ -154,9 +150,7 @@ app.UseStaticFiles(new StaticFileOptions()
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseResponseCaching();
 app.UseCookiePolicy();
-app.UseResponseCompression();
 
 app.Use(async (context, next) =>
 {

@@ -3,6 +3,7 @@
 @inject IDDLRepository repo
 @{
     UserModel user = (UserModel)ViewData["User"];
+    //<a href="#" data-toggle="tooltip" data-placement="top" title="@Resource.Back" onclick="go_back()"><i class="far fa-arrow-alt-circle-left fa-lg"></i></a> &nbsp;
 }
 
 <div class="modal-header">
@@ -47,6 +48,8 @@
 
 <script>
     $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+
         $.validator.setDefaults({ ignore: '' });
         var form = $('#frm_staff_absent');
         form.removeData('validator');
@@ -62,6 +65,10 @@
             }
         });
     });
+
+    //function go_back() {
+    //    $('#modal-large').find('.modal-content').load('@Url.Action("History", "Attendance", new { ide = Model.StaffIde, startDate = Model.StartDate, endDate = Model.EndDate })');
+    //}
 
     function success_staff_absent(data) {
         handle_success(data, SubmitPathType.RELOAD, "");

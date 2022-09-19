@@ -3,15 +3,18 @@
 @inject IDDLRepository repo
 @{
     UserModel user = (UserModel)ViewData["User"];
+    ViewData["Title"] = Resource.Documents;
 }
-
 
 <div class="card card-custom gutter-b">
     <div class="card-header">
         <h3 class="card-title">@Resource.SearchByCriteria</h3>
+        <div class="card-toolbar">
+            <button onclick="add_document()" class="btn btn-primary float-right">@Resource.AddDocument</button>
+        </div>
     </div>
     <div class="card-body">
-        <form asp-action="SearchAttendance" asp-controller="Attendance" method="post" id="frm_search_documents" data-ajax="true" data-ajax-success="success_documents">
+        <form asp-action="Search" asp-controller="Document" method="post" id="frm_search_documents" data-ajax="true" data-ajax-success="success_documents">
             @Html.AntiForgeryToken()
             <input id="atype" name="atype" type="hidden"/>
 
@@ -107,6 +110,8 @@
             });
 
             change_staff();
+
+            $('#btn_search_s').trigger('click');
         });
 
         function change_staff() {
@@ -173,7 +178,7 @@
                     },
                     {
                         data: function (row, type, set) {
-                            var name = '<div class="d-flex align-items-center">' +
+                            var name = '<div class="d-flex flex-column align-items-start">' +
                                 '<div class="text-dark-75 font-weight-bolder font-size-lg mb-0">' + row.firstName + ' ' + row.lastName + '</div>' +
                                 '<div class="text-muted font-weight-bold text-hover-primary">' + row.personalNumber + '</div>' +
                                 '</div>';
@@ -231,8 +236,8 @@
             $(e).parent().parent().find('.load-more').removeClass('d-none');
         }
 
-        function add_document(ide) {
-            $('#modal-large').find('.modal-content').load('@Url.Action("Create", "Document")?ide=' + ide, function () {
+        function add_document() {
+            $('#modal-large').find('.modal-content').load('@Url.Action("Create", "Document")', function () {
                 $('#modal-large').modal('toggle');
             });
         }

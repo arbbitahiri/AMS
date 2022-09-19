@@ -14,6 +14,7 @@ using System.Net;
 using System.Net.Mail;
 
 namespace AMS.Areas.Identity.Pages.Account;
+
 public class BaseOModel : PageModel
 {
     protected AMSContext db;

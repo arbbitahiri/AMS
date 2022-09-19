@@ -6,6 +6,11 @@ namespace AMS.Models.Attendance;
 public class AbsentDetails
 {
     public string AttendanceIde { get; set; }
+    public string StaffIde { get; set; }
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+
+
     public string StaffName { get; set; }
 
     [Display(Name = "Date", ResourceType = typeof(Resource))]

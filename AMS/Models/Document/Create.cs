@@ -8,15 +8,15 @@ public class Create
 {
     [Display(Name = "Staff", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    public int StaffId { get; set; }
+    public int AStaffId { get; set; }
 
     [Display(Name = "DocumentType", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    public int DocumentTypeId { get; set; }
+    public int ADocumentTypeId { get; set; }
 
     [Display(Name = "Title", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    public string Title { get; set; }
+    public string ATitle { get; set; }
 
     [Display(Name = "Document", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]

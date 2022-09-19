@@ -12,29 +12,29 @@
     </button>
 </div>
 
-<form asp-action="Create" asp-controller="Document" id="frm_create_document" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_create_document" role="form">
+<form asp-action="Create" asp-controller="Document" id="frm_create_document" method="post" enctype="multipart/form-data" data-ajax="true" data-ajax-method="post" data-ajax-success="success_create_document" role="form">
     <div class="modal-body">
         @Html.AntiForgeryToken()
 
         <div class="row pl-2 pr-2">
             <div class="col-md-6 form-group">
-                <label asp-for="StaffId" class="required"></label>
-                <select asp-for="StaffId" class="form-control select2">
+                <label asp-for="AStaffId" class="required"></label>
+                <select asp-for="AStaffId" class="form-control select2">
                     <option value="">@Resource.Choose</option>
                 </select>
-                <span asp-validation-for="StaffId" class="text-danger"></span>
+                <span asp-validation-for="AStaffId" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-group">
-                <label asp-for="DocumentTypeId" class="required"></label>
-                <select asp-for="DocumentTypeId" asp-items="await repo.DocumentTypes(user.Language)" class="form-control select2">
+                <label asp-for="ADocumentTypeId" class="required"></label>
+                <select asp-for="ADocumentTypeId" asp-items="await repo.DocumentTypes(user.Language)" class="form-control select2">
                     <option value="">@Resource.Choose</option>
                 </select>
-                <span asp-validation-for="DocumentTypeId" class="text-danger"></span>
+                <span asp-validation-for="ADocumentTypeId" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-group">
-                <label asp-for="Title" class="required"></label>
-                <input asp-for="Title" type="text" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="ATitle" class="required"></label>
+                <input asp-for="ATitle" type="text" class="form-control" />
+                <span asp-validation-for="ATitle" class="text-danger"></span>
             </div>
         </div>
         <div class="row form-group pl-2 pr-2">
@@ -86,7 +86,7 @@
             }
         });
 
-        $('#StaffId').select2({
+        $('#AStaffId').select2({
             width: "100%",
             language: {
                 noResults: function () {

@@ -1,8 +1,6 @@
 ﻿using AMS.Data.Core;
 using AMS.Data.General;
-using AMS.Models;
 using AMS.Models.Home;
-using AMS.Models.Shared;
 using AMS.Repositories;
 using AMS.Resources;
 using AMS.Utilities;
@@ -12,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace AMS.Controllers;
 
@@ -37,7 +34,7 @@ public class HomeController : BaseController
         return getRole.Value switch
         {
             "Administrator" => RedirectToAction(nameof(Administrator)),
-            "Developer" => RedirectToAction(nameof(Developer)),
+            "IT" => RedirectToAction(nameof(Developer)),
             _ => View()
         };
     }
@@ -57,14 +54,14 @@ public class HomeController : BaseController
             AttendanceCount = await db.StaffAttendance.CountAsync(a => a.InsertedDate.Date == DateTime.Now.Date),
             WorkingSince = (await function.AttendanceConsecutiveDays(staffId, null, null, null, null, user.Language)).Select(a => a.WorkingSince).FirstOrDefault(),
             WeekAttandance = (await function.AttendanceConsecutiveDays(null, null, null, DateTime.Now.AddDays(-7), DateTime.Now, user.Language))
-                .GroupBy(a => a.EndDate)
+                .GroupBy(a => a.EndDate.Date)
                 .Select(a => new AttendanceVM
                 {
                     Count = a.Count(),
                     Date = a.Key.ToString("dd/MM/yyyy")
                 }).ToList(),
             Logs = await db.Log
-                .OrderBy(a => a.InsertedDate)
+                .OrderByDescending(a => a.InsertedDate)
                 .Take(25)
                 .Select(a => new LogVM
                 {
@@ -94,7 +91,7 @@ public class HomeController : BaseController
                     Role = user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn
                 }).ToListAsync(),
             Logs = await db.Log
-                .OrderBy(a => a.InsertedDate)
+                .OrderByDescending(a => a.InsertedDate)
                 .Take(25)
                 .Select(a => new LogVM
                 {

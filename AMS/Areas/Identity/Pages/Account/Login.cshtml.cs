@@ -75,7 +75,7 @@ public class LoginModel : BaseOModel
         }
 
         var error = new ErrorVM { Status = ErrorStatus.Success, Description = "" };
-        var request = Request.Form;
+        //var request = Request.Form;
 
         var userName = Input.Email;
         if (userName.IndexOf('@') > -1)
@@ -92,7 +92,7 @@ public class LoginModel : BaseOModel
         var result = await signInManager.PasswordSignInAsync(userName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
         if (result.Succeeded)
         {
-            var userId = await db.AspNetUsers.Where(a => a.Email == Input.Email).Select(a => a.Id).FirstOrDefaultAsync();
+            //var userId = await db.AspNetUsers.Where(a => a.Email == Input.Email).Select(a => a.Id).FirstOrDefaultAsync();
             await db.SaveChangesAsync();
             return new JsonResult(error);
         }

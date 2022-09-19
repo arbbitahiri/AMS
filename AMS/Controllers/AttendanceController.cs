@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Reporting.NETCore;
+using System.Globalization;
 
 namespace AMS.Controllers;
 
@@ -143,16 +144,20 @@ public class AttendanceController : BaseController
         var staffId = CryptoSecurity.Decrypt<int>(ide);
 
         var attendance = await db.StaffAttendance
-            .Where(a => a.StaffId == staffId && startDate.Date <= a.InsertedDate && a.InsertedDate <= endDate.Date)
+            .Where(a => a.StaffId == staffId && startDate.Date <= a.InsertedDate.Date && a.InsertedDate.Date <= endDate.Value.Date)
             .GroupBy(a => a.StaffId)
             .Select(a => new AttendanceDetails
             {
+                StaffIde = ide,
                 Name = $"{a.Select(b => b.Staff.FirstName).FirstOrDefault()} {a.Select(b => b.Staff.LastName).FirstOrDefault()} - ({a.Select(b => b.Staff.PersonalNumber).FirstOrDefault()})",
+                StartDate = startDate,
+                EndDate = endDate.Value,
                 AttendanceList = a.Select(b => new AttendanceList
                 {
                     StaffAttendanceIde = CryptoSecurity.Encrypt(b.StaffAttendanceId),
                     Date = b.InsertedDate,
-                    Absent = b.Absent ? Resource.Yes : Resource.No
+                    Absent = b.Absent ? Resource.Yes : Resource.No,
+                    Attended = !b.Absent
                 }).ToList()
             }).FirstOrDefaultAsync();
         return PartialView(attendance);
@@ -160,7 +165,7 @@ public class AttendanceController : BaseController
 
     [HttpGet, Authorize(Policy = "8:e")]
     [Description("Arb Tahiri", "Form to add absent type and add description for staff.")]
-    public async Task<IActionResult> StaffAttendance(string ide)
+    public async Task<IActionResult> StaffAttendance(string ide, string sIde, DateTime startDate, DateTime endDate)
     {
         if (string.IsNullOrEmpty(ide))
         {
@@ -173,6 +178,9 @@ public class AttendanceController : BaseController
             .Select(a => new AbsentDetails
             {
                 AttendanceIde = ide,
+                StaffIde = sIde,
+                StartDate = startDate,
+                EndDate = endDate,
                 StaffName = $"{a.Staff.FirstName} {a.Staff.LastName} - ({a.Staff.PersonalNumber})",
                 AttendanceDate = a.InsertedDate.ToString("dd/MM/yyyy"),
                 AbsentTypeId = a.AbsentTypeId,

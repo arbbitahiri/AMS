@@ -5,4 +5,5 @@ public class AttendanceList
     public string StaffAttendanceIde { get; set; }
     public DateTime Date { get; set; }
     public string Absent { get; set; }
+    public bool Attended { get; set; }
 }

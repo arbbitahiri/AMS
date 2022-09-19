@@ -9,7 +9,9 @@ using AMS.Utilities.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Mime;
 
 namespace AMS.Controllers;
 
@@ -76,9 +78,9 @@ public class DocumentController : BaseController
         string path = await SaveFile(environment, configuration, create.FormFile, "StaffDocuments", null);
         db.Add(new StaffDocument
         {
-            StaffId = create.StaffId,
-            DocumentTypeId = create.DocumentTypeId,
-            Title = create.Title,
+            StaffId = create.AStaffId,
+            DocumentTypeId = create.ADocumentTypeId,
+            Title = create.ATitle,
             Path = path,
             Description = create.Description,
             Active = true,
@@ -151,6 +153,34 @@ public class DocumentController : BaseController
 
         await db.SaveChangesAsync();
         return Json(new ErrorVM { Status = ErrorStatus.Success, Description = Resource.DataDeletedSuccessfully });
+    }
+
+    #endregion
+
+    #region Download
+
+    [HttpGet, Description("Arb Tahiri", "Action to download document.")]
+    public async Task<IActionResult> Download(string ide)
+    {
+        var documentId = CryptoSecurity.Decrypt<int>(ide);
+        var document = await db.StaffDocument.FirstOrDefaultAsync(a => a.Active && a.StaffDocumentId == documentId);
+
+        string extension = Path.GetExtension(document.Path);
+        var fileStream = new FileStream(configuration["AppSettings:FilePath"] + document.Path, FileMode.Open, FileAccess.Read);
+        var contentDisposition = new ContentDisposition
+        {
+            FileName = document.Title + extension,
+            Inline = true
+        };
+
+        Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
+
+        var fileProvider = new FileExtensionContentTypeProvider();
+        if (!fileProvider.TryGetContentType(contentDisposition.FileName, out string contentType))
+        {
+            throw new ArgumentOutOfRangeException($"Unable to find Content Type for file name {contentDisposition.FileName}.");
+        }
+        return File(fileStream, contentType);
     }
 
     #endregion

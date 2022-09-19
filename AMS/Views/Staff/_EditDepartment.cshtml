@@ -34,12 +34,22 @@
             </div>
             <div class="col-md-6 form-group">
                 <label asp-for="StartDate" class="required"></label>
-                <input asp-for="StartDate" type="text" class="form-control datetimepicker-input" readonly autocomplete="off" data-toggle="datetimepicker" data-target="#StartDate"/>
+                <div class="input-group date">
+                    <input asp-for="StartDate" type="text" placeholder="dd/MM/yyyy" class="form-control" autocomplete="off" />
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="la la-calendar"></i></span>
+                    </div>
+                </div>
                 <span asp-validation-for="StartDate" class="text-danger"></span>
             </div>
             <div class="col-md-6 form-group">
                 <label asp-for="EndDate" class="required"></label>
-                <input asp-for="EndDate" type="text" class="form-control datetimepicker-input" readonly autocomplete="off" data-toggle="datetimepicker" data-target="#EndDate"/>
+                <div class="input-group date">
+                    <input asp-for="EndDate" type="text" placeholder="dd/MM/yyyy" class="form-control" autocomplete="off" />
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="la la-calendar"></i></span>
+                    </div>
+                </div>
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
         </div>
@@ -75,8 +85,30 @@
             }
         });
 
-        $(".datetimepicker-input").datetimepicker({
-            format: 'DD/MM/YYYY'
+        $("#StartDate").datepicker({
+            language: cultureShort,
+            rtl: KTUtil.isRTL(),
+            todayBtn: "linked",
+            todayHighlight: true,
+            templates: arrows,
+            autoclose: true,
+            orientation: "bottom"
+        }).inputmask("mask", {
+            mask: "99/99/9999",
+            placeholder: "dd/MM/yyyy"
+        });
+
+        $("#EndDate").datepicker({
+            language: cultureShort,
+            rtl: KTUtil.isRTL(),
+            todayBtn: "linked",
+            todayHighlight: true,
+            templates: arrows,
+            autoclose: true,
+            orientation: "bottom"
+        }).inputmask("mask", {
+            mask: "99/99/9999",
+            placeholder: "dd/MM/yyyy"
         });
     });
 

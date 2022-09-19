@@ -13,6 +13,7 @@
             <th>@Resource.StartDate</th>
             <th>@Resource.EndDate</th>
             <th>@Resource.ConsecutiveDays</th>
+            <th class="text-center" data-orderable="false">@Resource.Actions</th>
         </tr>
     </thead>
     <tbody></tbody>
@@ -35,8 +36,7 @@
             data: data,
             deferRender: true,
             columnDefs: [
-                { width: "5%", targets: [0] },
-                { width: "20%", targets: [3] },
+                { width: "5%", targets: [0, 4] },
                 { defaultContent: "///", targets: "_all" }
             ],
             order: [[0, "asc"]],
@@ -56,8 +56,24 @@
                         return moment(row.endDate).format('DD/MM/YYYY');
                     }
                 },
-                { data: "workingSince" }
+                { data: "workingSince" },
+                {
+                    data: function (row, type, set) {
+                        var dropdown = '<div class="dropdown dropleft cursor-pointer">' +
+                            '<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
+                            '<div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">' +
+                            '<button type="button" class="dropdown-item cursor-pointer" onclick="history(\'' + row.startDate + '\', \'' + row.endDate + '\')">@Html.Raw(ActionButton.History.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.History</span></button>' +
+                            '</div></div>';
+                        return dropdown;
+                    }
+                }
             ]
+        });
+    }
+
+    function history(start_date, end_date) {
+        $('#modal-large').find('.modal-content').load('@Url.Action("History", "Attendance")?ide=@Model.StaffIde&startDate=' + start_date + '&endDate=' + end_date, function () {
+            $('#modal-large').modal('toggle');
         });
     }
 </script>

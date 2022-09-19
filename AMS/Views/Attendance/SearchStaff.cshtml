@@ -82,6 +82,7 @@
                     <th>@Resource.Name</th>
                     <th>@Resource.Birthdate</th>
                     <th>@Resource.Department</th>
+                    <th>@Resource.WorkingSince</th>
                     <th class="text-center" data-orderable="false">@Resource.Actions</th>
                 </tr>
             </thead>
@@ -161,7 +162,7 @@
             data: data,
             deferRender: true,
             columnDefs: [
-                { width: "5%", targets: [0, 4] },
+                { width: "5%", targets: [0, 5] },
                 { defaultContent: "///", targets: "_all" }
             ],
             order: [[0, "asc"]],
@@ -185,11 +186,16 @@
                     }
                 },
                 {
-                    data: function(row, type, set) {
+                    data: function (row, type, set) {
                         return moment(row.birthDate).format('DD/MM/YYYY');
                     }
                 },
                 { data: "department" },
+                {
+                    data: function (row, type, set) {
+                        return row.workingSince >= 14 ? '<span class="label label-danger label-pill label-inline mr-2">' + row.workingSince + '</span>' : '<span class="label label-success label-pill label-inline mr-2">' + row.workingSince + '</span>';
+                    }
+                },
                 {
                     data: function (row, type, set) {
                         var attended = row.attended ? "checked" : "";

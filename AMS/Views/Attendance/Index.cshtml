@@ -57,18 +57,5 @@
                 return false;
             });
         });
-
-        function format_repo(repo) {
-            if (repo.loading) {
-                return repo.text;
-            }
-
-            var $container = $('<span class="d-flex align-items-center">' + repo.text + '</span>');
-            return $container;
-        }
-
-        function format_repo_selection(repo) {
-            return repo.text;
-        }
     </script>
 }
