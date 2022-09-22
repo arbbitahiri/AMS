@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Reporting.NETCore;
+using NuGet.ContentModel;
 using System.Globalization;
 
 namespace AMS.Controllers;
@@ -72,6 +73,7 @@ public class AttendanceController : BaseController
             .OrderByDescending(a => a.EndDate)
             .Select(a => new StaffList
             {
+                StaffAttendanceIde = CryptoSecurity.Encrypt(a.StaffAttendanceId),
                 StaffIde = CryptoSecurity.Encrypt(a.StaffId),
                 PersonalNumber = a.PersonalNumber,
                 FirstName = a.FirstName,
@@ -80,7 +82,7 @@ public class AttendanceController : BaseController
                 StaffType = a.StaffType,
                 StartDate = a.StartDate,
                 EndDate = a.EndDate,
-                WorkingSince = a.WorkingSince
+                WorkingSince = a.WorkingSince,
             }).ToList();
         return Json(attendance);
     }
@@ -144,14 +146,15 @@ public class AttendanceController : BaseController
         var staffId = CryptoSecurity.Decrypt<int>(ide);
 
         var attendance = await db.StaffAttendance
-            .Where(a => a.StaffId == staffId && startDate.Date <= a.InsertedDate.Date && a.InsertedDate.Date <= endDate.Value.Date)
+            .Where(a => a.Active && a.StaffId == staffId
+                && startDate.Date <= a.InsertedDate.Date && a.InsertedDate.Date <= endDate.Date)
             .GroupBy(a => a.StaffId)
             .Select(a => new AttendanceDetails
             {
                 StaffIde = ide,
                 Name = $"{a.Select(b => b.Staff.FirstName).FirstOrDefault()} {a.Select(b => b.Staff.LastName).FirstOrDefault()} - ({a.Select(b => b.Staff.PersonalNumber).FirstOrDefault()})",
                 StartDate = startDate,
-                EndDate = endDate.Value,
+                EndDate = endDate,
                 AttendanceList = a.Select(b => new AttendanceList
                 {
                     StaffAttendanceIde = CryptoSecurity.Encrypt(b.StaffAttendanceId),
@@ -163,9 +166,11 @@ public class AttendanceController : BaseController
         return PartialView(attendance);
     }
 
+    #region Absence
+
     [HttpGet, Authorize(Policy = "8:e")]
     [Description("Arb Tahiri", "Form to add absent type and add description for staff.")]
-    public async Task<IActionResult> StaffAttendance(string ide, string sIde, DateTime startDate, DateTime endDate)
+    public async Task<IActionResult> StaffAbsence(string ide)
     {
         if (string.IsNullOrEmpty(ide))
         {
@@ -178,9 +183,6 @@ public class AttendanceController : BaseController
             .Select(a => new AbsentDetails
             {
                 AttendanceIde = ide,
-                StaffIde = sIde,
-                StartDate = startDate,
-                EndDate = endDate,
                 StaffName = $"{a.Staff.FirstName} {a.Staff.LastName} - ({a.Staff.PersonalNumber})",
                 AttendanceDate = a.InsertedDate.ToString("dd/MM/yyyy"),
                 AbsentTypeId = a.AbsentTypeId,
@@ -191,7 +193,7 @@ public class AttendanceController : BaseController
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "8:e")]
     [Description("Arb Tahiri", "Action to add absent type and add description for staff.")]
-    public async Task<IActionResult> StaffAttendance(AbsentDetails attendance)
+    public async Task<IActionResult> StaffAbsence(AbsentDetails attendance)
     {
         if (!ModelState.IsValid)
         {
@@ -212,27 +214,77 @@ public class AttendanceController : BaseController
 
     #endregion
 
+    #region Edit attendance
+
+    [HttpGet, Authorize(Policy = "8:e")]
+    [Description("Arb Tahiri", "Form to add absent type and add description for staff.")]
+    public async Task<IActionResult> StaffAttendance(string ide)
+    {
+        if (string.IsNullOrEmpty(ide))
+        {
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
+        }
+
+        int attendanceId = CryptoSecurity.Decrypt<int>(ide);
+        var attendance = await db.StaffAttendance
+            .Where(a => a.StaffAttendanceId == attendanceId)
+            .Select(a => new AbsentDetails
+            {
+                AttendanceIde = ide,
+                StaffName = $"{a.Staff.FirstName} {a.Staff.LastName} - ({a.Staff.PersonalNumber})",
+                AttendanceDate = a.InsertedDate.ToString("dd/MM/yyyy"),
+                AbsentTypeId = a.AbsentTypeId,
+                Description = a.Description,
+                Absent = a.Absent
+            }).FirstOrDefaultAsync();
+        return PartialView(attendance);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "8:e")]
+    [Description("Arb Tahiri", "Action to add absent type and add description for staff.")]
+    public async Task<IActionResult> StaffAttendance(AbsentDetails attendance)
+    {
+        if (!ModelState.IsValid)
+        {
+            return Json(new ErrorVM { Status = ErrorStatus.Warning, Title = Resource.Warning, Description = Resource.InvalidData });
+        }
+
+        var isAbsent = attendance.AbsentId == (int)Absent.Yes;
+
+        int attendanceId = CryptoSecurity.Decrypt<int>(attendance.AttendanceIde);
+        var staffAttendance = await db.StaffAttendance.FirstOrDefaultAsync(a => a.StaffAttendanceId == attendanceId);
+        staffAttendance.Absent = isAbsent;
+        staffAttendance.AbsentTypeId = attendance.AbsentTypeId;
+        staffAttendance.Description = attendance.Description;
+        staffAttendance.UpdatedDate = DateTime.Now;
+        staffAttendance.UpdatedFrom = user.Id;
+        staffAttendance.UpdatedNo = UpdateNo(staffAttendance.UpdatedNo);
+
+        await db.SaveChangesAsync();
+        return Json(new ErrorVM { Status = ErrorStatus.Success, Title = Resource.Success, Description = Resource.DataUpdatedSuccessfully });
+    }
+
+    #endregion
+
+    #endregion
+
     #region Reports
 
     [HttpPost, ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Report for list of staff depending of the search.")]
+    [Description("Arb Tahiri", "Report for list of staff attendence for today depending of the search.")]
     public async Task<IActionResult> ReportStaff(SearchStaff search, ReportType stype)
     {
-        var staffList = await db.Staff
-            .Where(a => a.StaffDepartment.Any(b => b.EndDate.Date >= DateTime.Now.Date)
-                && a.StaffId == (search.SStaffId ?? a.StaffId)
-                && a.StaffDepartment.Any(b => b.DepartmentId == (search.SDepartmentId ?? b.DepartmentId))
-                && a.StaffDepartment.Any(b => b.StaffTypeId == (search.SStaffTypeId ?? b.StaffTypeId)))
-            .OrderBy(a => a.FirstName)
-            .Select(a => new ReportStaff
+        var staffList = (await function.StaffConsecutiveDays(search.SStaffId, search.SDepartmentId, search.SStaffTypeId, user.Language))
+            .Select(a => new ReportVM
             {
                 PersonalNumber = a.PersonalNumber,
                 FirstName = a.FirstName,
                 LastName = a.LastName,
                 BirthDate = a.BirthDate.ToString("dd/MM/yyyy"),
-                Department = string.Join(", ", a.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).ToList()),
-                Attended = a.StaffAttendance.Any(a => a.Active && a.InsertedDate.Date == DateTime.Now.Date) ? Resource.Yes : Resource.No
-            }).ToListAsync();
+                Department = a.Department,
+                WorkingSince = a.WorkingSince == 1 ? $"{a.WorkingSince} {Resource.Day.ToLower()}" : $"{a.WorkingSince} {Resource.Days.ToLower()}",
+                Attended = a.Attended ? Resource.Yes : Resource.No
+            }).ToList();
 
         var dataSource = new List<ReportDataSource>() { new ReportDataSource("StaffDetails", staffList) };
         var parameters = new List<ReportParameter>()
@@ -244,6 +296,7 @@ public class AttendanceController : BaseController
             new ReportParameter("LastName", Resource.Lastname),
             new ReportParameter("BirthDate", Resource.Birthdate),
             new ReportParameter("Department", Resource.Department),
+            new ReportParameter("WorkingSince", Resource.WorkingSince),
             new ReportParameter("Attended", Resource.Attendance),
             new ReportParameter("ListOfStaff", Resource.StaffList),
             new ReportParameter("AMS", Resource.AMSTitle)
@@ -270,21 +323,20 @@ public class AttendanceController : BaseController
     }
 
     [HttpPost, ValidateAntiForgeryToken]
-    [Description("Arb Tahiri", "Report for list of staff depending of the search.")]
+    [Description("Arb Tahiri", "Report for list of staff attendance depending of the search.")]
     public async Task<IActionResult> ReportAttendance(SearchAttendance search, ReportType atype)
     {
         var attendance = (await function.AttendanceConsecutiveDays(search.AStaffId, search.ADepartmentId, search.AStaffTypeId, search.AStartDate, search.AEndDate, user.Language))
             .OrderByDescending(a => a.EndDate)
-            .Select(a => new StaffList
+            .Select(a => new ReportVM
             {
+                StaffId = a.StaffId,
                 PersonalNumber = a.PersonalNumber,
                 FirstName = a.FirstName,
                 LastName = a.LastName,
-                Department = a.Department,
-                StaffType = a.StaffType,
-                StartDate = a.StartDate,
-                EndDate = a.EndDate,
-                WorkingSince = a.WorkingSince
+                StartDate = a.StartDate.ToString("dd/MM/yyyy"),
+                EndDate = a.EndDate.ToString("dd/MM/yyyy"),
+                WorkingSince = a.WorkingSince == 1 ? $"{a.WorkingSince} {Resource.Day.ToLower()}" : $"{a.WorkingSince} {Resource.Days.ToLower()}",
             }).ToList();
 
         var dataSource = new List<ReportDataSource>() { new ReportDataSource("StaffDetails", attendance) };
@@ -294,13 +346,13 @@ public class AttendanceController : BaseController
             new ReportParameter("PersonalNumber", Resource.PersonalNumber),
             new ReportParameter("FirstName", Resource.Firstname),
             new ReportParameter("LastName", Resource.Lastname),
-            new ReportParameter("BirthDate", Resource.Birthdate),
-            new ReportParameter("Gender", Resource.Gender),
-            new ReportParameter("Email", Resource.Email),
-            new ReportParameter("PhoneNumber", Resource.PhoneNumber),
+            new ReportParameter("Department", Resource.Department),
+            new ReportParameter("StaffType", Resource.StaffType),
+            new ReportParameter("StartDate", Resource.StartDate),
+            new ReportParameter("EndDate", Resource.EndDate),
+            new ReportParameter("WorkingSince", Resource.WorkingSince),
             new ReportParameter("ListOfStaff", Resource.StaffList),
-            new ReportParameter("AMS", Resource.AMSTitle),
-            new ReportParameter("City", Resource.City)
+            new ReportParameter("AMS", Resource.AMSTitle)
         };
 
         var reportByte = RDLCReport.GenerateReport("StaffAttendance.rdl", dataSource, parameters, atype, ReportOrientation.Portrait);
@@ -319,6 +371,56 @@ public class AttendanceController : BaseController
             _ => Resource.AttendanceList
         };
         return atype == ReportType.PDF ?
+            File(reportByte, contentType) :
+            File(reportByte, contentType, fileName);
+    }
+
+    [Description("Arb Tahiri", "Report for list of staff detailed attendance depending of the search.")]
+    public async Task<IActionResult> ReportAttendanceDetailed(string ide, ReportType reportType)
+    {
+        var staffId = CryptoSecurity.Decrypt<int>(ide);
+
+        var attendance = await db.StaffAttendance
+            .Where(a => a.Active && a.StaffId == staffId)
+            .Select(a => new ReportVM
+            {
+                PersonalNumber = a.Staff.PersonalNumber,
+                FirstName = a.Staff.FirstName,
+                LastName = a.Staff.LastName,
+                StartDate = a.InsertedDate.ToString("dd/MM/yyyy"),
+                EndDate = GetDayName(a.InsertedDate.DayOfWeek),
+                Attended = a.Absent ? Resource.Yes : Resource.No,
+                AbsentType = a.AbsentTypeId.HasValue ? user.Language == LanguageEnum.Albanian ? a.AbsentType.NameSq : a.AbsentType.NameEn : "///"
+            }).ToListAsync();
+
+        var dataSource = new List<ReportDataSource>() { new ReportDataSource("StaffDetails", attendance) };
+        var parameters = new List<ReportParameter>()
+        {
+            new ReportParameter("PrintedFrom", $"{user.FirstName} {user.LastName}"),
+            new ReportParameter("AttendanceDate", Resource.AttendanceDate),
+            new ReportParameter("DateName", Resource.Date),
+            new ReportParameter("Attended", Resource.BeenAbsent),
+            new ReportParameter("AbsentType", Resource.AbsentType),
+            new ReportParameter("ListOfAttendanceForStaff", Resource.ListOfAttendanceForStaff),
+            new ReportParameter("AMS", Resource.AMSTitle)
+        };
+
+        var reportByte = RDLCReport.GenerateReport("StaffAttendanceHistory.rdl", dataSource, parameters, reportType, ReportOrientation.Portrait);
+        string contentType = reportType switch
+        {
+            ReportType.PDF => "application/pdf",
+            ReportType.Excel => "application/ms-excel",
+            ReportType.Word => "application/msword",
+            _ => "application/pdf"
+        };
+        string fileName = reportType switch
+        {
+            ReportType.PDF => Resource.AttendanceList,
+            ReportType.Excel => $"{Resource.AttendanceList}.xlsx",
+            ReportType.Word => $"{Resource.AttendanceList}.docx",
+            _ => Resource.AttendanceList
+        };
+        return reportType == ReportType.PDF ?
             File(reportByte, contentType) :
             File(reportByte, contentType, fileName);
     }

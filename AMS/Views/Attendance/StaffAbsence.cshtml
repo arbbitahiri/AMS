@@ -19,22 +19,11 @@
         @Html.AntiForgeryToken()
         <input asp-for="AttendanceIde" type="hidden" />
 
-        <div class="row">
+        <div class="row pl-2 pr-2">
             <div class="col-md-6 form-group">
                 <label asp-for="AttendanceDate"></label>
                 <input asp-for="AttendanceDate" type="text" class="form-control" disabled autocomplete="off" />
             </div>
-            <div class="col-md-6 form-group">
-                <label asp-for="AbsentId" class="required"></label>
-                <select asp-for="AbsentId" class="form-control select2">
-                    <option value="@((int)Absent.No)" selected="selected">@Resource.No</option>
-                    <option value="@((int)Absent.Yes)">@Resource.Yes</option>
-                </select>
-                <span asp-validation-for="AbsentId" class="text-danger"></span>
-            </div>
-        </div>
-
-        <div class="row pl-2 pr-2" style="display: none;" id="absence_details">
             <div class="col-md-6 form-group">
                 <label asp-for="AbsentTypeId" class="required"></label>
                 <select asp-for="AbsentTypeId" asp-items="await repo.AbsentTypes(user.Language)" class="form-control select2">
@@ -52,7 +41,7 @@
 
     <div class="modal-footer modal-footer-uniform w-full justify-content-between">
         <button type="button" class="btn btn-bold btn-pure btn-secondary" data-bs-dismiss="modal">@Resource.Close</button>
-        <button type="button" class="btn btn-bold btn-pure btn-primary float-right" style="display: none;" id="btn_submit_attendance">@Resource.Save</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Save</button>
     </div>
 </form>
 
@@ -72,26 +61,6 @@
                 noResults: function () {
                     return '@Html.Raw(Resource.NoResultsFound)';
                 },
-            }
-        });
-
-        $('#AbsentId').on('change', function() {
-            if ($(this).val() == '@((int)Absent.No)') {
-                $('#absence_details').hide(250);
-                $('#btn_submit_attendance').hide(250);
-            } else {
-                $('#absence_details').show(250);
-                $('#btn_submit_attendance').show(250);
-            }
-        });
-
-        $('#btn_submit_attendance').on('click', function() {
-            if (form.valid()) {
-                if ($('#AbsentId').val() == '@((int)Absent.No)') {
-                    $('#modal-large').modal('hide');
-                } else {
-                    form.submit();
-                }
             }
         });
     });

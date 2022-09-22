@@ -2,6 +2,7 @@
 
 public class StaffList
 {
+    public string StaffAttendanceIde { get; set; }
     public string StaffIde { get; set; }
     public string PersonalNumber { get; set; }
     public string FirstName { get; set; }

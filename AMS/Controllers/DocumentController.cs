@@ -43,7 +43,8 @@ public class DocumentController : BaseController
             .Where(a => (string.IsNullOrEmpty(search.Title) || a.Title.ToLower().Contains(title))
                 && a.StaffId == (search.StaffId ?? a.StaffId)
                 && a.DocumentTypeId == (search.DocumentTypeId ?? a.DocumentTypeId)
-                && (!search.InsertDate.HasValue || a.InsertedDate.Date == search.InsertDate.Value.Date))
+                && (!search.InsertDate.HasValue || a.InsertedDate.Date == search.InsertDate.Value.Date)
+                && (!search.ExpireId.HasValue || (search.ExpireId.Value == 1 ? a.ExpirationDate.HasValue : !a.ExpirationDate.HasValue)))
             .Select(a => new DocumentList
             {
                 StaffDocumentIde = CryptoSecurity.Encrypt(a.StaffDocumentId),
@@ -53,6 +54,7 @@ public class DocumentController : BaseController
                 Title = a.Title,
                 DocumentType = user.Language == LanguageEnum.Albanian ? a.DocumentType.NameSq : a.DocumentType.NameEn,
                 FileType = Path.GetExtension(a.Path).ToLower(),
+                Expires = a.ExpirationDate.HasValue,
                 Description = a.Description
             }).ToListAsync();
         return Json(documents);
@@ -75,7 +77,9 @@ public class DocumentController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        string path = await SaveFile(environment, configuration, create.FormFile, "StaffDocuments", null);
+        DateTime? expirationDate = create.Expires ? DateTime.ParseExact(create.ExpireDate, "dd/MM/yyyy", null) : null;
+
+        string path = await SaveFile(configuration, create.FormFile, "StaffDocuments", null);
         db.Add(new StaffDocument
         {
             StaffId = create.AStaffId,
@@ -83,6 +87,7 @@ public class DocumentController : BaseController
             Title = create.ATitle,
             Path = path,
             Description = create.Description,
+            ExpirationDate = expirationDate,
             Active = true,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
@@ -106,11 +111,12 @@ public class DocumentController : BaseController
             {
                 StaffDocumentIde = ide,
                 StaffName = $"{a.Staff.FirstName} {a.Staff.LastName} - ({a.Staff.PersonalNumber})",
-                DocumentTypeId = a.DocumentTypeId,
-                Title = a.Title,
-                Description = a.Description
+                EDocumentTypeId = a.DocumentTypeId,
+                ETitle = a.Title,
+                Description = a.Description,
+                Expires = a.ExpirationDate.HasValue,
+                ExpireDate = a.ExpirationDate.HasValue ? a.ExpirationDate.Value.ToString("dd/MM/yyyy") : null
             }).FirstOrDefaultAsync();
-
         return View(document);
     }
 
@@ -123,11 +129,14 @@ public class DocumentController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
+        DateTime? expirationDate = edit.Expires ? DateTime.ParseExact(edit.ExpireDate, "dd/MM/yyyy", null) : null;
+
         var staffDocumentId = CryptoSecurity.Decrypt<int>(edit.StaffDocumentIde);
         var document = await db.StaffDocument.FirstOrDefaultAsync(a => a.StaffDocumentId == staffDocumentId);
-        document.DocumentTypeId = edit.DocumentTypeId;
-        document.Title = edit.Title;
+        document.DocumentTypeId = edit.EDocumentTypeId;
+        document.Title = edit.ETitle;
         document.Description = edit.Description;
+        document.ExpirationDate = expirationDate;
         document.UpdatedDate = DateTime.Now;
         document.UpdatedFrom = user.Id;
         document.UpdatedNo = UpdateNo(document.UpdatedNo);

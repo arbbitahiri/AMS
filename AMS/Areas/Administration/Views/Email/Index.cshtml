@@ -1,0 +1,71 @@
+﻿@using AMS.Areas.Administration.Models.Email
+@model EmailVM
+
+<div class="card card-custom">
+    <div class="card-header">
+        <h3 class="card-title">@Resource.EmailConfiguration</h3>
+    </div>
+    <div class="card-body">
+        <form method="post" asp-action="Index">
+            @Html.AntiForgeryToken()
+            <div class="form-group row">
+                <div class="col-md-4 form-group">
+                    <label class="col-form-label text-lg-right">@Resource.SMTPHost:</label>
+                    <div class="input-group">
+                        <input asp-for="Host" class="form-control" />
+                        <div class="input-group-append"><span class="input-group-text"><i class="fas fa-server"></i></span></div>
+                    </div>
+                    <span class="form-text text-muted">@Resource.ServerForEmail</span>
+                    <span asp-validation-for="Host" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label class="col-form-label text-lg-right">@Resource.Email:</label>
+                    <div class="input-group">
+                        <input asp-for="Email" class="form-control" />
+                        <div class="input-group-append"><span class="input-group-text"><i class="fas fa-at"></i></span></div>
+                    </div>
+                    <span class="form-text text-muted">@Resource.SendMailServer</span>
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label class="col-form-label text-lg-right">@Resource.Password:</label>
+                    <div class="input-group">
+                        <input asp-for="Password" class="form-control" />
+                        <div class="input-group-append"><span class="input-group-text"><i class="fas fa-key"></i></span></div>
+                    </div>
+                    <span class="form-text text-muted">@Resource.PasswordForMailServer</span>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label class="col-form-label text-lg-right">@Resource.CC:</label>
+                    <div class="input-group">
+                        <input asp-for="CC" class="form-control" />
+                        <div class="input-group-append"><span class="input-group-text"><i class="fas fa-users"></i></span></div>
+                    </div>
+                    <span class="form-text text-muted">@Resource.CCUsersText</span>
+                    <span asp-validation-for="CC" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label class="col-form-label text-lg-right">@Resource.Port:</label>
+                    <div class="input-group">
+                        <input asp-for="Port" class="form-control" />
+                        <div class="input-group-append"><span class="input-group-text"><i class="fas fa-handshake"></i></span></div>
+                    </div>
+                    <span class="form-text text-muted">@Resource.PortForMailServer</span>
+                    <span asp-validation-for="Port" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <label class="col-form-label d-block">@Resource.SSLEnable:</label><br />
+                    <input asp-for="SSLEnable" data-switch="true" style="cursor: pointer; width: 90px;" type="checkbox"
+                        data-bootstrap-switch data-off-color="warning" data-on-color="success" data-handle-width="90"
+                        data-on-text="@Html.Raw(Resource.Yes)" data-off-text="@Html.Raw(Resource.No)" />
+                    <span class="form-text text-muted">@Resource.EnableSSLForMailServer</span>
+                    <span asp-validation-for="SSLEnable" class="text-danger"></span>
+                </div>
+            </div>
+            <div class=" float-right">
+                <button class="btn btn-primary" type="submit">@Resource.Save</button>
+            </div>
+        </form>
+    </div>
+</div>

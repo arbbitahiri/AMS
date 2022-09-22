@@ -6,10 +6,6 @@ namespace AMS.Models.Attendance;
 public class AbsentDetails
 {
     public string AttendanceIde { get; set; }
-    public string StaffIde { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
-
 
     public string StaffName { get; set; }
 
@@ -24,4 +20,8 @@ public class AbsentDetails
     [Display(Name = "Description", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string Description { get; set; }
+
+    public bool Absent { get; set; }
+
+    public int? AbsentId { get; set; }
 }

@@ -951,4 +951,112 @@
   <data name="NumberOfUsersByGroups" xml:space="preserve">
     <value>Number of users by groups</value>
   </data>
+  <data name="April" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="AttendanceDate" xml:space="preserve">
+    <value>Attendance date</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="Friday" xml:space="preserve">
+    <value>Friday</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="ListOfAttendanceForStaff" xml:space="preserve">
+    <value>List of attendance for staff</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="Monday" xml:space="preserve">
+    <value>Monday</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="Saturday" xml:space="preserve">
+    <value>Saturday</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="Sunday" xml:space="preserve">
+    <value>Sunday</value>
+  </data>
+  <data name="Thursday" xml:space="preserve">
+    <value>Thursday</value>
+  </data>
+  <data name="Tuesday" xml:space="preserve">
+    <value>Tuesday</value>
+  </data>
+  <data name="Wednesday" xml:space="preserve">
+    <value>Wednesday</value>
+  </data>
+  <data name="CannotAddAttendanceOverWork" xml:space="preserve">
+    <value>You cannot add because the staff has worked for 14 consecutive days!</value>
+  </data>
+  <data name="DownloadAttendance" xml:space="preserve">
+    <value>Download attendance</value>
+  </data>
+  <data name="ExpireDate" xml:space="preserve">
+    <value>Expiration date</value>
+  </data>
+  <data name="CanExpire" xml:space="preserve">
+    <value>It has an expiration date</value>
+  </data>
+  <data name="Expires" xml:space="preserve">
+    <value>Expires</value>
+  </data>
+  <data name="CC" xml:space="preserve">
+    <value>CC</value>
+  </data>
+  <data name="CCUsersText" xml:space="preserve">
+    <value>For every email sent, these users will be notified</value>
+  </data>
+  <data name="EnableSSLForMailServer" xml:space="preserve">
+    <value>Emails will be sent in encrypted form</value>
+  </data>
+  <data name="PasswordForMailServer" xml:space="preserve">
+    <value>Password for the email address</value>
+  </data>
+  <data name="Port" xml:space="preserve">
+    <value>Port</value>
+  </data>
+  <data name="PortForMailServer" xml:space="preserve">
+    <value>Port to send email address, ex: 8080, 65</value>
+  </data>
+  <data name="SendMailServer" xml:space="preserve">
+    <value>Email address that will be used to send emails</value>
+  </data>
+  <data name="ServerForEmail" xml:space="preserve">
+    <value>Server to send emails</value>
+  </data>
+  <data name="SMTPHost" xml:space="preserve">
+    <value>SMTP host</value>
+  </data>
+  <data name="SSLEnable" xml:space="preserve">
+    <value>Activate SSL protocol</value>
+  </data>
 </root>

@@ -12,6 +12,7 @@ namespace AMS.Data.General
         public string Path { get; set; }
         public string Description { get; set; }
         public bool Active { get; set; }
+        public DateTime? ExpirationDate { get; set; }
         public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }
         public string UpdatedFrom { get; set; }

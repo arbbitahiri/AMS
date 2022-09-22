@@ -83,6 +83,7 @@
                     <th>@Resource.Birthdate</th>
                     <th>@Resource.Department</th>
                     <th>@Resource.WorkingSince</th>
+                    <th class="text-center" data-orderable="false">@Resource.Attendance</th>
                     <th class="text-center" data-orderable="false">@Resource.Actions</th>
                 </tr>
             </thead>
@@ -151,6 +152,7 @@
     }
 
     function success_staff(data) {
+        var row_count = 1;
         $('#tbl_staff').DataTable({
             destroy: true,
             language: {
@@ -163,6 +165,8 @@
             deferRender: true,
             columnDefs: [
                 { width: "5%", targets: [0, 5] },
+                { width: "15%", targets: [4, 6] },
+                { className: "text-center button-td", targets: [5, 6] },
                 { defaultContent: "///", targets: "_all" }
             ],
             order: [[0, "asc"]],
@@ -172,6 +176,7 @@
             columns: [
                 {
                     data: function (data, type, row, meta) {
+                        row_count++;
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
@@ -193,28 +198,52 @@
                 { data: "department" },
                 {
                     data: function (row, type, set) {
-                        return row.workingSince >= 14 ? '<span class="label label-danger label-pill label-inline mr-2">' + row.workingSince + '</span>' : '<span class="label label-success label-pill label-inline mr-2">' + row.workingSince + '</span>';
+                        var label = row.workingSince >= 14 ? 'danger' : (row.workingSince == 0 ? 'warning' : 'success');
+                        return '<span id="spn_working_' + row_count + '" class="label label-' + label + ' label-pill label-inline mr-2">' + row.workingSince + " " + (row.workingSince == 1 ? '@Html.Raw(Resource.Day.ToLower())' : '@Html.Raw(Resource.Days.ToLower())') + '</span>';
                     }
                 },
                 {
                     data: function (row, type, set) {
                         var attended = row.attended ? "checked" : "";
-                        return '<input data-switch="true" style="cursor: pointer; width: 90px;" type="checkbox" id="ch_hasAccess" ' +
-                                'onchange="change_attendance(this, \'' + row.staffIde + '\')" ' + attended + ' ' +
-                                'data-bootstrap-switch data-off-color="warning" data-on-color="success" data-handle-width="90" ' +
-                                'data-on-text="@Html.Raw(Resource.Yes)" data-off-text="@Html.Raw(Resource.No)"/>';
+                        var over_work = row.workingSince >= 14 ? "disabled" : "";
+                        var switch_colour = row.workingSince >= 14 ? "danger" : "warning";
+                        return '<input data-switch="true" ' + over_work + ' style="cursor: pointer; width: 90px;" type="checkbox" id="ch_hasAccess" ' +
+                            'onchange="change_attendance(this, \'' + row.staffIde + '\', \'' + row.workingSince + '\', \'' + row_count + '\')" ' + attended + ' ' +
+                            'data-bootstrap-switch data-off-color="' + switch_colour + '" data-on-color="success" data-handle-width="90" ' +
+                            'data-on-text="@Html.Raw(Resource.Yes)" data-off-text="@Html.Raw(Resource.No)"/>';
+                    }
+                },
+                {
+                    data: function (row, type, set) {
+                        return '<button class="btn btn-light-primary btn-sm cursor-pointer shadow btn-shadow" type="button" onclick="get_report_staff(\'' + row.staffIde + '\')"><i class="flaticon-download"></i><span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.DownloadAttendance</span></button>';
                     }
                 }
             ]
         });
     }
 
-    function change_attendance(e, ide) {
+    function change_attendance(e, ide, ws, rc) {
+        if (ws >= 1) {
+            Swal.fire({
+                icon: 'warning',
+                title: '@Html.Raw(Resource.Warning)',
+                text: '@Html.Raw(Resource.Warning)',
+                confirmButtonText: '@Html.Raw(Resource.CannotAddAttendanceOverWork)'
+            });
+
+            return false;
+        }
+
         $.post('@Url.Action("ChangeAttendance", "Attendance")', {
                 ide: ide,
                 attended: $(e).is(":checked"),
                 __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
             }, function (data) {
+                var no = $('#spn_working_' + rc).text().split(' ')[0];
+                var new_no = $(e).is(":checked") ? ++no : --no
+                var span_text = new_no = 1 ? new_no + ' @Html.Raw(Resource.Day.ToLower())' : new_no + ' @Html.Raw(Resource.Days.ToLower())';
+                $('#spn_working_' + rc).text(span_text);
+
                 handle_success(data, SubmitPathType.NORELOAD, "");
             }
         );
@@ -222,14 +251,18 @@
 
     function get_staff_report(type) {
         $('#frm_search_staff').attr('data-ajax', false);
-        $('#frm_search_staff').attr('action', '@Url.Action("Attendance", "ReportStaff")');
+        $('#frm_search_staff').attr('action', '@Url.Action("ReportStaff", "Attendance")');
         $('#frm_search_staff').attr('target', '_blank');
         $('#frm_search_staff').addClass('noLoading');
         $('#stype').val(type);
         $('#frm_search_staff').submit();
         $('#frm_search_staff').attr('data-ajax', true);
-        $('#frm_search_staff').attr('action', '@Url.Action("Attendance", "SearchAttendance")');
+        $('#frm_search_staff').attr('action', '@Url.Action("SearchAttendance", "Attendance")');
         $('#frm_search_staff').removeAttr('target');
         $('#frm_search_staff').removeClass('noLoading');
+    }
+
+    function get_report_staff(ide) {
+        window.open('@Url.Action("ReportAttendanceDetailed", "Attendance")?ide=' + ide + '&reportType=@((int)ReportType.PDF)', "_blank");
     }
 </script>

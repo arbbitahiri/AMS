@@ -31,9 +31,11 @@
                         <th width="5%">#</th>
                         <th width="15%">@Resource.Title</th>
                         <th width="15%">@Resource.DocumentType</th>
-                        <th width="15%">@Resource.Download</th>
+                        <th class="text-center" data-orderable="false" width="15%">@Resource.Type</th>
+                        <th class="text-center" data-orderable="false" width="15%">@Resource.Expires</th>
+                        <th class="text-center" data-orderable="false" width="15%">@Resource.Download</th>
                         <th width="40%">@Resource.Description</th>
-                        <th width="40%">@Resource.State</th>
+                        <th class="text-center" data-orderable="false" width="40%">@Resource.State</th>
                         <th width="10%" class="text-center" data-orderable="false">@Resource.Actions</th>
                     </tr>
                 </thead>
@@ -86,10 +88,10 @@
                 data: data,
                 deferRender: true,
                 columnDefs: [
-                    { width: "5%", targets: [0, 5, 6] },
-                    { width: "15%", targets: [1, 2, 3] },
-                    { width: "30%", targets: [4] },
-                    { className: "button-td", targets: [6] },
+                    { width: "5%", targets: [0, 3, 4, 5, 7, 8] },
+                    { width: "15%", targets: [1, 2] },
+                    { width: "40%", targets: [5] },
+                    { className: "button-td text-center", targets: [3, 4, 5, 7, 8] },
                     { targets: "_all", defaultContent: "///" }
                 ],
                 order: [[0, "asc"]],
@@ -103,8 +105,24 @@
                     { data: "title" },
                     { data: "documentType" },
                     {
+                        data: function (row, type, set) {
+                            var img_path = row.fileType.includes('pdf') ? 'pdf' : (row.fileType.includes('xl') ? 'xls' : (row.fileType.includes('do') ? 'doc' : (row.fileType.includes('pp') ? 'ppt' : 'pdf')));
+
+                            return '<div class="flex-shrink-0">' +
+                                '<img src="/media/extensions/' + img_path + '.png" asp-append-version="true" class="max-h-25px" />' +
+                                '</div>';
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            var label = row.expires ? 'danger' : 'success';
+                            var text = row.expires ? '@Html.Raw(Resource.Yes)' : '@Html.Raw(Resource.No)';
+                            return '<span class="label label-' + label + ' label-pill label-inline mr-2">' + text + '</span>';
+                        }
+                    },
+                    {
                         data: function(row, type, set) {
-                            return '<a onclick="download_doc(\'' + row.staffDocumentIde + '\', \'' + row.pathExtension + '\')" href="' + row.path + '" download="' + row.title + '" target="_blank" class="btn btn-icon btn-success btn-circle mr-2"><i class="fas fa-arrow-down"></i></a>'
+                            return '<a onclick="download_document(\'' + row.staffDocumentIde + '\')" class="btn btn-icon btn-success btn-circle mr-2"><i class="fas fa-arrow-down"></i></a>'
                         }
                     },
                     {
@@ -132,7 +150,7 @@
                                 '<div class="dropdown-menu dropdown-grid" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">' +
                                 '<button type="button" class="dropdown-item cursor-pointer" onclick="edit_document(\'' + row.staffDocumentIde + '\')">@Html.Raw(ActionButton.Edit.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Edit</span></button>';
                             if (row.active) {
-                                dropdown += '<button type="button" class="dropdown-item cursor-pointer" onclick="delete_document(\'' + row.staffDocumentIde + '\')">@Html.Raw(ActionButton.Delete.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Delete</span></button>';
+                                dropdown += '<button type="button" class="dropdown-item cursor-pointer" onclick="download_document(\'' + row.staffDocumentIde + '\')">@Html.Raw(ActionButton.Delete.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Delete</span></button>';
                             }
                             dropdown += '</div></div>';
                             return dropdown;
@@ -166,10 +184,8 @@
             });
         }
 
-        function download_doc(ide, file_type) {
-            if (file_type.contains(".pdf")) {
-                window.open('@Url.Action("OpenDocument", "Staff")?ide=' + ide, '_blank');
-            }
+        function download_document(ide) {
+            window.open('@Url.Action("Download", "Staff")?ide=' + ide, "_blank");
         }
 
         function delete_document(ide) {

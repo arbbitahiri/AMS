@@ -16,7 +16,7 @@
     <div class="card-body">
         <form asp-action="Search" asp-controller="Document" method="post" id="frm_search_documents" data-ajax="true" data-ajax-success="success_documents">
             @Html.AntiForgeryToken()
-            <input id="atype" name="atype" type="hidden"/>
+            <input id="atype" name="atype" type="hidden" />
 
             <div class="row">
                 <div class="col-lg-3 col-md-4 col-sm-6 form-group">
@@ -33,6 +33,14 @@
                     <label asp-for="DocumentTypeId">@Resource.DocumentType</label>
                     <select asp-for="DocumentTypeId" asp-items="await repo.DocumentTypes(user.Language)" class="form-control select2">
                         <option value="">@Resource.Choose</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 d-flex flex-column pl-5">
+                    <label asp-for="ExpireId">@Resource.CanExpire</label>
+                    <select asp-for="ExpireId" class="form-control select2">
+                        <option value="">@Resource.Choose</option>
+                        <option value="1">@Resource.Yes</option>
+                        <option value="2">@Resource.No</option>
                     </select>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6 form-group">
@@ -69,7 +77,8 @@
                     <th>@Resource.Name</th>
                     <th>@Resource.Title</th>
                     <th>@Resource.DocumentType</th>
-                    <th>@Resource.Type</th>
+                    <th class="text-center" data-orderable="false">@Resource.Type</th>
+                    <th class="text-center" data-orderable="false">@Resource.Expires</th>
                     <th>@Resource.Description</th>
                     <th class="text-center" data-orderable="false">@Resource.Actions</th>
                 </tr>
@@ -81,7 +90,7 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $(".select2").select2({
                 width: "100%",
                 language: {
@@ -103,7 +112,8 @@
                 todayHighlight: true,
                 templates: arrows,
                 autoclose: true,
-                orientation: "bottom"
+                orientation: "bottom",
+                format: 'dd/mm/yyyy'
             }).inputmask("mask", {
                 mask: "99/99/9999",
                 placeholder: "dd/MM/yyyy"
@@ -163,9 +173,9 @@
                 data: data,
                 deferRender: true,
                 columnDefs: [
-                    { width: "5%", targets: [0, 4, 6] },
-                    { width: "30%", targets: [5] },
-                    { className: "button-td", targets: [6] },
+                    { width: "5%", targets: [0, 4, 5, 7] },
+                    { width: "30%", targets: [6] },
+                    { className: "button-td text-center", targets: [4, 5, 7] },
                     { defaultContent: "///", targets: "_all" }
                 ],
                 order: [[0, "asc"]],
@@ -191,9 +201,16 @@
                         data: function (row, type, set) {
                             var img_path = row.fileType.includes('pdf') ? 'pdf' : (row.fileType.includes('xl') ? 'xls' : (row.fileType.includes('do') ? 'doc' : (row.fileType.includes('pp') ? 'ppt' : 'pdf')));
 
-                            return '<div class="d-flex align-items-center"><div class="flex-shrink-0">' +
+                            return '<div class="flex-shrink-0">' +
                                 '<img src="/media/extensions/' + img_path + '.png" asp-append-version="true" class="max-h-25px" />' +
-                                '</div></div>';
+                                '</div>';
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            var label = row.expires ? 'danger' : 'success';
+                            var text = row.expires ? '@Html.Raw(Resource.Yes)' : '@Html.Raw(Resource.No)';
+                            return '<span class="label label-' + label + ' label-pill label-inline mr-2">' + text + '</span>';
                         }
                     },
                     {
@@ -215,7 +232,7 @@
                                 '<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                                 '<div class="dropdown-menu dropdown-grid" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">' +
                                 '<button type="button" class="dropdown-item cursor-pointer" onclick="edit_document(\'' + row.staffDocumentIde + '\')">@Html.Raw(ActionButton.Edit.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Edit</span></button>' +
-                                '<button type="button" class="dropdown-item cursor-pointer" asp-action="Download" asp-controller="Document" asp-route-ide="\'' + row.staffDocumentIde + '\'">@Html.Raw(ActionButton.Download.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Download</span></button>' +
+                                '<button type="button" class="dropdown-item cursor-pointer" onclick="download_document(\'' + row.staffDocumentIde + '\')">@Html.Raw(ActionButton.Download.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Download</span></button>' +
                                 '<button type="button" class="dropdown-item cursor-pointer" onclick="delete_document(\'' + row.staffDocumentIde + '\')">@Html.Raw(ActionButton.Delete.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Delete</span></button>' +
                                 '</div></div>';
                         }
@@ -268,6 +285,10 @@
                     });
                 }
             });
+        }
+
+        function download_document(ide) {
+            window.open('@Url.Action("Download", "Document")?ide=' + ide, "_blank");
         }
     </script>
 }

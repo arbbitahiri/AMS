@@ -823,6 +823,8 @@ public partial class AMSContext : DbContext
 
             entity.Property(e => e.DocumentTypeId).HasColumnName("DocumentTypeID");
 
+            entity.Property(e => e.ExpirationDate).HasColumnType("datetime");
+
             entity.Property(e => e.InsertedDate).HasColumnType("datetime");
 
             entity.Property(e => e.InsertedFrom)

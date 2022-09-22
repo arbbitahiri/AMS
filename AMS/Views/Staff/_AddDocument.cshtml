@@ -30,6 +30,23 @@
                 <input asp-for="Title" type="text" class="form-control"/>
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
+            <div class="col-md-6 d-flex flex-column pl-5">
+                <label asp-for="Expires" class="required" style="pointer-events: none;">@Resource.CanExpire</label>
+                <div class="d-inline">
+                    <input asp-for="Expires" style="cursor: pointer;" type="checkbox">
+                    <label asp-for="Expires" id="lbl_expires" onclick="change_check()"></label>
+                </div>
+            </div>
+            <div class="col-md-6 form-group" style="display: none;" id="kt_expire_date">
+                <label asp-for="ExpireDate" class="required"></label>
+                <div class="input-group date">
+                    <input asp-for="ExpireDate" type="text" placeholder="dd/MM/yyyy" class="form-control" autocomplete="off" />
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="la la-calendar"></i></span>
+                    </div>
+                </div>
+                <span id="spn_expire_date" class="text-danger d-none">@Resource.RequiredField</span>
+            </div>
         </div>
         <div class="row form-group pl-2 pr-2">
             <div class="col-md-12">
@@ -59,7 +76,7 @@
 
     <div class="modal-footer modal-footer-uniform w-full justify-content-between">
         <button type="button" class="btn btn-bold btn-pure btn-secondary" data-bs-dismiss="modal">@Resource.Close</button>
-        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
+        <button type="button" id="btn_submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
     </div>
 </form>
 
@@ -79,7 +96,47 @@
                 },
             }
         });
+
+        $('#lbl_expires').text('');
+
+        $("#ExpireDate").datepicker({
+            language: cultureShort,
+            rtl: KTUtil.isRTL(),
+            todayBtn: "linked",
+            todayHighlight: true,
+            templates: arrows,
+            autoclose: true,
+            orientation: "bottom",
+            format: 'dd/mm/yyyy'
+        }).inputmask("mask", {
+            mask: "99/99/9999",
+            placeholder: "dd/MM/yyyy"
+        });
+
+        $('#btn_submit').on('click', function () {
+            if (form.valid()) {
+                if ($('#Expires').is(":checked")) {
+                    if ($('#ExpireDate').val() != null && $('#ExpireDate').val() != "") {
+                        $('#spn_expire_date').addClass('d-none');
+                        form.submit();
+                    } else {
+                        $('#spn_expire_date').removeClass('d-none');
+                    }
+                } else {
+                    $('#spn_expire_date').addClass('d-none');
+                    form.submit();
+                }
+            }
+        });
     });
+
+    function change_check() {
+        if (!$('#Expires').is(":checked")) {
+            $('#kt_expire_date').show(250);
+        } else {
+            $('#kt_expire_date').hide(250);
+        }
+    }
 
     function get_name(e) {
         $("#lbl_browse").text(e.value);

@@ -53,14 +53,17 @@ public class HomeController : BaseController
             DocumentsCount = await db.StaffDocument.CountAsync(),
             AttendanceCount = await db.StaffAttendance.CountAsync(a => a.InsertedDate.Date == DateTime.Now.Date),
             WorkingSince = (await function.AttendanceConsecutiveDays(staffId, null, null, null, null, user.Language)).Select(a => a.WorkingSince).FirstOrDefault(),
-            WeekAttandance = (await function.AttendanceConsecutiveDays(null, null, null, DateTime.Now.AddDays(-7), DateTime.Now, user.Language))
-                .GroupBy(a => a.EndDate.Date)
+            WeekAttandance = await db.StaffAttendance
+                .Where(a => a.Active && !a.Absent && DateTime.Now.Date.AddDays(-7) <= a.InsertedDate.Date && a.InsertedDate.Date <= DateTime.Now.Date.AddDays(-1))
+                .GroupBy(a => a.InsertedDate.Date)
+                .OrderBy(a => a.Key.Day)
                 .Select(a => new AttendanceVM
                 {
                     Count = a.Count(),
-                    Date = a.Key.ToString("dd/MM/yyyy")
-                }).ToList(),
+                    Date = GetDayName(a.Key.DayOfWeek)
+                }).ToListAsync(),
             Logs = await db.Log
+                .Where(a => a.UserId == user.Id)
                 .OrderByDescending(a => a.InsertedDate)
                 .Take(25)
                 .Select(a => new LogVM

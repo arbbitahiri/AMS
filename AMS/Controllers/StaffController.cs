@@ -10,8 +10,11 @@ using AMS.Utilities.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Reporting.NETCore;
+using System.Net.Mime;
+using System.Runtime.Versioning;
 
 namespace AMS.Controllers;
 
@@ -162,6 +165,7 @@ public class StaffController : BaseController
                 EmailConfirmed = true,
                 PhoneNumber = staff.PhoneNumber,
                 UserName = staff.Username,
+                AllowNotification = false,
                 Language = LanguageEnum.Albanian,
                 AppMode = TemplateMode.Light,
                 InsertedDate = DateTime.Now,
@@ -268,7 +272,7 @@ public class StaffController : BaseController
 
     #region 2. Documents
 
-    #region => List
+    #region List
 
     [HttpGet, Authorize(Policy = "7d:r")]
     [Description("Arb Tahiri", "Entry form for documents. Third step of registration/editation of staff.")]
@@ -291,7 +295,8 @@ public class StaffController : BaseController
                 StaffDocumentIde = CryptoSecurity.Encrypt(a.StaffDocumentId),
                 Title = a.Title,
                 Path = a.Path,
-                PathExtension = Path.GetExtension(a.Path),
+                FileType = Path.GetExtension(a.Path),
+                Expires = a.ExpirationDate.HasValue,
                 DocumentType = user.Language == LanguageEnum.Albanian ? a.DocumentType.NameSq : a.DocumentType.NameEn,
                 Description = a.Description,
                 Active = a.Active
@@ -308,7 +313,7 @@ public class StaffController : BaseController
 
     #endregion
 
-    #region => Create
+    #region Create
 
     [HttpGet, Authorize(Policy = "7d:c")]
     [Description("Arb Tahiri", "Form to add documents.")]
@@ -323,8 +328,9 @@ public class StaffController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        string path = await SaveFile(environment, configuration, add.FormFile, "StaffDocuments", null);
+        DateTime? expirationDate = add.Expires ? DateTime.ParseExact(add.ExpireDate, "dd/MM/yyyy", null) : null;
 
+        string path = await SaveFile(configuration, add.FormFile, "StaffDocuments", null);
         db.Add(new StaffDocument
         {
             StaffId = CryptoSecurity.Decrypt<int>(add.StaffIde),
@@ -333,6 +339,7 @@ public class StaffController : BaseController
             Path = path,
             Description = add.Description,
             Active = true,
+            ExpirationDate = expirationDate,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
         });
@@ -343,7 +350,7 @@ public class StaffController : BaseController
 
     #endregion
 
-    #region => Edit
+    #region Edit
 
     [HttpGet, Authorize(Policy = "7d:e")]
     [Description("Arb Tahiri", "Form to edit a document.")]
@@ -357,7 +364,9 @@ public class StaffController : BaseController
                 DocumentTypeId = a.DocumentTypeId,
                 Title = a.Title,
                 Description = a.Description,
-                Active = a.Active
+                Active = a.Active,
+                Expires = a.ExpirationDate.HasValue,
+                ExpireDate = a.ExpirationDate.HasValue ? a.ExpirationDate.Value.ToString("dd/MM/yyyy") : null
             }).FirstOrDefaultAsync();
 
         return View(document);
@@ -372,11 +381,14 @@ public class StaffController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
+        DateTime? expirationDate = edit.Expires ? DateTime.ParseExact(edit.ExpireDate, "dd/MM/yyyy", null) : null;
+
         var document = await db.StaffDocument.FirstOrDefaultAsync(a => a.StaffDocumentId == CryptoSecurity.Decrypt<int>(edit.StaffDocumentIde));
         document.DocumentTypeId = edit.DocumentTypeId;
         document.Title = edit.Title;
         document.Description = edit.Description;
         document.Active = edit.Active;
+        document.ExpirationDate = expirationDate;
         document.UpdatedDate = DateTime.Now;
         document.UpdatedFrom = user.Id;
         document.UpdatedNo = UpdateNo(document.UpdatedNo);
@@ -387,7 +399,7 @@ public class StaffController : BaseController
 
     #endregion
 
-    #region => Delete
+    #region Delete
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "7d:d")]
     [Description("Arb Tahiri", "Action to delete a document.")]
@@ -405,11 +417,39 @@ public class StaffController : BaseController
 
     #endregion
 
+    #region Download
+
+    [HttpGet, Description("Arb Tahiri", "Action to download document.")]
+    public async Task<IActionResult> Download(string ide)
+    {
+        var documentId = CryptoSecurity.Decrypt<int>(ide);
+        var document = await db.StaffDocument.FirstOrDefaultAsync(a => a.Active && a.StaffDocumentId == documentId);
+
+        string extension = Path.GetExtension(document.Path);
+        var fileStream = new FileStream(configuration["AppSettings:FilePath"] + document.Path, FileMode.Open, FileAccess.Read);
+        var contentDisposition = new ContentDisposition
+        {
+            FileName = document.Title + extension,
+            Inline = true
+        };
+
+        Response.Headers.Add("Content-Disposition", contentDisposition.ToString());
+
+        var fileProvider = new FileExtensionContentTypeProvider();
+        if (!fileProvider.TryGetContentType(contentDisposition.FileName, out string contentType))
+        {
+            throw new ArgumentOutOfRangeException($"Unable to find Content Type for file name {contentDisposition.FileName}.");
+        }
+        return File(fileStream, contentType);
+    }
+
+    #endregion
+
     #endregion
 
     #region 3. Department
 
-    #region => List
+    #region List
 
     [HttpGet, Authorize(Policy = "7dp:r")]
     [Description("Arb Tahiri", "Entry form for department. Fourth step of registration/editation of staff.")]
@@ -448,7 +488,7 @@ public class StaffController : BaseController
 
     #endregion
 
-    #region ==> Create
+    #region Create
 
     [HttpGet, Authorize(Policy = "7dp:c")]
     [Description("Arb Tahiri", "Form to add department.")]
@@ -529,7 +569,7 @@ public class StaffController : BaseController
 
     #endregion
 
-    #region ==> Edit
+    #region Edit
 
     [HttpGet, Authorize(Policy = "7dp:e")]
     [Description("Arb Tahiri", "Form to edit department.")]
@@ -618,7 +658,7 @@ public class StaffController : BaseController
 
     #endregion
 
-    #region ==> Delete
+    #region Delete
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "7dp:d")]
     [Description("Arb Tahiri", "Action to delete a department.")]
@@ -828,23 +868,6 @@ public class StaffController : BaseController
         {
             return Json(false);
         }
-    }
-
-    #endregion
-
-    #region Open document
-
-    [HttpGet, Description("Arb Tahiri", "Action to open documents.")]
-    public async Task<IActionResult> OpenDocument(string ide)
-    {
-        var getDocument = await db.StaffDocument.FirstOrDefaultAsync(a => a.StaffDocumentId == CryptoSecurity.Decrypt<int>(ide));
-        var openDocument = new OpenDocument
-        {
-            Path = getDocument.Path,
-            Name = getDocument.Title
-        };
-
-        return View(openDocument);
     }
 
     #endregion

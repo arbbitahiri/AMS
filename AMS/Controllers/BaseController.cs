@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Sqlite.Query.Internal;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Drawing;
@@ -119,8 +120,6 @@ public class BaseController : Controller
         db.Log.Add(log);
         await db.SaveChangesAsync();
     }
-
-    #region General methods
 
     #region Role
 
@@ -299,11 +298,11 @@ public class BaseController : Controller
     protected string FirstTimePassword(IConfiguration configuration, string firstName, string lastName)
     {
         string password = "@1234";
-        if (bool.Parse(configuration["SecurityConfiguration:Password:RequiredUppercase"]))
+        if (bool.Parse(configuration["SecurityConfiguration:Password:RequireUppercase"]))
         {
             password += firstName[..1].ToUpper();
         }
-        if (bool.Parse(configuration["SecurityConfiguration:Password:RequiredLowercase"]))
+        if (bool.Parse(configuration["SecurityConfiguration:Password:RequireLowercase"]))
         {
             password += lastName[..1].ToLower();
         }
@@ -311,12 +310,43 @@ public class BaseController : Controller
         return password;
     }
 
+    protected string GetMonthName(int month) =>
+        month switch
+        {
+            1 => Resource.January,
+            2 => Resource.February,
+            3 => Resource.March,
+            4 => Resource.April,
+            5 => Resource.May,
+            6 => Resource.June,
+            7 => Resource.July,
+            8 => Resource.August,
+            9 => Resource.September,
+            10 => Resource.October,
+            11 => Resource.November,
+            12 => Resource.December,
+            _ => Resource.January,
+        };
+
+    protected static string GetDayName(DayOfWeek day) =>
+        day switch
+        {
+            DayOfWeek.Monday => Resource.Monday,
+            DayOfWeek.Tuesday => Resource.Tuesday,
+            DayOfWeek.Wednesday => Resource.Wednesday,
+            DayOfWeek.Thursday => Resource.Thursday,
+            DayOfWeek.Friday => Resource.Friday,
+            DayOfWeek.Saturday => Resource.Saturday,
+            DayOfWeek.Sunday => Resource.Sunday,
+            _ => Resource.Monday,
+        };
+
     #endregion
 
     #region Save file
 
     [SupportedOSPlatform("windows")]
-    protected async Task<string> SaveFile(IWebHostEnvironment environment, IConfiguration configuration, IFormFile file, string folder, string fileTitle, int type = 512)
+    protected async Task<string> SaveFile(IConfiguration configuration, IFormFile file, string folder, string fileTitle, int type = 512)
     {
         int maxKB = int.Parse(configuration["AppSettings:FileMaxKB"]);
         string[] imageFormats = configuration["AppSettings:ImagesFormat"].Split(",");
@@ -324,7 +354,7 @@ public class BaseController : Controller
         if (file != null && file.Length > 0 && maxKB * 1024 >= file.Length)
         {
             string fileName = string.IsNullOrEmpty(fileTitle) ? (Guid.NewGuid().ToString() + Path.GetExtension(file.FileName)) : fileTitle;
-            string uploads = Path.Combine(environment.WebRootPath, $"Uploads/{folder}");
+            string uploads = Path.Combine(configuration["AppSettings:FilePath"], $"{folder}");
             if (!Directory.Exists(uploads))
             {
                 Directory.CreateDirectory(uploads);
@@ -340,7 +370,7 @@ public class BaseController : Controller
                 using var fileStream = new FileStream(filePath, FileMode.Create);
                 await file.CopyToAsync(fileStream);
             }
-            return $"/Uploads/{folder}/{fileName}";
+            return $"/{folder}/{fileName}";
         }
         else return null;
     }
@@ -434,8 +464,6 @@ public class BaseController : Controller
         string email = $"<div>{content}</div>";
         return email;
     }
-
-    #endregion
 
     #endregion
 

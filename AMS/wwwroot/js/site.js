@@ -273,7 +273,7 @@ function format_repo(repo) {
     }
 
     var $container = $(
-        '<span class="d-flex align-items-center">' + (repo.image == null ? ('<div class="symbol symbol-40 symbol-sm flex-shrink-0 mr-3"><span class="symbol-label font-size-h5 font-weight-boldest">' + repo.initials + '</span></div>') : ('<img src="../..' + repo.image +'" height="40" class="flag-icon circle rounded rounded-circle" style="object-fit: cover; width: 36px; margin-right: 10px;"/>')) + repo.text + '</span>'
+        '<span class="d-flex align-items-center">' + repo.text + '</span>'
     );
     return $container;
 }

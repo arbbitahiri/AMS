@@ -96,3 +96,9 @@ public enum CountryEnum
 {
     Kosova = 1
 }
+
+public enum Absent
+{
+    Yes = 1,
+    No = 2
+}

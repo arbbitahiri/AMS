@@ -129,7 +129,8 @@
             todayHighlight: true,
             templates: arrows,
             autoclose: true,
-            orientation: "bottom"
+            orientation: "bottom",
+            format: 'dd/mm/yyyy'
         }).inputmask("mask", {
             mask: "99/99/9999",
             placeholder: "dd/MM/yyyy"
@@ -142,7 +143,8 @@
             todayHighlight: true,
             templates: arrows,
             autoclose: true,
-            orientation: "bottom"
+            orientation: "bottom",
+            format: 'dd/mm/yyyy'
         }).inputmask("mask", {
             mask: "99/99/9999",
             placeholder: "dd/MM/yyyy"
@@ -246,7 +248,7 @@
                 },
                 {
                     data: function(row, type, set) {
-                        return row.workingSince + " " + (row.workingSince > 1 ? "@Html.Raw(Resource.Days)" : "@Html.Raw(Resource.Day)");
+                        return row.workingSince == 0 ? 'Ka munguar' : (row.workingSince + " " + (row.workingSince == 1 ? "@Html.Raw(Resource.Day.ToLower())" : "@Html.Raw(Resource.Days.ToLower())"));
                     }
                 },
                 {
@@ -254,8 +256,11 @@
                         var dropdown = '<div class="dropdown dropleft cursor-pointer">' +
                             '<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                             '<div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">' +
-                            '<button type="button" class="dropdown-item cursor-pointer" onclick="history(\'' + row.staffIde + '\', \'' + row.startDate + '\', \'' + row.endDate + '\')">@Html.Raw(ActionButton.History.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.History</span></button>' +
-                            '</div></div>';
+                            '<button type="button" class="dropdown-item cursor-pointer" onclick="history(\'' + row.staffIde + '\', \'' + row.startDate + '\', \'' + row.endDate + '\')">@Html.Raw(ActionButton.History.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.History</span></button>';
+                        if (row.workingSince == 0) {
+                            dropdown += '<button type="button" class="dropdown-item cursor-pointer" onclick="change_attendace_details(\'' + row.staffAttendanceIde + '\')">@Html.Raw(ActionButton.Edit.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Details</span></button>';
+                        }
+                        dropdown += '</div></div>';
                         return dropdown;
                     }
                 }
@@ -280,15 +285,21 @@
         });
     }
 
+    function change_attendace_details(ide) {
+        $('#modal-large').find('.modal-content').load('@Url.Action("StaffAbsence", "Attendance")?ide=' + ide, function () {
+            $('#modal-large').modal('toggle');
+        });
+    }
+
     function get_attendance_report(type) {
         $('#frm_search_attendance').attr('data-ajax', false);
-        $('#frm_search_attendance').attr('action', '@Url.Action("Attendance", "ReportAttendance")');
+        $('#frm_search_attendance').attr('action', '@Url.Action("ReportAttendance", "Attendance")');
         $('#frm_search_attendance').attr('target', '_blank');
         $('#frm_search_attendance').addClass('noLoading');
         $('#atype').val(type);
         $('#frm_search_attendance').submit();
         $('#frm_search_attendance').attr('data-ajax', true);
-        $('#frm_search_attendance').attr('action', '@Url.Action("Attendance", "SearchStaff")');
+        $('#frm_search_attendance').attr('action', '@Url.Action("SearchStaff", "Attendance")');
         $('#frm_search_attendance').removeAttr('target');
         $('#frm_search_attendance').removeClass('noLoading');
     }
