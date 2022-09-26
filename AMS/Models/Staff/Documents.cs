@@ -14,8 +14,6 @@ public class Documents
 
 public class DocumentsVM
 {
-    public string StaffIde { get; set; }
-
     public StaffDetails StaffDetails { get; set; }
     public List<Documents> Documents { get; set; }
 

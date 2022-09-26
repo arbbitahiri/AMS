@@ -242,7 +242,11 @@
                 var no = $('#spn_working_' + rc).text().split(' ')[0];
                 var new_no = $(e).is(":checked") ? ++no : --no
                 var span_text = new_no = 1 ? new_no + ' @Html.Raw(Resource.Day.ToLower())' : new_no + ' @Html.Raw(Resource.Days.ToLower())';
+                var span_label = no == 0 ? 'label-warning' : (no < 14 ? 'label-success' : 'label-danger');
+                var new_span_label = new_no == 0 ? 'label-warning' : (new_no < 14 ? 'label-success' : 'label-danger');
+
                 $('#spn_working_' + rc).text(span_text);
+                $('#spn_working_' + rc).removeClass(span_label).addClass(new_span_label);
 
                 handle_success(data, SubmitPathType.NORELOAD, "");
             }

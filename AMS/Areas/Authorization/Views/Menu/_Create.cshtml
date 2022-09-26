@@ -66,6 +66,18 @@
                 <span asp-validation-for="HasSubMenu" class="text-danger"></span>
             </div>
         </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <label asp-for="TagsSQ" class="required"></label>
+                <input asp-for="TagsSQ" data-role="tagsinput" class="tagify form-control" />
+                <span asp-validation-for="TagsSQ" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="TagsEN" class="required"></label>
+                <input asp-for="TagsEN" data-role="tagsinput" class="tagify form-control" />
+                <span asp-validation-for="TagsEN" class="text-danger"></span>
+            </div>
+        </div>
     </div>
     <div class="modal-footer modal-footer-uniform w-full justify-content-between">
         <button type="button" class="btn btn-bold btn-pure btn-secondary" data-bs-dismiss="modal">@Resource.Close</button>
@@ -81,6 +93,22 @@
         $.validator.unobtrusive.parse(form);
 
         $('#lbl_submenu').text('');
+
+        $('#TagsSQ').tagsinput({
+            typeaheadjs: {
+                displayKey: 'name',
+                valueKey: 'name',
+                source: citynames.ttAdapter()
+            }
+        });
+
+        $('#TagsEN').tagsinput({
+            typeaheadjs: {
+                displayKey: 'name',
+                valueKey: 'name',
+                source: citynames.ttAdapter()
+            }
+        });
     });
 
     function change_check(e) {

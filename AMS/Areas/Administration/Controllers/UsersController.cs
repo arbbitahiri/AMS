@@ -353,7 +353,8 @@ public class UsersController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.IncorrectPassword });
         }
 
-        var userToAdd = await userManager.FindByIdAsync(CryptoSecurity.Decrypt<string>(addRole.UserIde));
+        var userId = CryptoSecurity.Decrypt<string>(addRole.UserIde);
+        var userToAdd = await userManager.FindByIdAsync(userId);
         var roleToAdd = await db.AspNetRoles.Where(a => addRole.Roles.Contains(a.Id)).Select(a => a.NormalizedName).ToListAsync();
 
         foreach (var role in addRole.Roles)

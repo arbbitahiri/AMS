@@ -2,6 +2,7 @@
 
 public class SubMenuVM
 {
+    public string MenuIde { get; set; }
     public string SubMenuIde { get; set; }
     public string Title { get; set; }
     public string MenuTitle { get; set; }

@@ -1059,4 +1059,37 @@
   <data name="SSLEnable" xml:space="preserve">
     <value>Activate SSL protocol</value>
   </data>
+  <data name="EmailConfigurationForApp" xml:space="preserve">
+    <value>Email configuration within application</value>
+  </data>
+  <data name="EmailConfigurationForDB" xml:space="preserve">
+    <value>Email configuration outside application, notifications</value>
+  </data>
+  <data name="Departments" xml:space="preserve">
+    <value>Departments</value>
+  </data>
+  <data name="Documents1" xml:space="preserve">
+    <value>Documents</value>
+  </data>
+  <data name="ListOfRoles" xml:space="preserve">
+    <value>List of roles</value>
+  </data>
+  <data name="NumberOfAbsence" xml:space="preserve">
+    <value>Number of absence</value>
+  </data>
+  <data name="RoleRemovedSuccess" xml:space="preserve">
+    <value>Role removed successfully!</value>
+  </data>
+  <data name="SureYouWantToRemoveRole" xml:space="preserve">
+    <value>Are you sure you want to remove role?</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tags</value>
+  </data>
+  <data name="TagsEN" xml:space="preserve">
+    <value>Tags in english (comma separated)</value>
+  </data>
+  <data name="TagsSQ" xml:space="preserve">
+    <value>Tags in albanian (comma separated)</value>
+  </data>
 </root>

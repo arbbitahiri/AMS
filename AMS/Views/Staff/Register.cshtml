@@ -12,6 +12,7 @@
     @Html.AntiForgeryToken()
     <input asp-for="StaffIde" type="hidden"/>
     <input asp-for="MethodType" type="hidden"/>
+    <input asp-for="UserIde" type="hidden"/>
 
     <div class="row form-group">
         <div class="col-md-4">
@@ -80,29 +81,23 @@
             <input asp-for="PostalCode" type="text" autocomplete="off" class="form-control"/>
             <span asp-validation-for="PostalCode" class="text-danger"></span>
         </div>
-        @if (Model.MethodType == (int)MethodType.Post)
-        {
-            <div class="col-md-4">
-                <label asp-for="NewUser"></label><br />
-                <input asp-for="NewUser" data-switch="true" style="cursor: pointer; width: 90px;"
-                    type="checkbox" id="ch_hasAccess" onchange="change_new_user(this)"
-                    data-bootstrap-switch data-off-color="warning" data-on-color="success" data-handle-width="90"
-                    data-on-text="@Html.Raw(Resource.Yes)" data-off-text="@Html.Raw(Resource.No)" />
-                <span asp-validation-for="NewUser" class="text-danger"></span>
-            </div>
-        }
+        <div class="col-md-4">
+            <label asp-for="NewUser"></label><br />
+            <input asp-for="NewUser" data-switch="true" style="cursor: pointer; width: 90px;"
+                type="checkbox" id="ch_hasAccess" onchange="change_new_user(this)"
+                data-bootstrap-switch data-off-color="warning" data-on-color="success" data-handle-width="90"
+                data-on-text="@Html.Raw(Resource.Yes)" data-off-text="@Html.Raw(Resource.No)" />
+            <span asp-validation-for="NewUser" class="text-danger"></span>
+        </div>
     </div>
 
-    @if (Model.MethodType == (int)MethodType.Post)
-    {
-        <div class="row form-group for-user" style="display: none;">
-            <div class="col-md-4">
-                <label asp-for="Username" class="required"></label>
-                <input asp-for="Username" type="text" autocomplete="off" class="form-control" />
-                <span asp-validation-for="Username" class="text-danger"></span>
-            </div>
+    <div class="row form-group for-user" style="@(Model.NewUser ? "" : "display: none;")">
+        <div class="col-md-4">
+            <label asp-for="Username" class="required"></label>
+            <input asp-for="Username" type="text" autocomplete="off" class="form-control" />
+            <span asp-validation-for="Username" class="text-danger"></span>
         </div>
-    }
+    </div>
 
     <div class="d-flex justify-content-end border-top mt-5">
         <input type="button" value="@Resource.Continue" onclick="continue_form()" class="btn btn-primary font-weight-bolder text-uppercase mt-2 btn-lg"/>

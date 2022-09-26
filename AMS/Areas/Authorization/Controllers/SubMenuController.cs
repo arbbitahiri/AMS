@@ -48,6 +48,7 @@ public class SubMenuController : BaseController
             .Where(a => a.MenuId == menuId)
             .Select(a => new SubMenuVM
             {
+                MenuIde = mIde,
                 SubMenuIde = CryptoSecurity.Encrypt(a.SubMenuId),
                 Title = user.Language == LanguageEnum.Albanian ? a.NameSq : a.NameEn,
                 MenuTitle = user.Language == LanguageEnum.Albanian ? a.Menu.NameSq : a.Menu.NameEn,
@@ -100,6 +101,8 @@ public class SubMenuController : BaseController
             Action = create.Action,
             OrdinalNumber = create.OrdinalNumber,
             OpenFor = create.OpenFor,
+            TagsSq = create.TagsSQ,
+            TagsEn = create.TagsEN,
             InsertedFrom = user.Id,
             InsertedDate = DateTime.Now
         });
@@ -113,13 +116,14 @@ public class SubMenuController : BaseController
 
     [HttpGet, Authorize(Policy = "53:e")]
     [Description("Arb Tahiri", "Form to edit a new submenu.")]
-    public async Task<IActionResult> _Edit(string sIde)
+    public async Task<IActionResult> _Edit(string sIde, string mIde)
     {
         var subMenuId = CryptoSecurity.Decrypt<int>(sIde);
         var subMenu = await db.SubMenu.FindAsync(subMenuId);
         var edit = new Edit
         {
             SubMenuIde = sIde,
+            MenuIde = mIde,
             NameSq = subMenu.NameSq,
             NameEn = subMenu.NameEn,
             Active = subMenu.Active,
@@ -156,6 +160,8 @@ public class SubMenuController : BaseController
         subMenu.Action = edit.Action;
         subMenu.OrdinalNumber = edit.OrdinalNumber;
         subMenu.OpenFor = edit.OpenFor;
+        subMenu.TagsSq = edit.TagsSQ;
+        subMenu.TagsEn = edit.TagsEN;
         subMenu.UpdatedFrom = user.Id;
         subMenu.UpdatedDate = DateTime.Now;
         subMenu.UpdatedNo = UpdateNo(subMenu.UpdatedNo);

@@ -57,7 +57,7 @@
                         return '<div class="dropdown dropleft cursor-pointer">' +
                             '<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">@Resource.Actions</button>' +
                             '<div class="dropdown-menu dropdown-grid" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">' +
-                            '<button class="dropdown-item cursor-pointer" type="button" onclick="edit(\'' + row.subMenuIde + '\')">@Html.Raw(ActionButton.Edit.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Edit</span></button>' +
+                            '<button class="dropdown-item cursor-pointer" type="button" onclick="edit_submenu(\'' + row.subMenuIde + '\',\'' + row.menuIde + '\')">@Html.Raw(ActionButton.Edit.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Edit</span></button>' +
                             '<button class="dropdown-item cursor-pointer" type="button" onclick="delete_submenu(\'' + row.subMenuIde + '\')">@Html.Raw(ActionButton.Delete.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Delete</span></button>' +
                             '</div></div>';
                     }
@@ -66,9 +66,9 @@
         });
     }
 
-    function edit(ide) {
-        $('#modal-large').find('.modal-content').load('@Url.Action("_Edit", "SubMenu")?sIde=' + ide, function () {
-            $('#modal-large').modal('toggle');
+    function edit_submenu(ide, mIde) {
+        $('#modal-large').find('.modal-content').load('@Url.Action("_Edit", "SubMenu")?sIde=' + ide + '&mIde=' + mIde, function () {
+            $('#modal-large').modal('show');
         });
     }
 

@@ -6,6 +6,7 @@ namespace AMS.Areas.Authorization.Models.SubMenu;
 public class Edit
 {
     public string SubMenuIde { get; set; }
+    public string MenuIde { get; set; }
 
     [Display(Name = "NameSq", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
@@ -32,6 +33,12 @@ public class Edit
 
     [Display(Name = "ClaimPolicy", ResourceType = typeof(Resource))]
     public string ClaimPolicy { get; set; }
+
+    [Display(Name = "TagsSQ", ResourceType = typeof(Resource))]
+    public string TagsSQ { get; set; }
+
+    [Display(Name = "TagsEN", ResourceType = typeof(Resource))]
+    public string TagsEN { get; set; }
 
     [Display(Name = "Icon", ResourceType = typeof(Resource))]
     public string Icon { get; set; }

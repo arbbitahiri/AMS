@@ -91,7 +91,7 @@
                 <tr>
                     <th>#</th>
                     <th>@Resource.Name</th>
-                    <th>@Resource.Department</th>
+                    <th>@Resource.Birthdate</th>
                     <th>@Resource.StaffType</th>
                     <th>@Resource.Gender</th>
                     <th>@Resource.Email</th>
@@ -188,7 +188,11 @@
                             return name;
                         }
                     },
-                    { data: "department" },
+                    {
+                        data: function (row, type, set) {
+                            return moment(row.birthDate).format('DD/MM/YYYY');
+                        }
+                    },
                     { data: "staffType" },
                     { data: "gender" },
                     { data: "email" },

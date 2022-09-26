@@ -2,6 +2,15 @@
 @model Edit
 
 <div class="modal-header">
+    <h5 class="modal-title">
+        @if (!string.IsNullOrEmpty(Model.MenuIde))
+        {
+            <a href="#" data-toggle="tooltop" title="@Resource.Back" onclick="go_back('@Model.MenuIde')">
+                <i class="far fa-arrow-alt-circle-left fa-lg"></i>&nbsp;
+            </a>
+        }
+        @Resource.Edit
+    </h5>
     <h5 class="modal-title">@Resource.Edit</h5>
     <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
         <i aria-hidden="true" class="ki ki-close"></i>
@@ -84,6 +93,10 @@
 
         $('#lbl_active').text('');
     });
+
+    function go_back(ide) {
+        $('#modal-large').find('.modal-content').load('@Url.Action("_Edit", "Menu")?ide=' + ide)
+    }
 
     function change_active(e) {
         if($('#inp_active').is(":checked")) {

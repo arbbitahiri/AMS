@@ -31,6 +31,12 @@ public class Create
     [Display(Name = "Icon", ResourceType = typeof(Resource))]
     public string Icon { get; set; }
 
+    [Display(Name = "TagsSQ", ResourceType = typeof(Resource))]
+    public string TagsSQ { get; set; }
+
+    [Display(Name = "TagsEN", ResourceType = typeof(Resource))]
+    public string TagsEN { get; set; }
+
     [Display(Name = "OpenFor", ResourceType = typeof(Resource))]
     public string OpenFor { get; set; }
 }

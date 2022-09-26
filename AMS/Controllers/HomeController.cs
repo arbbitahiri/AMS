@@ -6,14 +6,12 @@ using AMS.Resources;
 using AMS.Utilities;
 using AMS.Utilities.General;
 using AMS.Utilities.Security;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace AMS.Controllers;
 
-[Authorize]
 public class HomeController : BaseController
 {
     private readonly IFunctionRepository function;
@@ -54,12 +52,13 @@ public class HomeController : BaseController
             AttendanceCount = await db.StaffAttendance.CountAsync(a => a.InsertedDate.Date == DateTime.Now.Date),
             WorkingSince = (await function.AttendanceConsecutiveDays(staffId, null, null, null, null, user.Language)).Select(a => a.WorkingSince).FirstOrDefault(),
             WeekAttandance = await db.StaffAttendance
-                .Where(a => a.Active && !a.Absent && DateTime.Now.Date.AddDays(-7) <= a.InsertedDate.Date && a.InsertedDate.Date <= DateTime.Now.Date.AddDays(-1))
+                .Where(a => a.Active && DateTime.Now.Date.AddDays(-7) <= a.InsertedDate.Date && a.InsertedDate.Date <= DateTime.Now.Date.AddDays(-1))
                 .GroupBy(a => a.InsertedDate.Date)
                 .OrderBy(a => a.Key.Day)
                 .Select(a => new AttendanceVM
                 {
-                    Count = a.Count(),
+                    Count = a.Count(a => !a.Absent),
+                    CountAbsent = a.Count(a => a.Absent),
                     Date = GetDayName(a.Key.DayOfWeek)
                 }).ToListAsync(),
             Logs = await db.Log

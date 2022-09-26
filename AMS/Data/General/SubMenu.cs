@@ -18,6 +18,8 @@ namespace AMS.Data.General
         public int OrdinalNumber { get; set; }
         public string Roles { get; set; }
         public string OpenFor { get; set; }
+        public string TagsSq { get; set; }
+        public string TagsEn { get; set; }
         public bool Active { get; set; }
         public string InsertedFrom { get; set; }
         public DateTime InsertedDate { get; set; }

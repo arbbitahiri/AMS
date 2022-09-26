@@ -1,8 +1,4 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
-var resources = null;
+﻿var resources = null;
 
 const ErrorStatus = {
     SUCCESS: 1,
@@ -45,9 +41,11 @@ var arrows = {
 
 $(document).ready(function () {
     $('.fade-in').hide().fadeIn(2000);
+    console.log('/culture/general/' + culture + '.json');
+    resources = $.getJSON('/culture/general/' + culture + '.json', function () {
 
-    resources = $.getJSON(`/culture/General/${culture}.json`);
-
+    });
+    console.log("resources: " + resources);
     if (culture == 'sq-AL') {
         $("input[type='text']").prop('spellcheck', false);
         $('textarea').prop('spellcheck', false);
@@ -56,9 +54,61 @@ $(document).ready(function () {
         $('textarea').prop('spellcheck', true);
     }
 
-    if (Notification.permission === 'default') {
-        $('#allow_notification').parent().removeClass('d-none');
+    var pageLength = $('table').attr('data-length');
+    if ($('table[data-length]').text() == '') {
+        pageLength = 10
+    } else {
+        pageLength = parseInt(pageLength);
     }
+
+    $('table:not(.no-datatable)').DataTable({
+        language: {
+            url: "/Internationalisation/Datatables/" + culture + ".json"
+        },
+        keys: true,
+        responsive: true,
+        lengthChange: false,
+        pageLength: pageLength
+    });
+
+    $.fn.datepicker.dates.sq = {
+        days: ["E dielë", "E hënë", "E martë", "E mërkurë", "E enjte", "E premte", "E shtunë"],
+        daysShort: ["Die", "Hën", "Mar", "Mër", "Enj", "Pre", "Sht"],
+        daysMin: ["D", "H", "Ma", "Më", "E", "P", "Sh"],
+        months: ["Janar", "Shkurt", "Mars", "Prill", "Maj", "Qershor", "Korrik", "Gusht", "Shtator", "Tetor", "Nentor", "Dhjetor"],
+        monthsShort: ["Jan", "Shk", "Mar", "Pri", "Maj", "Qer", "Kor", "Gus", "Sht", "Tet", "Nen", "Dhj"],
+        today: "Sot",
+        clear: "Fshije",
+        format: "dd/mm/yyyy",
+        titleFormat: "MM yyyy",
+        weekStart: 1
+    };
+
+    $.fn.datepicker.dates.en = {
+        days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+        daysMin: ["Su", "M", "Tu", "W", "Th", "F", "Sa"],
+        months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+        monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        today: "Today",
+        clear: "Clear",
+        format: "dd/mm/yyyy",
+        titleFormat: "MM yyyy",
+        weekStart: 1
+    };
+
+    $.fn.datepicker.dates.sr = {
+        days: ["Nedelja", "Ponedeljak", "Utorak", "Sreda", "Četvrtak", "Petak", "Subota"],
+        daysShort: ["Ned", "Pon", "Uto", "Sre", "Čet", "Pet", "Sub"],
+        daysMin: ["N", "Po", "U", "Sr", "Č", "Pe", "Su"],
+        months: ["Januara", "Februara", "Marta", "April", "Može", "Juna", "Jul", "Avgusta", "Septembar", "Oktobar", "Novembar", "Decembar"],
+        monthsShort: ["Jan", "Feb", "Mar", "Apr", "Maž", "Jun", "Jul", "Avg", "Sep", "Okt", "Nov", "Dec"],
+        today: "Danas",
+        clear: "Jasno",
+        format: "dd/mm/yyyy",
+        titleFormat: "MM yyyy",
+        weekStart: 1
+    };
 });
 
 function show_loading() {
@@ -130,7 +180,7 @@ $(document).ajaxError(function (error) {
             confirmButtonText: resources.responseJSON["Okay"]
         });
     } else if (error.handleObj.handler.arguments[1].status == 0) {
-        window.location.href = '/Home/Index';
+        // ajax from ajax
     } else if (error.handleObj.handler.arguments[1].status == 307) {
         window.location.href = '/Home/Index';
     } else {

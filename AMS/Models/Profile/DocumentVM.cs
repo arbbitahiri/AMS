@@ -13,6 +13,8 @@ public class DocumentDetails
     public string Path { get; set; }
     public string PathExtension { get; set; }
     public string DocumentType { get; set; }
+    public string FileType { get; set; }
+    public bool Expires { get; set; }
     public string Description { get; set; }
     public bool Active { get; set; }
 }

@@ -21,6 +21,8 @@ namespace AMS.Data.General
             DepartmentUpdatedFromNavigation = new HashSet<Department>();
             DocumentTypeInsertedFromNavigation = new HashSet<DocumentType>();
             DocumentTypeUpdatedFromNavigation = new HashSet<DocumentType>();
+            EmailInsertedFromNavigation = new HashSet<Email>();
+            EmailUpdatedFromNavigation = new HashSet<Email>();
             InverseInsertedFromNavigation = new HashSet<AspNetUsers>();
             Log = new HashSet<Log>();
             MenuInsertedFromNavigation = new HashSet<Menu>();
@@ -90,6 +92,8 @@ namespace AMS.Data.General
         public virtual ICollection<Department> DepartmentUpdatedFromNavigation { get; set; }
         public virtual ICollection<DocumentType> DocumentTypeInsertedFromNavigation { get; set; }
         public virtual ICollection<DocumentType> DocumentTypeUpdatedFromNavigation { get; set; }
+        public virtual ICollection<Email> EmailInsertedFromNavigation { get; set; }
+        public virtual ICollection<Email> EmailUpdatedFromNavigation { get; set; }
         public virtual ICollection<AspNetUsers> InverseInsertedFromNavigation { get; set; }
         public virtual ICollection<Log> Log { get; set; }
         public virtual ICollection<Menu> MenuInsertedFromNavigation { get; set; }

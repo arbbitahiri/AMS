@@ -26,6 +26,7 @@ public partial class AMSContext : DbContext
     public virtual DbSet<Country> Country { get; set; }
     public virtual DbSet<Department> Department { get; set; }
     public virtual DbSet<DocumentType> DocumentType { get; set; }
+    public virtual DbSet<Email> Email { get; set; }
     public virtual DbSet<Gender> Gender { get; set; }
     public virtual DbSet<Log> Log { get; set; }
     public virtual DbSet<Menu> Menu { get; set; }
@@ -44,7 +45,8 @@ public partial class AMSContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseSqlServer("Server=ARBTAHIRI;Database=AMS;Trusted_Connection=True;MultipleActiveResultSets=true");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+            optionsBuilder.UseSqlServer("Server=ARBTAHIRI;Database=AMS;User Id=amsweb;Password=1234;MultipleActiveResultSets=true");
         }
     }
 
@@ -428,6 +430,49 @@ public partial class AMSContext : DbContext
                 .HasConstraintName("FK_DocumentType_AspNetUsers_Updated");
         });
 
+        modelBuilder.Entity<Email>(entity =>
+        {
+            entity.ToTable("Email", "Core");
+
+            entity.Property(e => e.EmailId).HasColumnName("EmailID");
+
+            entity.Property(e => e.Cc).HasColumnName("CC");
+
+            entity.Property(e => e.EmailAddress)
+                .IsRequired()
+                .HasMaxLength(512);
+
+            entity.Property(e => e.InsertedDate).HasColumnType("datetime");
+
+            entity.Property(e => e.InsertedFrom)
+                .IsRequired()
+                .HasMaxLength(450);
+
+            entity.Property(e => e.Password).IsRequired();
+
+            entity.Property(e => e.Smtphost)
+                .IsRequired()
+                .HasMaxLength(512)
+                .HasColumnName("SMTPHost");
+
+            entity.Property(e => e.Sslprotocol).HasColumnName("SSLProtocol");
+
+            entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
+
+            entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
+            entity.HasOne(d => d.InsertedFromNavigation)
+                .WithMany(p => p.EmailInsertedFromNavigation)
+                .HasForeignKey(d => d.InsertedFrom)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Email_AspNetUsers_Inserted");
+
+            entity.HasOne(d => d.UpdatedFromNavigation)
+                .WithMany(p => p.EmailUpdatedFromNavigation)
+                .HasForeignKey(d => d.UpdatedFrom)
+                .HasConstraintName("FK_Email_AspNetUsers_Updated");
+        });
+
         modelBuilder.Entity<Gender>(entity =>
         {
             entity.ToTable("Gender", "Core");
@@ -525,6 +570,10 @@ public partial class AMSContext : DbContext
                 .HasColumnName("NameSQ");
 
             entity.Property(e => e.Roles).HasMaxLength(2048);
+
+            entity.Property(e => e.TagsEn).HasColumnName("TagsEN");
+
+            entity.Property(e => e.TagsSq).HasColumnName("TagsSQ");
 
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 
@@ -1022,6 +1071,10 @@ public partial class AMSContext : DbContext
                 .HasColumnName("NameSQ");
 
             entity.Property(e => e.Roles).HasMaxLength(2048);
+
+            entity.Property(e => e.TagsEn).HasColumnName("TagsEN");
+
+            entity.Property(e => e.TagsSq).HasColumnName("TagsSQ");
 
             entity.Property(e => e.UpdatedDate).HasColumnType("datetime");
 

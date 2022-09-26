@@ -1,0 +1,89 @@
+﻿@using AMS.Areas.Administration.Models.Email
+@model AppSettingsEmail
+@{
+    ViewData["Title"] = Resource.EmailConfiguration;
+    Layout = null;
+}
+
+<form asp-action="AppEmail" asp-controller="Email" method="post" id="frm_email_registration_app">
+    @Html.AntiForgeryToken()
+    <div class="form-group row">
+        <div class="col-md-4 form-group">
+            <label class="col-form-label text-lg-right">@Resource.SMTPHost:</label>
+            <div class="input-group">
+                <input asp-for="AHost" class="form-control" />
+                <div class="input-group-append"><span class="input-group-text"><i class="fas fa-server"></i></span></div>
+            </div>
+            <span class="form-text text-muted">@Resource.ServerForEmail</span>
+            <span asp-validation-for="AHost" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 form-group">
+            <label class="col-form-label text-lg-right">@Resource.Email:</label>
+            <div class="input-group">
+                <input asp-for="AEmail" class="form-control" />
+                <div class="input-group-append"><span class="input-group-text"><i class="fas fa-at"></i></span></div>
+            </div>
+            <span class="form-text text-muted">@Resource.SendMailServer</span>
+            <span asp-validation-for="AEmail" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 form-group">
+            <label class="col-form-label text-lg-right">@Resource.Password:</label>
+            <div class="input-group">
+                <input asp-for="APassword" class="form-control" type="text" />
+                <div id="show_password_app" class="input-group-append cursor-pointer"><span class="input-group-text"><i class="fas fa-key"></i></span></div>
+            </div>
+            <span class="form-text text-muted">@Resource.PasswordForMailServer</span>
+            <span asp-validation-for="APassword" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 form-group">
+            <label class="col-form-label text-lg-right">@Resource.CC:</label>
+            <div class="input-group">
+                <input asp-for="ACC" class="form-control" />
+                <div class="input-group-append"><span class="input-group-text"><i class="fas fa-users"></i></span></div>
+            </div>
+            <span class="form-text text-muted">@Resource.CCUsersText</span>
+            <span asp-validation-for="ACC" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 form-group">
+            <label class="col-form-label text-lg-right">@Resource.Port:</label>
+            <div class="input-group">
+                <input asp-for="APort" class="form-control" />
+                <div class="input-group-append"><span class="input-group-text"><i class="fas fa-handshake"></i></span></div>
+            </div>
+            <span class="form-text text-muted">@Resource.PortForMailServer</span>
+            <span asp-validation-for="APort" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 form-group">
+            <label class="col-form-label d-block">@Resource.SSLEnable:</label>
+            <input asp-for="ASSLEnable" data-switch="true" style="cursor: pointer; width: 90px;" type="checkbox" data-bootstrap-switch-app data-off-color="warning" data-on-color="success" data-handle-width="90" data-on-text="@Html.Raw(Resource.Yes)" data-off-text="@Html.Raw(Resource.No)" />
+            <span class="form-text text-muted">@Resource.EnableSSLForMailServer</span>
+            <span asp-validation-for="ASSLEnable" class="text-danger"></span>
+        </div>
+    </div>
+    <div class=" float-right">
+        <button class="btn btn-primary" type="submit">@Resource.Save</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $.validator.setDefaults({ ignore: '' });
+        var form_app = $('#frm_email_registration_app');
+        form_app.removeData('validator');
+        form_app.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form_app);
+
+        $('#APassword').attr("type", "password");
+
+        $("input[data-bootstrap-switch-app]").bootstrapSwitch();
+
+        $('#show_password_app').on('click', function () {
+            var input = $('#APassword');
+            if (input.attr("type") === "password") {
+                input.attr("type", "text");
+            } else {
+                input.attr("type", "password");
+            }
+        });
+    });
+</script>

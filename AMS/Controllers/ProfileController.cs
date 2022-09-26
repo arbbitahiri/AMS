@@ -107,6 +107,8 @@ public class ProfileController : BaseController
                 Path = a.Path,
                 PathExtension = Path.GetExtension(a.Path),
                 DocumentType = user.Language == LanguageEnum.Albanian ? a.DocumentType.NameSq : a.DocumentType.NameEn,
+                FileType = Path.GetExtension(a.Path).ToLower(),
+                Expires = a.ExpirationDate.HasValue,
                 Description = a.Description
             }).ToListAsync();
 

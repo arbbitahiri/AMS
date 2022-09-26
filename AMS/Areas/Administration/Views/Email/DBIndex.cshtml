@@ -1,0 +1,88 @@
+﻿@using AMS.Areas.Administration.Models.Email
+@model DataBaseEmail
+@{
+    ViewData["Title"] = Resource.EmailConfiguration;
+    Layout = null;
+}
+
+<form asp-action="DBEmail" asp-controller="Email" method="post" id="frm_email_registration_db">
+    @Html.AntiForgeryToken()
+    <div class="form-group row">
+        <div class="col-md-4 form-group">
+            <label class="col-form-label text-lg-right">@Resource.SMTPHost:</label>
+            <div class="input-group">
+                <input asp-for="DBHost" class="form-control" />
+                <div class="input-group-append"><span class="input-group-text"><i class="fas fa-server"></i></span></div>
+            </div>
+            <span class="form-text text-muted">@Resource.ServerForEmail</span>
+            <span asp-validation-for="DBHost" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 form-group">
+            <label class="col-form-label text-lg-right">@Resource.Email:</label>
+            <div class="input-group">
+                <input asp-for="DBEmail" class="form-control" />
+                <div class="input-group-append"><span class="input-group-text"><i class="fas fa-at"></i></span></div>
+            </div>
+            <span class="form-text text-muted">@Resource.SendMailServer</span>
+            <span asp-validation-for="DBEmail" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 form-group">
+            <label class="col-form-label text-lg-right">@Resource.Password:</label>
+            <div class="input-group">
+                <input asp-for="DBPassword" class="form-control" type="text" />
+                <div id="show_password_db" class="input-group-append cursor-pointer"><span class="input-group-text"><i class="fas fa-key"></i></span></div>
+            </div>
+            <span class="form-text text-muted">@Resource.PasswordForMailServer</span>
+            <span asp-validation-for="DBPassword" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 form-group">
+            <label class="col-form-label text-lg-right">@Resource.CC:</label>
+            <div class="input-group">
+                <input asp-for="DBCC" class="form-control" />
+                <div class="input-group-append"><span class="input-group-text"><i class="fas fa-users"></i></span></div>
+            </div>
+            <span class="form-text text-muted">@Resource.CCUsersText</span>
+        </div>
+        <div class="col-md-4 form-group">
+            <label class="col-form-label text-lg-right">@Resource.Port:</label>
+            <div class="input-group">
+                <input asp-for="DBPort" class="form-control" type="text"/>
+                <div class="input-group-append"><span class="input-group-text"><i class="fas fa-handshake"></i></span></div>
+            </div>
+            <span class="form-text text-muted">@Resource.PortForMailServer</span>
+            <span asp-validation-for="DBPort" class="text-danger"></span>
+        </div>
+        <div class="col-md-4 form-group">
+            <label class="col-form-label d-block">@Resource.SSLEnable:</label>
+            <input asp-for="DBSSLEnable" data-switch="true" style="cursor: pointer; width: 90px;" type="checkbox" data-bootstrap-switch-db data-off-color="warning" data-on-color="success" data-handle-width="90" data-on-text="@Html.Raw(Resource.Yes)" data-off-text="@Html.Raw(Resource.No)" />
+            <span class="form-text text-muted">@Resource.EnableSSLForMailServer</span>
+            <span asp-validation-for="DBSSLEnable" class="text-danger"></span>
+        </div>
+    </div>
+    <div class=" float-right">
+        <button class="btn btn-primary" type="submit">@Resource.Save</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $.validator.setDefaults({ ignore: '' });
+        var form_db = $('#frm_email_registration_db');
+        form_db.removeData('validator');
+        form_db.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form_db);
+
+        $('#DBPassword').attr("type", "password");
+
+        $("input[data-bootstrap-switch-db]").bootstrapSwitch();
+
+        $('#show_password_db').on('click', function () {
+            var input = $('#DBPassword');
+            if (input.attr("type") === "password") {
+                input.attr("type", "text");
+            } else {
+                input.attr("type", "password");
+            }
+        });
+    });
+</script>

@@ -17,7 +17,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Sqlite.Query.Internal;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Drawing;
@@ -28,6 +27,7 @@ using System.Runtime.Versioning;
 
 namespace AMS.Controllers;
 
+[Authorize]
 public class BaseController : Controller
 {
     protected readonly SignInManager<ApplicationUser> signInManager;

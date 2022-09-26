@@ -9,6 +9,7 @@ public class StaffPost
 {
     public int MethodType { get; set; }
     public string StaffIde { get; set; }
+    public string UserIde { get; set; }
 
     [Display(Name = "PersonalNumber", ResourceType = typeof(Resource))]
     [RegularExpression(@"^.{10,}$", ErrorMessageResourceName = "MinChar10", ErrorMessageResourceType = typeof(Resource))]

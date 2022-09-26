@@ -31,7 +31,7 @@ public class ExceptionHandlerMiddleware
         db.ChangeTracker.Clear();
         var log = new Log
         {
-            UserId = context.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "",
+            UserId = context.User.FindFirstValue(ClaimTypes.NameIdentifier) ?? null,
             Ip = context.Connection.RemoteIpAddress.ToString() ?? "",
             Controller = context.Request.RouteValues["controller"].ToString() ?? "",
             Action = context.Request.RouteValues["action"].ToString() ?? "",

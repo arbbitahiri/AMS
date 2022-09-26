@@ -1,0 +1,57 @@
+﻿@using AMS.Models.Staff
+@model AddRole
+@inject IDDLRepository repo
+@{
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">@string.Format(Resource.AddRoleFor, Model.Name)</h5>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="ki ki-close"></i>
+    </button>
+</div>
+
+<form asp-action="AddToRole" asp-controller="Staff" id="frm_add_role" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_add_role" role="form">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <input asp-for="UserIde" type="hidden"/>
+
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <label asp-for="Roles" class="required">@Resource.Role</label>
+                <select asp-for="Roles" asp-items="await repo.Roles(user.Language)" autocomplete="off" multiple class="form-control select2">
+                    <option value="">@Resource.Choose</option>
+                </select>
+                <span asp-validation-for="Roles" class="text-danger"></span>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer modal-footer-uniform w-full justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-default" data-bs-dismiss="modal">@Resource.Close</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Set</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function() {
+        var form = $('#frm_add_role');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+
+        $(".select2").select2({
+            width: "100%",
+            language: {
+                noResults: function () {
+                    return '@Html.Raw(Resource.NoResultsFound)';
+                },
+            }
+        });
+    });
+
+    function success_add_role(data) {
+        handle_success(data, SubmitPathType.RELOAD, "");
+    }
+</script>

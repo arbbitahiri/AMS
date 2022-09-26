@@ -73,7 +73,7 @@
     }
 
     function edit(ide) {
-        $('#modal-large').find('.modal-content').load('@Url.Action("_Edit", "SubMenu")?sIde=' + ide, function () {
+        $('#modal-large').find('.modal-content').load('@Url.Action("_Edit", "SubMenu")?sIde=' + ide + '&mIde=', function () {
             $('#modal-large').modal('toggle');
         });
     }

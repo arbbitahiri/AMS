@@ -65,8 +65,7 @@
                 },
                 {
                     data: function(row, type, set) {
-                        var date = new Date(Date.parse(row.insertedDate));
-                        return `${date.getUTCDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+                        return moment(row.insertedDate).format('DD/MM/YYYY');
                     }
                 },
                 {

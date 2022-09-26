@@ -78,7 +78,7 @@
                 <h4 class="card-title">@Resource.NumberOfUsersByGroups</h4>
             </div>
             <div class="card-body">
-                <canvas id="myChart" width="500" height="500"></canvas>
+                <canvas id="myChart"></canvas>
             </div>
         </div>
     </div>
@@ -119,10 +119,8 @@
 
         function render_chart(data) {
             const ctx = document.getElementById('myChart').getContext('2d');
-            ctx.width = 250;
-            ctx.height = 250;
             const myChart = new Chart(ctx, {
-                type: 'pie',
+                type: 'bar',
                 data: {
                     labels: data.map(a => a.Role),
                     datasets: [{
@@ -137,17 +135,30 @@
                     }]
                 },
                 options: {
+                    indexAxis: 'y',
                     responsive: true,
-                    maintainAspectRatio: true,
                     plugins: {
                         legend: {
-                            position: 'top'
+                            position: 'top',
                         },
                         title: {
                             display: false
                         },
                         font: {
                             size: 16
+                        }
+                    },
+                    scales: {
+                        y: {
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                maxRotation: 90,
+                                minRotation: 90
+                            }
                         }
                     }
                 }

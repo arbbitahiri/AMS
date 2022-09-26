@@ -375,6 +375,9 @@
   <data name="Department" xml:space="preserve">
     <value>Departamenti</value>
   </data>
+  <data name="Departments" xml:space="preserve">
+    <value>Departamentet</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Përshkrimi</value>
   </data>
@@ -396,6 +399,9 @@
   <data name="Documents" xml:space="preserve">
     <value>Dokumente</value>
   </data>
+  <data name="Documents1" xml:space="preserve">
+    <value>Dokumentet</value>
+  </data>
   <data name="DocumentType" xml:space="preserve">
     <value>Lloji dokumentit</value>
   </data>
@@ -416,6 +422,12 @@
   </data>
   <data name="EmailConfiguration" xml:space="preserve">
     <value>Konfigurimi i e-mailit</value>
+  </data>
+  <data name="EmailConfigurationForApp" xml:space="preserve">
+    <value>Konfigurimi i e-mailit brenda aplikacionit</value>
+  </data>
+  <data name="EmailConfigurationForDB" xml:space="preserve">
+    <value>Konfigurimi i e-mailit jashtë aplikacionit, njoftime</value>
   </data>
   <data name="EmailExists" xml:space="preserve">
     <value>E-maili ekziston!</value>
@@ -576,6 +588,9 @@
   <data name="ListOfNotifications" xml:space="preserve">
     <value>Lista njoftimeve</value>
   </data>
+  <data name="ListOfRoles" xml:space="preserve">
+    <value>Lista e grupeve</value>
+  </data>
   <data name="ListOfStaffInProcessRegistration" xml:space="preserve">
     <value>Lista e stafit në proces të regjistrimit</value>
   </data>
@@ -699,6 +714,9 @@
   <data name="November" xml:space="preserve">
     <value>Nëntor</value>
   </data>
+  <data name="NumberOfAbsence" xml:space="preserve">
+    <value>Numri i mungesave</value>
+  </data>
   <data name="NumberOfAttendance" xml:space="preserve">
     <value>Numri pjesëmarrjes</value>
   </data>
@@ -818,6 +836,9 @@
   </data>
   <data name="RoleExists" xml:space="preserve">
     <value>Grupi ekziston!</value>
+  </data>
+  <data name="RoleRemovedSuccess" xml:space="preserve">
+    <value>Grupi u largua me sukses!</value>
   </data>
   <data name="Roles" xml:space="preserve">
     <value>Grupet</value>
@@ -960,6 +981,9 @@
   <data name="SureYouWantToLockUser" xml:space="preserve">
     <value>A jeni i sigurt për bllokimin e përdoruesit?</value>
   </data>
+  <data name="SureYouWantToRemoveRole" xml:space="preserve">
+    <value>A jeni i sigurt për të larguar grupin?</value>
+  </data>
   <data name="SureYouWantToUnlockUser" xml:space="preserve">
     <value>A jeni i sigurt për zhbllokimin e përdoruesit?</value>
   </data>
@@ -968,6 +992,15 @@
   </data>
   <data name="Tables" xml:space="preserve">
     <value>Tabelat</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Taget</value>
+  </data>
+  <data name="TagsEN" xml:space="preserve">
+    <value>Taget në anglisht (të ndara me presje)</value>
+  </data>
+  <data name="TagsSQ" xml:space="preserve">
+    <value>Taget në shqip (të ndara me presje)</value>
   </data>
   <data name="ThereHasBeenSystemError" xml:space="preserve">
     <value>Ka ndodhur një gabim në sistem.</value>
