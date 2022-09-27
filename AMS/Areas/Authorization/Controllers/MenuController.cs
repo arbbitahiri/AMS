@@ -71,8 +71,8 @@ public class MenuController : BaseController
             Action = create.Action,
             OrdinalNumber = create.OrdinalNumber,
             OpenFor = create.OpenFor,
-            TagsSq = create.TagsSQ,
-            TagsEn = create.TagsEN,
+            //TagsSq = create.TagsSQ,
+            //TagsEn = create.TagsEN,
             InsertedFrom = user.Id,
             InsertedDate = DateTime.Now
         });
@@ -128,8 +128,8 @@ public class MenuController : BaseController
         menu.Action = edit.Action;
         menu.OrdinalNumber = edit.OrdinalNumber;
         menu.OpenFor = edit.OpenFor;
-        menu.TagsSq = edit.TagsSQ;
-        menu.TagsEn = edit.TagsEN;
+        //menu.TagsSq = edit.TagsSQ;
+        //menu.TagsEn = edit.TagsEN;
         menu.UpdatedFrom = user.Id;
         menu.UpdatedDate = DateTime.Now;
         menu.UpdatedNo = UpdateNo(menu.UpdatedNo);

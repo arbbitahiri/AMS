@@ -1092,4 +1092,7 @@
   <data name="TagsSQ" xml:space="preserve">
     <value>Tags in albanian (comma separated)</value>
   </data>
+  <data name="SureYouWantToDeleteStaffCannotReturn" xml:space="preserve">
+    <value>Deleted staff cannot be restored. Are you sure you want to delete staff?</value>
+  </data>
 </root>

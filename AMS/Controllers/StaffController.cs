@@ -46,7 +46,7 @@ public class StaffController : BaseController
         var lastName = string.IsNullOrEmpty(search.Lastname) ? search.Lastname : search.Lastname.ToLower();
 
         var staffList = await db.Staff
-            .Where(a => a.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId != (int)Status.Deleted)
+            .Where(a => a.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished)
                 && a.StaffDepartment.Any(b => b.DepartmentId == (search.Department ?? b.DepartmentId))
                 && a.StaffDepartment.Any(b => b.StaffTypeId == (search.StaffType ?? b.StaffTypeId))
                 && a.StaffDepartment.Any(b => b.EndDate.Date >= DateTime.Now.Date)
@@ -54,6 +54,7 @@ public class StaffController : BaseController
                 && (string.IsNullOrEmpty(search.Firstname) || a.FirstName.ToLower().Contains(firstName))
                 && (string.IsNullOrEmpty(search.Lastname) || a.LastName.ToLower().Contains(lastName)))
             .AsSplitQuery()
+            .OrderBy(a => a.FirstName).ThenBy(a => a.LastName)
             .Select(a => new StaffDetails
             {
                 Ide = CryptoSecurity.Encrypt(a.StaffId),
@@ -585,8 +586,6 @@ public class StaffController : BaseController
             var staffName = await db.Staff.Where(a => a.StaffId == staffId).Select(a => $"{a.FirstName} {a.LastName}").FirstOrDefaultAsync();
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = string.Format(Resource.StaffExistsWithRole, staffName) });
         }
-
-        var userId = await db.Staff.Where(a => a.StaffId == staffId).Select(a => a.UserId).FirstOrDefaultAsync();
 
         var newStaffDepartment = new StaffDepartment
         {

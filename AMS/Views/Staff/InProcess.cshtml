@@ -74,7 +74,7 @@
                             '<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                             '<div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">' +
                             '<button type="button" class="dropdown-item cursor-pointer" onclick="edit_staff(\'' + row.ide + '\')">@Html.Raw(ActionButton.Edit.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Edit</span></button>' +
-                            '<button type="button" class="dropdown-item cursor-pointer" onclick="delete_staff(\'' + row.ide + '\')">@Html.Raw(ActionButton.Delete.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Delete</span></button>' +
+                            '<button type="button" class="dropdown-item cursor-pointer" onclick="delete_process_staff(\'' + row.ide + '\')">@Html.Raw(ActionButton.Delete.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Delete</span></button>' +
                             '</div></div>';
                         return dropdown;
                     }
@@ -83,7 +83,7 @@
         });
     }
 
-    function delete_staff(ide) {
+    function delete_process_staff(ide) {
         Swal.fire({
             title: "@Html.Raw(Resource.AreYouSure)",
             text: "@Html.Raw(Resource.SureYouWantToDeleteStaff)",

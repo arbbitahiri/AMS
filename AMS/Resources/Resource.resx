@@ -972,6 +972,9 @@
   <data name="SureYouWantToDeleteStaff" xml:space="preserve">
     <value>A jeni i sigurt për fshirjen e stafit?</value>
   </data>
+  <data name="SureYouWantToDeleteStaffCannotReturn" xml:space="preserve">
+    <value>Stafin e fshirë nuk mund ta ktheni. A jeni i sigurt për fshirjen e stafit?</value>
+  </data>
   <data name="SureYouWantToDeleteSubMenu" xml:space="preserve">
     <value>A jeni i sigurt për fshirjen e nënmenysë?</value>
   </data>

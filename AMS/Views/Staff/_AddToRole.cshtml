@@ -21,7 +21,6 @@
             <div class="col-md-12 form-group">
                 <label asp-for="Roles" class="required">@Resource.Role</label>
                 <select asp-for="Roles" asp-items="await repo.Roles(user.Language)" autocomplete="off" multiple class="form-control select2">
-                    <option value="">@Resource.Choose</option>
                 </select>
                 <span asp-validation-for="Roles" class="text-danger"></span>
             </div>
@@ -29,7 +28,7 @@
 
     </div>
     <div class="modal-footer modal-footer-uniform w-full justify-content-between">
-        <button type="button" class="btn btn-bold btn-pure btn-default" data-bs-dismiss="modal">@Resource.Close</button>
+        <button type="button" class="btn btn-bold btn-pure btn-secondary" data-bs-dismiss="modal">@Resource.Close</button>
         <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Set</button>
     </div>
 </form>

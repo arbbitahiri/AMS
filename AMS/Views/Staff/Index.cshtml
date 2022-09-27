@@ -108,8 +108,8 @@
     <div class="card-header">
         <h3 class="card-title">@Resource.ListOfStaffInProcessRegistration</h3>
         <div class="card-toolbar">
-            <button type="button" class="btn btn-icon btn-sm btn-hover-light-primary mr-1" data-card-tool="toggle" data-toggle="tooltip" data-placement="top" title="Toggle Card"><i class="ki ki-arrow-down icon-nm"></i></button>
-            <button type="button" class="btn btn-icon btn-sm btn-hover-light-primary mr-1" data-card-tool="reload" data-toggle="tooltip" data-placement="top" title="Toggle Card"><i class="ki ki-reload icon-nm"></i></button>
+            <button type="button" class="btn btn-icon btn-sm btn-hover-light-primary mr-1" data-card-tool="toggle"><i class="ki ki-arrow-down icon-nm"></i></button>
+            <button type="button" class="btn btn-icon btn-sm btn-hover-light-primary mr-1" data-card-tool="reload"><i class="ki ki-reload icon-nm"></i></button>
         </div>
     </div>
     <div class="card-body" id="kt_load_tbl" style="display: none; overflow: hidden; padding-top: 0px; padding-bottom: 0px;">
@@ -212,6 +212,7 @@
                                 '<div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">' +
                                 '<button type="button" class="dropdown-item cursor-pointer" onclick="staff_profile(\'' + row.ide + '\')">@Html.Raw(ActionButton.Profile.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Profile</span></button>' +
                                 '<button type="button" class="dropdown-item cursor-pointer" onclick="edit_staff(\'' + row.ide + '\')">@Html.Raw(ActionButton.Edit.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Edit</span></button>' +
+                                '<button type="button" class="dropdown-item cursor-pointer" onclick="delete_staff(\'' + row.ide + '\')">@Html.Raw(ActionButton.Delete.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Delete</span></button>' +
                                 '</div></div>';
                             return dropdown;
                         }
@@ -226,6 +227,28 @@
 
         function edit_staff(ide) {
             window.location.href = '@Url.Action("Register", "Staff")?ide=' + ide;
+        }
+
+        function delete_staff(ide) {
+            Swal.fire({
+                title: "@Html.Raw(Resource.AreYouSure)",
+                text: "@Html.Raw(Resource.SureYouWantToDeleteStaffCannotReturn)",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: "@Resource.Yes",
+                cancelButtonText: "@Resource.No"
+            }).then((result) => {
+                if (result.value) {
+                    $.post('@Url.Action("Delete", "Staff")', {
+                        ide: ide,
+                        __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                    }, function (data) {
+                        handle_success(data, SubmitPathType.RELOAD, "");
+                    });
+                }
+            });
         }
 
         function get_report(type) {

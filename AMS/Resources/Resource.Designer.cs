@@ -2626,6 +2626,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stafin e fshirë nuk mund ta ktheni. A jeni i sigurt për fshirjen e stafit?.
+        /// </summary>
+        public static string SureYouWantToDeleteStaffCannotReturn {
+            get {
+                return ResourceManager.GetString("SureYouWantToDeleteStaffCannotReturn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A jeni i sigurt për fshirjen e nënmenysë?.
         /// </summary>
         public static string SureYouWantToDeleteSubMenu {

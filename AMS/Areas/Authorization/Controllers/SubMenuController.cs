@@ -101,8 +101,8 @@ public class SubMenuController : BaseController
             Action = create.Action,
             OrdinalNumber = create.OrdinalNumber,
             OpenFor = create.OpenFor,
-            TagsSq = create.TagsSQ,
-            TagsEn = create.TagsEN,
+            //TagsSq = create.TagsSQ,
+            //TagsEn = create.TagsEN,
             InsertedFrom = user.Id,
             InsertedDate = DateTime.Now
         });
@@ -160,8 +160,8 @@ public class SubMenuController : BaseController
         subMenu.Action = edit.Action;
         subMenu.OrdinalNumber = edit.OrdinalNumber;
         subMenu.OpenFor = edit.OpenFor;
-        subMenu.TagsSq = edit.TagsSQ;
-        subMenu.TagsEn = edit.TagsEN;
+        //subMenu.TagsSq = edit.TagsSQ;
+        //subMenu.TagsEn = edit.TagsEN;
         subMenu.UpdatedFrom = user.Id;
         subMenu.UpdatedDate = DateTime.Now;
         subMenu.UpdatedNo = UpdateNo(subMenu.UpdatedNo);

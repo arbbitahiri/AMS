@@ -37,15 +37,13 @@ const StatusType = {
 var arrows = {
     leftArrow: '<i class="la la-angle-left"></i>',
     rightArrow: '<i class="la la-angle-right"></i>'
-};
+}
 
 $(document).ready(function () {
-    $('.fade-in').hide().fadeIn(2000);
-    console.log('/culture/general/' + culture + '.json');
-    resources = $.getJSON('/culture/general/' + culture + '.json', function () {
+    resources = $.getJSON('/culture/general/' + culture + '.json');
 
-    });
-    console.log("resources: " + resources);
+    $('.fade-in').hide().fadeIn(2000);
+
     if (culture == 'sq-AL') {
         $("input[type='text']").prop('spellcheck', false);
         $('textarea').prop('spellcheck', false);
@@ -53,23 +51,6 @@ $(document).ready(function () {
         $("input[type='text']").prop('spellcheck', true);
         $('textarea').prop('spellcheck', true);
     }
-
-    var pageLength = $('table').attr('data-length');
-    if ($('table[data-length]').text() == '') {
-        pageLength = 10
-    } else {
-        pageLength = parseInt(pageLength);
-    }
-
-    $('table:not(.no-datatable)').DataTable({
-        language: {
-            url: "/Internationalisation/Datatables/" + culture + ".json"
-        },
-        keys: true,
-        responsive: true,
-        lengthChange: false,
-        pageLength: pageLength
-    });
 
     $.fn.datepicker.dates.sq = {
         days: ["E dielë", "E hënë", "E martë", "E mërkurë", "E enjte", "E premte", "E shtunë"],
@@ -142,21 +123,21 @@ function handle_success(data, path_type, path) {
             icon: 'warning',
             title: data.title,
             text: data.description,
-            confirmButtonText: 'Okay'
+            confirmButtonText: resources.responseJSON.Okay
         });
     } else if (data.status == ErrorStatus.ERROR) {
         Swal.fire({
             icon: 'error',
             title: data.title,
             text: data.description,
-            confirmButtonText: 'Okay'
+            confirmButtonText: resources.responseJSON.Okay
         });
     } else if (data.status == ErrorStatus.INFO) {
         Swal.fire({
             icon: 'info',
             title: data.title,
             text: data.description,
-            confirmButtonText: 'Okay'
+            confirmButtonText: resources.responseJSON.Okay
         });
     }
 }
@@ -175,9 +156,9 @@ $(document).ajaxError(function (error) {
     if (error.handleObj.handler.arguments[1].status == 403) {
         Swal.fire({
             icon: 'error',
-            title: resources.responseJSON["AccessDenied"],
-            text: resources.responseJSON["AccessDeniedLong"],
-            confirmButtonText: resources.responseJSON["Okay"]
+            title: resources.responseJSON.AccessDenied,
+            text: resources.responseJSON.AccessDeniedLong,
+            confirmButtonText: resources.responseJSON.Okay
         });
     } else if (error.handleObj.handler.arguments[1].status == 0) {
         // ajax from ajax
@@ -186,9 +167,9 @@ $(document).ajaxError(function (error) {
     } else {
         Swal.fire({
             icon: 'error',
-            title: resources.responseJSON["Error"],
-            text: resources.responseJSON["ErrorProcessingData"],
-            confirmButtonText: resources.responseJSON["Okay"]
+            title: resources.responseJSON.Error,
+            text: resources.responseJSON.ErrorProcessingData,
+            confirmButtonText: resources.responseJSON.Okay
         });
     }
 });
@@ -197,9 +178,9 @@ $(document).on('invalid-form.validate', 'form', function () {
     hide_loading();
 });
 
-$(document).ajaxStart(function () {
-    Pace.restart();
-});
+//$(document).ajaxStart(function () {
+//    Pace.restart();
+//});
 
 function change_role(ide) {
     show_loading();
