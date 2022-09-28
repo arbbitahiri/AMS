@@ -13,12 +13,12 @@
 }
 
 <div class="d-flex flex-row">
-    <div class="flex-row-auto offcanvas-mobile w-300px w-xl-350px">
-        <div class="card card-custom gutter-b">
+    <div id="kt_profile_aside" class="flex-row-auto offcanvas-mobile w-300px w-xl-350px">
+        <div class="card card-custom card-stretch">
             <div class="card-body pt-10 pb-0">
                 <div class="d-flex align-items-center">
                     <div class="symbol symbol-60 symbol-xxl-100 mr-5 align-self-start align-self-xxl-center">
-                        <div class="symbol-label shadow" style="background-image:url('../../../../../@Url.Content(Model.ProfileImage ?? "assets2/media/users/default.jpg")')"></div>
+                        <div id="kt_profile_avatar" class="symbol-label shadow" style="background-image:url('../../../../../@Url.Content(Model.ProfileImage ?? "assets2/media/users/default.jpg")')"></div>
                     </div>
                     <div>
                         <a href="#" class="font-weight-bolder font-size-h5 text-dark-75 text-hover-primary">@Model.FirstName @Model.LastName</a>
@@ -234,7 +234,33 @@
                 $(this).tab('show')
                 return false;
             });
+
+            KTProfile.init();
         });
+
+        var KTProfile = function () {
+            var avatar;
+            var offcanvas;
+
+            var init_aside = function () {
+                offcanvas = new KTOffcanvas('kt_profile_aside', {
+                    overlay: true,
+                    baseClass: 'offcanvas-mobile',
+                    toggleBy: 'kt_subheader_mobile_toggle'
+                });
+            }
+
+            var init_form = function () {
+                avatar = new KTImageInput('kt_profile_avatar');
+            }
+
+            return {
+                init: function () {
+                    init_aside();
+                    init_form();
+                }
+            }
+        }();
 
         function load_more(e) {
             $(e).parent().find('.load-less-fst').removeClass('d-none');
