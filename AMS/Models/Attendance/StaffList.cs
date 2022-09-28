@@ -10,6 +10,7 @@ public class StaffList
     public DateTime BirthDate { get; set; }
     public string Department { get; set; }
     public string StaffType { get; set; }
+    public string AbsentType { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public bool Attended { get; set; }

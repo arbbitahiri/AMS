@@ -13,8 +13,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Reporting.NETCore;
-using NuGet.ContentModel;
-using System.Globalization;
 
 namespace AMS.Controllers;
 
@@ -85,6 +83,39 @@ public class AttendanceController : BaseController
                 WorkingSince = a.WorkingSince,
             }).ToList();
         return Json(attendance);
+    }
+
+    #endregion
+
+    #region Absence
+
+    [Authorize(Policy = "8:m"), Description("Arb Tahiri", "Form to display list of staff attendance.")]
+    public IActionResult SearchAbsence() => View();
+
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "8:r")]
+    [Description("Arb Tahiri", "Form to display list of staff attendance.")]
+    public async Task<IActionResult> SearchAbsence(SearchAbsence search)
+    {
+        var absence = await db.StaffAttendance
+            .Where(a => a.Active && a.Absent
+                && a.Staff.StaffRegistrationStatus.Any(b => b.Active && b.StatusTypeId == (int)Status.Finished)
+                && a.StaffId == (search.BStaffId ?? a.StaffId)
+                && a.Staff.StaffDepartment.Any(b => b.DepartmentId == (search.BDepartmentId ?? b.DepartmentId))
+                && a.Staff.StaffDepartment.Any(b => b.StaffTypeId == (search.BStaffTypeId ?? b.StaffTypeId))
+                && a.AbsentTypeId == (search.BAbsentTypeId ?? a.AbsentTypeId)
+                && (!search.BInsertedDate.HasValue || a.InsertedDate.Date == search.BInsertedDate.Value.Date))
+            .Select(a => new StaffList
+            {
+                StaffAttendanceIde = CryptoSecurity.Encrypt(a.StaffAttendanceId),
+                PersonalNumber = a.Staff.PersonalNumber,
+                FirstName = a.Staff.FirstName,
+                LastName = a.Staff.LastName,
+                Department = string.Join(",", a.Staff.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).ToList()),
+                StaffType = string.Join(",", a.Staff.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.StaffType.NameSq : a.StaffType.NameEn).ToList()),
+                StartDate = a.InsertedDate,
+                AbsentType = user.Language == LanguageEnum.Albanian ? a.AbsentType.NameSq : a.AbsentType.NameEn
+            }).ToListAsync();
+        return Json(absence);
     }
 
     #endregion
@@ -234,8 +265,7 @@ public class AttendanceController : BaseController
                 StaffName = $"{a.Staff.FirstName} {a.Staff.LastName} - ({a.Staff.PersonalNumber})",
                 AttendanceDate = a.InsertedDate.ToString("dd/MM/yyyy"),
                 AbsentTypeId = a.AbsentTypeId,
-                Description = a.Description,
-                Absent = a.Absent
+                Description = a.Description
             }).FirstOrDefaultAsync();
         return PartialView(attendance);
     }

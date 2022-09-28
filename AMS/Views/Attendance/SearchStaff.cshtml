@@ -36,11 +36,11 @@
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6 form-group">
                     <label class="invisible">//</label>
-                    <button type="submit" id="btn_search_a" class="btn btn-primary btn-block">@Resource.Search</button>
+                    <button type="submit" id="btn_search_s" class="btn btn-primary btn-block">@Resource.Search</button>
                 </div>
                 <div class="col-lg-3 col-md-4 col-sm-6 form-group">
                     <label class="invisible">//</label>
-                    <button type="button" id="btn_clear_a" class="btn btn-secondary btn-block">@Resource.Clear</button>
+                    <button type="button" id="btn_clear_s" class="btn btn-secondary btn-block">@Resource.Clear</button>
                 </div>
             </div>
         </form>
@@ -103,21 +103,21 @@
             }
         });
 
-        change_staff_a();
+        change_staff_s();
 
-        $('#btn_clear_a').on('click', function() {
+        $('#btn_clear_s').on('click', function () {
             $('#frm_search_staff').trigger("reset");
             $('form select').each(function() {
                 $(this).val('').change();
             });
         });
 
-        $('#btn_search_a').on('click', function() {
+        $('#btn_search_s').on('click', function() {
             $('#kt_staff_search').removeClass('d-none');
         });
     });
 
-    function change_staff_a() {
+    function change_staff_s() {
         $('#SStaffId').select2({
             width: "100%",
             language: {
@@ -177,7 +177,7 @@
                 {
                     data: function (data, type, row, meta) {
                         row_count++;
-                        return meta.row + meta.settings._iDisplayStart + 1;
+                        return meta.row + 1;
                     }
                 },
                 {
@@ -223,7 +223,7 @@
     }
 
     function change_attendance(e, ide, ws, rc) {
-        if (ws >= 1) {
+        if (ws >= 14) {
             Swal.fire({
                 icon: 'warning',
                 title: '@Html.Raw(Resource.Warning)',
@@ -239,11 +239,12 @@
                 attended: $(e).is(":checked"),
                 __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
             }, function (data) {
+                var no1 = $('#spn_working_' + rc).text().split(' ')[0];
                 var no = $('#spn_working_' + rc).text().split(' ')[0];
                 var new_no = $(e).is(":checked") ? ++no : --no
                 var span_text = new_no = 1 ? new_no + ' @Html.Raw(Resource.Day.ToLower())' : new_no + ' @Html.Raw(Resource.Days.ToLower())';
-                var span_label = no == 0 ? 'label-warning' : (no < 14 ? 'label-success' : 'label-danger');
-                var new_span_label = new_no == 0 ? 'label-warning' : (new_no < 14 ? 'label-success' : 'label-danger');
+                var span_label = no1 == 0 ? 'label-warning' : (no1 < 14 ? 'label-success' : 'label-danger');
+                var new_span_label = no == 0 ? 'label-warning' : (no < 14 ? 'label-success' : 'label-danger');
 
                 $('#spn_working_' + rc).text(span_text);
                 $('#spn_working_' + rc).removeClass(span_label).addClass(new_span_label);
@@ -257,13 +258,13 @@
         $('#frm_search_staff').attr('data-ajax', false);
         $('#frm_search_staff').attr('action', '@Url.Action("ReportStaff", "Attendance")');
         $('#frm_search_staff').attr('target', '_blank');
-        $('#frm_search_staff').addClass('noLoading');
+        $('#frm_search_staff').addClass('no-loading');
         $('#stype').val(type);
         $('#frm_search_staff').submit();
         $('#frm_search_staff').attr('data-ajax', true);
         $('#frm_search_staff').attr('action', '@Url.Action("SearchAttendance", "Attendance")');
         $('#frm_search_staff').removeAttr('target');
-        $('#frm_search_staff').removeClass('noLoading');
+        $('#frm_search_staff').removeClass('no-loading');
     }
 
     function get_report_staff(ide) {

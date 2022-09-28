@@ -6,6 +6,7 @@ using AMS.Resources;
 using AMS.Utilities;
 using AMS.Utilities.General;
 using AMS.Utilities.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -49,8 +50,9 @@ public class HomeController : BaseController
         {
             StaffCount = await db.Staff.CountAsync(a => a.StaffDepartment.Any(a => a.EndDate.Date >= DateTime.Now.Date)),
             DocumentsCount = await db.StaffDocument.CountAsync(),
-            AttendanceCount = await db.StaffAttendance.CountAsync(a => a.InsertedDate.Date == DateTime.Now.Date),
-            WorkingSince = (await function.AttendanceConsecutiveDays(staffId, null, null, null, null, user.Language)).Select(a => a.WorkingSince).FirstOrDefault(),
+            AttendanceCount = await db.StaffAttendance.CountAsync(a => a.Active && !a.Absent && a.InsertedDate.Date == DateTime.Now.Date),
+            AbsenceCount = await db.StaffAttendance.CountAsync(a => a.Active && a.Absent && a.InsertedDate.Date == DateTime.Now.Date),
+            WorkingSince = (await function.StaffConsecutiveDays(staffId, null, null, user.Language)).Select(a => a.WorkingSince).FirstOrDefault(),
             WeekAttandance = await db.StaffAttendance
                 .Where(a => a.Active && DateTime.Now.Date.AddDays(-7) <= a.InsertedDate.Date && a.InsertedDate.Date <= DateTime.Now.Date.AddDays(-1))
                 .GroupBy(a => a.InsertedDate.Date)
@@ -143,6 +145,30 @@ public class HomeController : BaseController
         await db.Notification.Where(a => a.Receiver == user.Id && !a.Deleted).ForEachAsync(a => a.Deleted = true);
         await db.SaveChangesAsync();
         return Json(true);
+    }
+
+    #endregion
+
+    #region Search
+
+    [HttpGet, Authorize(Policy = "1:s"), Description("Arb Tahiri", "Action to search for actions in application")]
+    public IActionResult Search() => PartialView();
+
+    [HttpPost, Authorize(Policy = "1:s"), ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "Action to search for actions in application")]
+    public async Task<IActionResult> SearchResult(string title)
+    {
+        var result = (await function.SearchApplication(title, user.Id, user.Language))
+            .Select(a => new SearchList
+            {
+                Icon = a.Icon,
+                MenuTitle = a.MenuTitle,
+                SubMenuTitle = a.SubMenuTitle,
+                Area = a.Area,
+                Controller = a.Controller,
+                Action = a.Action
+            }).ToList();
+        return PartialView(result);
     }
 
     #endregion

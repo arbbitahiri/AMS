@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Absences" xml:space="preserve">
+    <value>Mungesat</value>
+  </data>
   <data name="AbsentType" xml:space="preserve">
     <value>Lloji mungesës</value>
   </data>
@@ -570,6 +573,9 @@
   <data name="LightMode" xml:space="preserve">
     <value>Ndriçuar</value>
   </data>
+  <data name="ListOfAbsences" xml:space="preserve">
+    <value>Lista e mungesave</value>
+  </data>
   <data name="ListOfAppSettings" xml:space="preserve">
     <value>Lista e parametrave të aplikacionit</value>
   </data>
@@ -716,6 +722,9 @@
   </data>
   <data name="NumberOfAbsence" xml:space="preserve">
     <value>Numri i mungesave</value>
+  </data>
+  <data name="NumberOfAbsencesToday" xml:space="preserve">
+    <value>Numri mungesave sot</value>
   </data>
   <data name="NumberOfAttendance" xml:space="preserve">
     <value>Numri pjesëmarrjes</value>

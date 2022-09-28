@@ -70,6 +70,28 @@ public class ProfileController : BaseController
         return PartialView(attendance);
     }
 
+    [HttpGet, Description("Arb Tahiri", "Form to display list of attendance for staff.")]
+    public async Task<IActionResult> _Absence(string ide)
+    {
+        int staffId = CryptoSecurity.Decrypt<int>(ide);
+        var absences = await db.StaffAttendance
+            .Where(a => a.Active && a.Absent && a.StaffId == staffId)
+            .Select(a => new AbsenceDetails
+            {
+                StaffAttendanceIde = CryptoSecurity.Encrypt(a.StaffAttendanceId),
+                InsertedDate = a.InsertedDate,
+                AbsenceType = user.Language == LanguageEnum.Albanian ? a.AbsentType.NameSq : a.AbsentType.NameEn,
+                Description = a.Description
+            }).ToListAsync();
+
+        var absence = new AbsenceVM
+        {
+            StaffIde = ide,
+            Absences = absences.OrderByDescending(a => a.InsertedDate).ToList()
+        };
+        return PartialView(absence);
+    }
+
     [HttpGet, Description("Arb Tahiri", "Form to display list of departments for staff.")]
     public async Task<IActionResult> _Department(string ide)
     {

@@ -61,6 +61,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mungesat.
+        /// </summary>
+        public static string Absences {
+            get {
+                return ResourceManager.GetString("Absences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lloji mungesës.
         /// </summary>
         public static string AbsentType {
@@ -1420,6 +1429,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lista e mungesave.
+        /// </summary>
+        public static string ListOfAbsences {
+            get {
+                return ResourceManager.GetString("ListOfAbsences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lista e parametrave të aplikacionit.
         /// </summary>
         public static string ListOfAppSettings {
@@ -1857,6 +1875,15 @@ namespace AMS.Resources {
         public static string NumberOfAbsence {
             get {
                 return ResourceManager.GetString("NumberOfAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Numri mungesave sot.
+        /// </summary>
+        public static string NumberOfAbsencesToday {
+            get {
+                return ResourceManager.GetString("NumberOfAbsencesToday", resourceCulture);
             }
         }
         

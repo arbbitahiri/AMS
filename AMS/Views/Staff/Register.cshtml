@@ -125,6 +125,12 @@
             form.removeData('unobtrusiveValidation');
             $.validator.unobtrusive.parse(form);
 
+            if (culture == 'sq-AL') {
+                $("input[type='text']").prop('spellcheck', false);
+            } else {
+                $("input[type='text']").prop('spellcheck', true);
+            }
+
             $('#PhoneNumber').inputmask("mask", {
                 mask: "+(999) 99 999-999",
                 removeMaskOnSubmit: true,

@@ -142,7 +142,7 @@ function handle_success(data, path_type, path) {
     }
 }
 
-$(document).on('submit', 'form:not(.noLoading)', function () {
+$(document).on('submit', 'form:not(.no-loading)', function () {
     show_loading();
     $(this).find('button[type="submit"]').attr('disabled', 'disabled');
 });
@@ -177,10 +177,6 @@ $(document).ajaxError(function (error) {
 $(document).on('invalid-form.validate', 'form', function () {
     hide_loading();
 });
-
-//$(document).ajaxStart(function () {
-//    Pace.restart();
-//});
 
 function change_role(ide) {
     show_loading();
@@ -311,4 +307,8 @@ function format_repo(repo) {
 
 function format_repo_selection(repo) {
     return repo.text;
+}
+
+function quick_search() {
+    $('#kt_quick_search_result').load('/Home/Search');
 }

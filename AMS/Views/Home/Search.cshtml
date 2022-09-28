@@ -1,0 +1,71 @@
+﻿<div id="kt_search_form" class="quick-search quick-search-dropdown">
+    <form asp-action="SearchResult" asp-controller="Home" method="post" id="frm_quick_search" class="quick-search-form no-loading" autocomplete="off"
+          data-ajax="true" data-ajax-begin="begin_search" data-ajax-complete="complete_search" data-ajax-update="#search_result">
+        <input type="hidden" />
+        @Html.AntiForgeryToken()
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">
+                    <span class="svg-icon svg-icon-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <rect x="0" y="0" width="24" height="24" />
+                                <path d="M14.2928932,16.7071068 C13.9023689,16.3165825 13.9023689,15.6834175 14.2928932,15.2928932 C14.6834175,14.9023689 15.3165825,14.9023689 15.7071068,15.2928932 L19.7071068,19.2928932 C20.0976311,19.6834175 20.0976311,20.3165825 19.7071068,20.7071068 C19.3165825,21.0976311 18.6834175,21.0976311 18.2928932,20.7071068 L14.2928932,16.7071068 Z" fill="#000000" fill-rule="nonzero" opacity="0.3" />
+                                <path d="M11,16 C13.7614237,16 16,13.7614237 16,11 C16,8.23857625 13.7614237,6 11,6 C8.23857625,6 6,8.23857625 6,11 C6,13.7614237 8.23857625,16 11,16 Z M11,18 C7.13400675,18 4,14.8659932 4,11 C4,7.13400675 7.13400675,4 11,4 C14.8659932,4 18,7.13400675 18,11 C18,14.8659932 14.8659932,18 11,18 Z" fill="#000000" fill-rule="nonzero" />
+                            </g>
+                        </svg>
+                    </span>
+                </span>
+            </div>
+            <input name="title" id="txt_title" type="text" class="form-control" placeholder="@Resource.Search" data-kt-search-element="input" />
+            <div class="input-group-append spinner-sm spinner-primary" id="kt_group_append">
+                <span class="input-group-text">
+                    <i class="quick-search-close ki ki-close icon-sm text-muted" id="kt_close_search" style="display: none;"></i>
+                </span>
+            </div>
+        </div>
+    </form>
+    <div id="search_result" class="quick-search-wrapper scroll scroll-pull" data-scroll="true" data-wheel-propagation="true" data-height="300" data-mobile-height="200" style="height: auto; max-height: 300px; overflow: hidden; overflow-y: scroll;">
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#frm_quick_search').on('keyup keypress', function (e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $('#txt_title').on('keyup keypress', function (e) {
+            var keyCode = e.keyCode || e.which;
+            if (keyCode === 13) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $('#txt_title').bind('keyup', function () {
+            $('#frm_quick_search').delay(100).submit();
+        });
+
+        $('#kt_close_search').on('click', function () {
+            $('#frm_quick_search').trigger('reset');
+            $('#kt_search_form').removeClass('quick-search-has-result');
+        });
+    });
+
+    function begin_search() {
+        $('#kt_close_search').hide(100);
+        $('#kt_group_append').addClass('spinner');
+    }
+
+    function complete_search() {
+        $('#kt_group_append').removeClass('spinner');
+        $('#kt_close_search').show(100);
+        $('#kt_search_form').addClass('quick-search-has-result');
+    }
+</script>
+

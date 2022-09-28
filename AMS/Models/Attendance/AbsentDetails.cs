@@ -10,7 +10,6 @@ public class AbsentDetails
     public string StaffName { get; set; }
 
     [Display(Name = "Date", ResourceType = typeof(Resource))]
-    [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string AttendanceDate { get; set; }
 
     [Display(Name = "AbsentType", ResourceType = typeof(Resource))]
@@ -20,8 +19,6 @@ public class AbsentDetails
     [Display(Name = "Description", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
     public string Description { get; set; }
-
-    public bool Absent { get; set; }
 
     public int? AbsentId { get; set; }
 }

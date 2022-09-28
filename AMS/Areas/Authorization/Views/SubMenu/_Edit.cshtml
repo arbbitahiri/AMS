@@ -77,6 +77,18 @@
                 <span asp-validation-for="Active" class="text-danger"></span>
             </div>
         </div>
+        <div class="row form-group">
+            <div class="col-md-6">
+                <label asp-for="TagsSQ" class="required"></label>
+                <input asp-for="TagsSQ" class="tagify form-control" />
+                <span asp-validation-for="TagsSQ" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="TagsEN" class="required"></label>
+                <input asp-for="TagsEN" class="tagify form-control" />
+                <span asp-validation-for="TagsEN" class="text-danger"></span>
+            </div>
+        </div>
     </div>
     <div class="modal-footer modal-footer-uniform w-full justify-content-between">
         <button type="button" class="btn btn-bold btn-pure btn-secondary" data-bs-dismiss="modal">@Resource.Close</button>
@@ -92,6 +104,35 @@
         $.validator.unobtrusive.parse(form);
 
         $('#lbl_active').text('');
+
+        var input_sq = $('#TagsSQ');
+        var input_en = $('#TagsEN');
+
+        var tagify_sq = new Tagify(input_sq, {
+            delimiters: ",",
+            transformTag: transform_tag,
+            originalInputValueFormat: valuesArr => valuesArr.map(a => a.value).join(',')
+        });
+
+        var tagify_en = new Tagify(input_en, {
+            delimiters: ",",
+            transformTag: transform_tag,
+            originalInputValueFormat: valuesArr => valuesArr.map(a => a.value).join(',')
+        });
+
+        function transform_tag(tagData) {
+            var states = [
+                'success',
+                'primary',
+                'danger',
+                'warning',
+                'dark',
+                'primary',
+                'info'
+            ];
+
+            tagData.class = 'tagify__tag tagify__tag--' + states[KTUtil.getRandomInt(0, 7)];
+        }
     });
 
     function go_back(ide) {

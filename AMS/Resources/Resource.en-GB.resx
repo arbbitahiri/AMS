@@ -1095,4 +1095,13 @@
   <data name="SureYouWantToDeleteStaffCannotReturn" xml:space="preserve">
     <value>Deleted staff cannot be restored. Are you sure you want to delete staff?</value>
   </data>
+  <data name="Absences" xml:space="preserve">
+    <value>Absences</value>
+  </data>
+  <data name="NumberOfAbsencesToday" xml:space="preserve">
+    <value>Number of absences today</value>
+  </data>
+  <data name="ListOfAbsences" xml:space="preserve">
+    <value>List of absences</value>
+  </data>
 </root>

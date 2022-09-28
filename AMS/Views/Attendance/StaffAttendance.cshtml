@@ -94,6 +94,12 @@
                 }
             }
         });
+
+        if (culture == 'sq-AL') {
+            $('textarea').prop('spellcheck', false);
+        } else {
+            $('textarea').prop('spellcheck', true);
+        }
     });
 
     function success_staff_absent(data) {

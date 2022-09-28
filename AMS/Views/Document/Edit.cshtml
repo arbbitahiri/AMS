@@ -73,6 +73,14 @@
         form.removeData('unobtrusiveValidation');
         $.validator.unobtrusive.parse(form);
 
+        if (culture == 'sq-AL') {
+            $("input[type='text']").prop('spellcheck', false);
+            $('textarea').prop('spellcheck', false);
+        } else {
+            $("input[type='text']").prop('spellcheck', true);
+            $('textarea').prop('spellcheck', true);
+        }
+
         $(".select2").select2({
             width: "100%",
             language: {

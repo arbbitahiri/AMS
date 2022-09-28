@@ -255,13 +255,13 @@
             $('#frm_search_staff').attr('data-ajax', false);
             $('#frm_search_staff').attr('action', '@Url.Action("Report", "Staff")');
             $('#frm_search_staff').attr('target', '_blank');
-            $('#frm_search_staff').addClass('noLoading');
+            $('#frm_search_staff').addClass('no-loading');
             $('#reportType').val(type);
             $('#frm_search_staff').submit();
             $('#frm_search_staff').attr('data-ajax', true);
             $('#frm_search_staff').attr('action', '@Url.Action("Search", "Staff")');
             $('#frm_search_staff').removeAttr('target');
-            $('#frm_search_staff').removeClass('noLoading');
+            $('#frm_search_staff').removeClass('no-loading');
         }
     </script>
 }

@@ -165,6 +165,12 @@
                                 <span class="nav-text font-size-h6">@Resource.Attendance</span>
                             </a>
                         </li>
+                        <li class="nav-item mx-2" id="kt_absence_tab">
+                            <a class="nav-link text-active-primary" id="tab_absence" data-bs-toggle="tab" href="/Profile/_Absence?ide=@Model.StaffIde" data-target="#kt_absence">
+                                <span class="nav-icon mr-2"><i class="fas fa-calendar-times menu-icon mr-3"></i></span>
+                                <span class="nav-text font-size-h6">@Resource.Absences</span>
+                            </a>
+                        </li>
                         <li class="nav-item mx-2" id="kt_department_tab">
                             <a class="nav-link text-active-primary" id="tab_department" data-bs-toggle="tab" href="/Profile/_Department?ide=@Model.StaffIde" data-target="#kt_department">
                                 <span class="nav-icon mr-2"><i class="far fa-building"></i></span>
@@ -184,6 +190,11 @@
                 <div class="tab-content px-10">
                     <div class="tab-pane fade show active" role="tabpanel">
                         <div class="mt-1" id="kt_attendance"></div>
+                    </div>
+                </div>
+                <div class="tab-content px-10">
+                    <div class="tab-pane fade show" role="tabpanel">
+                        <div class="mt-1" id="kt_absence"></div>
                     </div>
                 </div>
                 <div class="tab-content px-10">
@@ -224,5 +235,17 @@
                 return false;
             });
         });
+
+        function load_more(e) {
+            $(e).parent().find('.load-less-fst').removeClass('d-none');
+            $(e).parent().parent().find('.load-less-snd').removeClass('d-none');
+            $(e).addClass('d-none');
+        }
+
+        function load_less(e) {
+            $(e).addClass('d-none');
+            $(e).parent().addClass('d-none');
+            $(e).parent().parent().find('.load-more').removeClass('d-none');
+        }
     </script>
 }

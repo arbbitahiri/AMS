@@ -15,7 +15,7 @@ function hide_loading(timeout = 0) {
     }, timeout);
 }
 
-$(document).on('submit', 'form:not(.noLoading)', function () {
+$(document).on('submit', 'form:not(.no-loading)', function () {
     show_loading();
     $(this).find('button[type="submit"]').attr('disabled', 'disabled');
 });

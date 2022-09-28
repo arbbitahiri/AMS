@@ -28,4 +28,7 @@ public class FunctionRepository : IFunctionRepository
 
     public async Task<List<StaffConsecutiveDays>> StaffConsecutiveDays(int? staffId, int? departmentId, int? staffTypeId, LanguageEnum language) =>
         await db.Set<StaffConsecutiveDays>().FromSqlInterpolated(sql: $"SELECT * FROM [StaffConsecutiveDays] ({staffId}, {departmentId}, {staffTypeId}, {language})").ToListAsync();
+
+    public async Task<List<SearchApplication>> SearchApplication(string title, string userId, LanguageEnum language) =>
+        await db.Set<SearchApplication>().FromSqlInterpolated(sql: $"SELECT * FROM [SearchApplication] ({title}, {userId}, {language})").ToListAsync();
 }
