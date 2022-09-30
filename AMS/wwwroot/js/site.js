@@ -312,3 +312,9 @@ function format_repo_selection(repo) {
 function quick_search() {
     $('#kt_quick_search_result').load('/Home/Search');
 }
+
+function show_side_profile() {
+    $('#kt_quick_user').load('/Home/SideProfile', function () {
+        $('#kt_quick_user').addClass('offcanvas-on');
+    });
+}

@@ -31,4 +31,7 @@ public class FunctionRepository : IFunctionRepository
 
     public async Task<List<SearchApplication>> SearchApplication(string title, string userId, LanguageEnum language) =>
         await db.Set<SearchApplication>().FromSqlInterpolated(sql: $"SELECT * FROM [SearchApplication] ({title}, {userId}, {language})").ToListAsync();
+
+    public async Task<List<StaffListHistory>> StaffListHistory(int? staffId, int? departmentId, int? staffTypeId, DateTime? startDate, DateTime? endDate, string personalNumber, string firstName, string lastName, DateTime? birthDate, int? statusType, bool advanced, LanguageEnum language) =>
+        await db.Set<StaffListHistory>().FromSqlInterpolated(sql: $"SELECT * FROM [StaffListHistory] ({staffId}, {departmentId}, {staffTypeId}, {startDate}, {endDate}, {personalNumber}, {firstName}, {lastName}, {birthDate}, {statusType}, {advanced}, {language})").ToListAsync();
 }

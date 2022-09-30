@@ -558,16 +558,7 @@ public class StaffController : BaseController
 
     [HttpGet, Authorize(Policy = "7dp:c")]
     [Description("Arb Tahiri", "Form to add department.")]
-    public async Task<IActionResult> _AddDepartment(string ide)
-    {
-        var staffDetails = await db.Staff.Where(a => a.StaffId == CryptoSecurity.Decrypt<int>(ide))
-            .Select(a => new AddDepartment
-            {
-                StaffIde = ide,
-                Outsider = a.CountryId != (int)CountryEnum.Kosova
-            }).FirstOrDefaultAsync();
-        return PartialView(staffDetails);
-    }
+    public IActionResult _AddDepartment(string ide) => PartialView(new AddDepartment { StaffIde = ide });
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Policy = "7dp:c")]
     [Description("Arb Tahiri", "Action to add new department.")]
@@ -621,8 +612,7 @@ public class StaffController : BaseController
                 StaffTypeId = a.StaffTypeId,
                 StartDate = a.StartDate.ToString("dd/MM/yyyy"),
                 EndDate = a.EndDate.ToString("dd/MM/yyyy"),
-                Description = a.Description,
-                Outsider = a.Staff.CountryId != (int)CountryEnum.Kosova
+                Description = a.Description
             }).FirstOrDefaultAsync();
 
         return PartialView(department);
@@ -911,9 +901,9 @@ public class StaffController : BaseController
     public async Task<IActionResult> Report(Search search, ReportType reportType)
     {
         var staffList = await db.StaffDepartment
-            .Where(a => a.Staff.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId != (int)Status.Deleted)
+            .Where(a => a.Staff.StaffRegistrationStatus.Any(a => a.Active && a.StatusTypeId == (int)Status.Finished)
                 && a.DepartmentId == (search.Department ?? a.DepartmentId)
-                && a.StaffTypeId == (search.Department ?? a.StaffTypeId)
+                && a.StaffTypeId == (search.StaffType ?? a.StaffTypeId)
                 && a.EndDate >= DateTime.Now
                 && (string.IsNullOrEmpty(search.PersonalNumber) || a.Staff.PersonalNumber.Contains(search.PersonalNumber))
                 && (string.IsNullOrEmpty(search.Firstname) || a.Staff.FirstName.Contains(search.Firstname))

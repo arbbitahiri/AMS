@@ -16,4 +16,6 @@ public interface IFunctionRepository
     Task<List<StaffConsecutiveDays>> StaffConsecutiveDays(int? staffId, int? departmentId, int? staffTypeId, LanguageEnum language);
 
     Task<List<SearchApplication>> SearchApplication(string title, string userId, LanguageEnum language);
+
+    Task<List<StaffListHistory>> StaffListHistory(int? staffId, int? departmentId, int? staffTypeId, DateTime? startDate, DateTime? endDate, string personalNumber, string firstName, string lastName, DateTime? birthDate, int? statusType, bool advanced, LanguageEnum language);
 }

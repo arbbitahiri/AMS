@@ -86,14 +86,14 @@
     }
 
     function add_submenu(ide) {
-        $('#modal-large').find('.modal-content').load('@Url.Action("_Create", "SubMenu")?ide=' + ide, function () {
-            $('#modal-large').modal('toggle');
+        $('#modal-center-xlarge').find('.modal-content').load('@Url.Action("_Create", "SubMenu")?ide=' + ide, function () {
+            $('#modal-center-xlarge').modal('toggle');
         });
     }
 
     function edit(ide) {
-        $('#modal-large').find('.modal-content').load('@Url.Action("_Edit", "Menu")?ide=' + ide, function () {
-            $('#modal-large').modal('toggle');
+        $('#modal-center-xlarge').find('.modal-content').load('@Url.Action("_Edit", "Menu")?ide=' + ide, function () {
+            $('#modal-center-xlarge').modal('toggle');
         });
     }
 

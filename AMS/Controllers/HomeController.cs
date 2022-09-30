@@ -172,4 +172,29 @@ public class HomeController : BaseController
     }
 
     #endregion
+
+    #region Side profile
+
+    [HttpGet, Description("Arb Tahiri", "Formt to open side profile")]
+    public async Task<IActionResult> SideProfile()
+    {
+        var userData = await db.AspNetUsers
+            .Where(a => a.Id == user.Id)
+            .Select(a => new ProfileVM
+            {
+                Name = $"{a.FirstName} {a.LastName}",
+                ProfileImage = a.ProfileImage,
+                Username = a.UserName,
+                Email = a.Email,
+                Roles = a.RealRoleUser.Select(a => new ProfileRoles
+                {
+                    RoleIde = CryptoSecurity.Encrypt(a.RoleId),
+                    Name = a.Role.Name,
+                    Title = user.Language == LanguageEnum.Albanian ? a.Role.NameSq : a.Role.NameEn
+                }).ToList()
+            }).FirstOrDefaultAsync();
+        return PartialView(userData);
+    }
+
+    #endregion
 }

@@ -277,6 +277,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kërkimi avancuar.
+        /// </summary>
+        public static string AdvancedSearch {
+            get {
+                return ResourceManager.GetString("AdvancedSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SQ.
         /// </summary>
         public static string AL {
@@ -633,6 +642,15 @@ namespace AMS.Resources {
         public static string Complete {
             get {
                 return ResourceManager.GetString("Complete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Konfigurimi i parametrave të llogarisë.
+        /// </summary>
+        public static string ConfigureAccountSettings {
+            get {
+                return ResourceManager.GetString("ConfigureAccountSettings", resourceCulture);
             }
         }
         
@@ -1065,6 +1083,15 @@ namespace AMS.Resources {
         public static string English {
             get {
                 return ResourceManager.GetString("English", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shkruani fjalëkalimin për të vazhduar sesionin tuaj.
+        /// </summary>
+        public static string EnterPasswordToContinue {
+            get {
+                return ResourceManager.GetString("EnterPasswordToContinue", resourceCulture);
             }
         }
         
@@ -1555,6 +1582,15 @@ namespace AMS.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Kyçu si përdorues tjetër?.
+        /// </summary>
+        public static string LogInAsDifferentUser {
+            get {
+                return ResourceManager.GetString("LogInAsDifferentUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kyçuni?.
         /// </summary>
         public static string LoginInstead {
@@ -1758,6 +1794,15 @@ namespace AMS.Resources {
         public static string MustBe18YearsOld {
             get {
                 return ResourceManager.GetString("MustBe18YearsOld", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Llogaria ime.
+        /// </summary>
+        public static string MyAccount {
+            get {
+                return ResourceManager.GetString("MyAccount", resourceCulture);
             }
         }
         

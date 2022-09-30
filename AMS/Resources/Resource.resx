@@ -189,6 +189,9 @@
   <data name="AddUser" xml:space="preserve">
     <value>Shto përdoruesin</value>
   </data>
+  <data name="AdvancedSearch" xml:space="preserve">
+    <value>Kërkimi avancuar</value>
+  </data>
   <data name="AL" xml:space="preserve">
     <value>SQ</value>
   </data>
@@ -308,6 +311,9 @@
   </data>
   <data name="Complete" xml:space="preserve">
     <value>Përfunduar</value>
+  </data>
+  <data name="ConfigureAccountSettings" xml:space="preserve">
+    <value>Konfigurimi i parametrave të llogarisë</value>
   </data>
   <data name="ConfirmNewPassword" xml:space="preserve">
     <value>Konfirmo fjalëkalimin e ri</value>
@@ -452,6 +458,9 @@
   </data>
   <data name="English" xml:space="preserve">
     <value>Anglisht</value>
+  </data>
+  <data name="EnterPasswordToContinue" xml:space="preserve">
+    <value>Shkruani fjalëkalimin për të vazhduar sesionin tuaj</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Gabim</value>
@@ -615,6 +624,9 @@
   <data name="Login" xml:space="preserve">
     <value>Kyçu</value>
   </data>
+  <data name="LogInAsDifferentUser" xml:space="preserve">
+    <value>Kyçu si përdorues tjetër?</value>
+  </data>
   <data name="LoginInstead" xml:space="preserve">
     <value>Kyçuni?</value>
   </data>
@@ -683,6 +695,9 @@
   </data>
   <data name="MustBe18YearsOld" xml:space="preserve">
     <value>Punonjësi i stafit duhet të jetë 18 vjeç ose më i vjetër.</value>
+  </data>
+  <data name="MyAccount" xml:space="preserve">
+    <value>Llogaria ime</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Emri</value>

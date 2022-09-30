@@ -13,61 +13,57 @@
         @Html.AntiForgeryToken()
         <input asp-for="MenuIde" type="hidden"/>
 
-        <div class="row form-group">
-            <div class="col-md-4">
+        <div class="row">
+            <div class="col-md-4 form-group">
                 <label asp-for="NameSq" class="required"></label>
                 <input asp-for="NameSq" class="form-control" />
                 <span asp-validation-for="NameSq" class="text-danger"></span>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 form-group">
                 <label asp-for="NameEn" class="required"></label>
                 <input asp-for="NameEn" class="form-control" />
                 <span asp-validation-for="NameEn" class="text-danger"></span>
             </div>
-            <div class="col-md-4">
-                <label asp-for="Controller" class="required"></label>
+            <div class="col-md-4 form-group">
+                <label asp-for="Area"></label>
+                <input asp-for="Area" class="form-control" />
+            </div>
+            <div class="col-md-4 form-group">
+                <label asp-for="Controller"></label>
                 <input asp-for="Controller" class="form-control" />
-                <span asp-validation-for="Controller" class="text-danger"></span>
             </div>
-        </div>
-        <div class="row form-group">
-            <div class="col-md-4">
-                <label asp-for="Action" class="required"></label>
+            <div class="col-md-4 form-group">
+                <label asp-for="Action"></label>
                 <input asp-for="Action" class="form-control" />
-                <span asp-validation-for="Action" class="text-danger"></span>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 form-group">
                 <label asp-for="OrdinalNumber" class="required"></label>
                 <input asp-for="OrdinalNumber" type="number" class="form-control" />
                 <span asp-validation-for="OrdinalNumber" class="text-danger"></span>
             </div>
-            <div class="col-md-4">
-                <label asp-for="ClaimPolicy" class="required"></label>
+            <div class="col-md-4 form-group">
+                <label asp-for="ClaimPolicy"></label>
                 <input asp-for="ClaimPolicy" class="form-control" />
-                <span asp-validation-for="ClaimPolicy" class="text-danger"></span>
             </div>
-        </div>
-        <div class="row form-group">
-            <div class="col-md-4">
-                <label asp-for="Icon" class="required"></label>
-                <input asp-for="Icon" class="form-control" />
-                <span asp-validation-for="Icon" class="text-danger"></span>
+            <div class="col-md-4 form-group">
+                <label asp-for="Icon"></label>
+                <div class="input-group">
+                    <input asp-for="Icon" class="form-control" />
+                    <div class="input-group-append"><span class="input-group-text"><i id="kt_icon" class="fas fa-code"></i></span></div>
+                </div>
             </div>
-            <div class="col-md-4">
-                <label asp-for="OpenFor" class="required"></label>
+            <div class="col-md-4 form-group">
+                <label asp-for="OpenFor"></label>
                 <input asp-for="OpenFor" class="form-control" />
-                <span asp-validation-for="OpenFor" class="text-danger"></span>
             </div>
-            <div class="col-md-4 d-flex flex-column pl-5">
+            <div class="col-md-4 d-flex flex-column pl-5 form-group">
                 <label asp-for="HasSubMenu" class="required">@Resource.HasSubMenu</label>
                 <div class="d-inline">
                     <input asp-for="HasSubMenu" id="has_submenu" style="cursor: pointer;" type="checkbox">
                     <label asp-for="HasSubMenu" id="lbl_submenu" onclick="change_submenu(this)"></label>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4 d-flex flex-column pl-5">
+            <div class="col-md-4 d-flex flex-column pl-5 form-group">
                 <label asp-for="Active" class="required">@Resource.Active</label>
                 <div class="d-inline">
                     <input asp-for="Active" id="inp_active" style="cursor: pointer;" type="checkbox">
@@ -78,14 +74,12 @@
         </div>
         <div class="row form-group">
             <div class="col-md-6">
-                <label asp-for="TagsSQ" class="required"></label>
-                <input asp-for="TagsSQ" class="tagify form-control" />
-                <span asp-validation-for="TagsSQ" class="text-danger"></span>
+                <label asp-for="TagsSQ"></label>
+                <input asp-for="TagsSQ" name="basic" id="txt_tags_sq" class="tagify form-control" />
             </div>
             <div class="col-md-6">
-                <label asp-for="TagsEN" class="required"></label>
-                <input asp-for="TagsEN" class="tagify form-control" />
-                <span asp-validation-for="TagsEN" class="text-danger"></span>
+                <label asp-for="TagsEN"></label>
+                <input asp-for="TagsEN" name="basic" id="txt_tags_en" class="tagify form-control" />
             </div>
         </div>
         <div class="separator separator-solid mb-5"></div>
@@ -123,37 +117,57 @@
         $('#lbl_submenu').text('');
         $('#lbl_active').text('');
 
+        $('#Icon').on('change', function () {
+            if ($(this).val() != null && $(this).val() != '') {
+                $('#kt_icon').removeClass('fas fa-code').addClass($(this).val());
+            } else {
+                $('#kt_icon').addClass('fas fa-code');
+            }
+        });
+
         $('#kt_submenu_data').load('@Url.Action("SubMenu", "SubMenu")?mIde=@Model.MenuIde');
 
-        var input_sq = $('#TagsSQ');
-        var input_en = $('#TagsEN');
-
-        var tagify_sq = new Tagify(input_sq, {
-            delimiters: ",",
-            transformTag: transform_tag,
-            originalInputValueFormat: valuesArr => valuesArr.map(a => a.value).join(',')
-        });
-
-        var tagify_en = new Tagify(input_en, {
-            delimiters: ",",
-            transformTag: transform_tag,
-            originalInputValueFormat: valuesArr => valuesArr.map(a => a.value).join(',')
-        });
-
-        function transform_tag(tagData) {
-            var states = [
-                'success',
-                'primary',
-                'danger',
-                'warning',
-                'dark',
-                'primary',
-                'info'
-            ];
-
-            tagData.class = 'tagify__tag tagify__tag--' + states[KTUtil.getRandomInt(0, 7)];
-        }
+        KTTagify.init();
     });
+
+    var KTTagify = function () {
+        var init_tagify = function () {
+            var input_sq = document.getElementById('txt_tags_sq');
+            var input_en = document.getElementById('txt_tags_en');
+
+            var tagify_sq = new Tagify(input_sq, {
+                delimiters: ",",
+                transformTag: transform_tag,
+                originalInputValueFormat: valuesArr => valuesArr.map(a => a.value).join(',')
+            });
+
+            var tagify_en = new Tagify(input_en, {
+                delimiters: ",",
+                transformTag: transform_tag,
+                originalInputValueFormat: valuesArr => valuesArr.map(a => a.value).join(',')
+            });
+
+            function transform_tag(tagData) {
+                var states = [
+                    'success',
+                    'primary',
+                    'danger',
+                    'warning',
+                    'dark',
+                    'primary',
+                    'info'
+                ];
+
+                tagData.class = 'tagify__tag tagify__tag--' + states[KTUtil.getRandomInt(0, 7)];
+            }
+        }
+
+        return {
+            init: function () {
+                init_tagify();
+            }
+        }
+    }();
 
     function change_submenu(e) {
         if($('#has_submenu').is(":checked")) {

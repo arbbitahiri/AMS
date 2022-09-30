@@ -22,4 +22,6 @@ public interface IDDLRepository
     Task<List<SelectListItem>> DocumentTypes(LanguageEnum language);
 
     Task<List<SelectListItem>> AbsentTypes(LanguageEnum language);
+
+    Task<List<SelectListItem>> StatusTypes(LanguageEnum language, bool staff = false);
 }

@@ -46,6 +46,4 @@ public class AddDepartment
 
     [Display(Name = "Description", ResourceType = typeof(Resource))]
     public string Description { get; set; }
-
-    public bool Outsider { get; set; }
 }

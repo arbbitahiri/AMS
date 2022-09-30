@@ -1,92 +1,100 @@
 ﻿@page
 @model TimeoutModel
 @{
-    Layout = "_Layout";
+    ErrorVM error = (ErrorVM)ViewData["Error"] ?? new ErrorVM();
+    Layout = null;
 }
+<!DOCTYPE html>
+<html lang="en">
 
-<h3 class="auth-title" style="font-size:2rem !important;">HRMS Riinvest</h3>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Resource.SessionTimedOut</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
 
-<div class="text-center mb-10">
-    <h3>@Resource.SessionTimedOut</h3>
+    <link rel="stylesheet" asp-append-version="true" href="~/assets2/css/pages/login/login-3.css" />
+    <link rel="stylesheet" asp-append-version="true" href="~/assets2/css/pages/login/login-4.css" />
+    <link rel="stylesheet" asp-append-version="true" href="~/assets2/plugins/global/plugins.bundle.css">
+    <link rel="stylesheet" asp-append-version="true" href="~/assets2/css/style.bundle.css">
+</head>
+<body class="d-flex flex-column flex-root">
+    <div class="login login-3 login-signin-on d-flex flex-row-fluid" id="kt_login">
+        <div class="d-flex flex-center bgi-size-cover bgi-no-repeat flex-row-fluid" style="background-image: url(/assets2/media/bg/bg-1.jpg);">
+            <div class="login-form text-center text-white p-7 position-relative overflow-hidden">
+                <div class="d-flex flex-center mb-5">
+                    <a class="symbol symbol-120 mr-3" href="#">
+                        <img id="kt_user_image" src='@Url.Content(Model.Image ?? "../../../../assets2/media/users/default.jpg")' class="max-h-100px" alt="">
+                    </a>
+                </div>
+                <div class="login-signin">
+                    <div class="mb-10">
+                        <h3 id="kt_user_name">@(Model.Name ?? "")</h3>
+                        <p class="opacity-60 font-weight-bold pt-5">@Resource.EnterPasswordToContinue:</p>
+                    </div>
+                    <form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form fv-plugins-bootstrap fv-plugins-framework" id="kt_login_signin_form">
+                        @Html.AntiForgeryToken()
+                        @if (error.Status != 0)
+                        {
+                            <div class="mb-5 text-dark">
+                                <partial name="_AlertMessage" model="error" />
+                            </div>
+                        }
 
-    <a asp-page-handler="ChangeLang" asp-route-returnUrl="/Identity/Account/TimeOut" asp-route-culture="sq-AL">@Resource.Albanian</a> | <a asp-page-handler="ChangeLang" asp-route-returnUrl="/Identity/Account/TimeOut" asp-route-culture="en-GB">@Resource.English</a>
-</div>
-
-<form method="post" asp-route-returnUrl="@Model.ReturnUrl" id="frm_Login" class="form-element">
-    @Html.AntiForgeryToken()
-    <div class="text-center content-bottom">
-        <img id="user-profile-img" src="@Url.Content(Model.Image ?? "")" class="rounded-circle b-2 p-10 border-dark" style="max-width:200px" alt="">
-        <h3 id="user-name">@(Model.Name ?? "")</h3>
-    </div>
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    @Html.TextBoxFor(m => m.Input.Email, new { @class = "form-control d-none" })
-    <div class="form-group has-feedback">
-        <input type="password" asp-for="Input.Password" id="Password" class="form-control" placeholder="@Resource.Password" />
-        <span asp-validation-for="Input.Password" class="text-danger"></span>
-        <span class="ion ion-locked form-control-feedback"></span>
-    </div>
-    <div class="row">
-        <div class="col-12 text-center pt-2">
-            <button type="submit" data-callback="onSubmitForm" data-action="login" class="btn btn-primary btn-block margin-top-10">@Resource.Login</button>
+                        <input asp-for="Input.Email" type="hidden"/>
+                        <div class="form-group fv-plugins-icon-container">
+                            <input asp-for="Input.Password" type="password" placeholder="@Resource.Password" class="form-control h-auto text-white placeholder-white opacity-70 bg-dark-o-70 rounded-pill border-0 py-4 px-8 mb-5">
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            <div class="fv-plugins-message-container"></div>
+                        </div>
+                        <div class="form-group d-flex flex-wrap justify-content-between align-items-center px-8 float-right">
+                            <a href="/Identity/Account/ForgotPassword" id="kt_login_forgot" class="text-white font-weight-bold">@Resource.ForgotPassword</a>
+                        </div>
+                        <div class="form-group text-center mt-10">
+                            <button type="submit" id="kt_login_signin_submit" class="btn btn-pill btn-outline-white font-weight-bold opacity-90 px-15 py-3">@Resource.Login</button>
+                        </div>
+                        <input type="hidden"><div></div>
+                    </form>
+                    <div class="mt-10">
+                        <a href="/Identity/Account/Login" id="kt_login_signup" class="text-white font-weight-bold">@Resource.LogInAsDifferentUser</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</form>
 
-<div class="text-center">
-    <p class="mb-5 mt-4">
-        @Resource.TypePasswordToSession
-    </p>
-    <p class="mt-4"> or </p>
-</div>
-<div class="text-center">
-    <p class="mb-0">or <a asp-page="Login" class="text-warning"><b>@Resource.Login</b></a> @Resource.AsDiffUser</p>
-</div>
+    <partial name="_LoadingPartial" />
 
-@section scripts{
-    <script type="text/javascript">
-        function ShowLoading() {
-            $('#loader').modal('show')
-        }
+    <script asp-append-version="true" src="~/assets2/plugins/global/plugins.bundle.js"></script>
+    <script asp-append-version="true" src="~/assets2/js/scripts.bundle.js"></script>
+    <script asp-append-version="true" src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script asp-append-version="true" src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script asp-append-version="true" src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+    <script asp-append-version="true" src="~/js/login.js"></script>
+</body>
+</html>
 
-        function HideLoading() {
-            $('#loader').modal('hide')
-        }
+@if (Model.Email != null)
+{
+    <script>
+        window.localStorage.removeItem('ud');
 
-        function onSubmitForm(data) {
-            if ($("#frm_Login").valid()) {
-                $("#frm_Login").submit();
-            }
-        }
+        $('#Input_Email').val('@Model.Email');
+        var user_details = {
+            e: '@Model.Email',
+            n: '@Model.Name',
+            i: '@Model.Image'
+        };
 
-        $(document).on('submit', 'form:not(.no-loading)', function () {
-            ShowLoading()
-        });
-
-        $(document).on('invalid-form.validate', 'form', function () {
-            HideLoading();
-        });
+        window.localStorage.setItem('ud', JSON.stringify(user_details));
     </script>
-
-    @if (Model.Email != null)
-    {
-        <script>
-            var ud = {
-                e: '@Model.Email',
-                n: '@Model.Name',
-                i: '@Model.Image'
-            };
-            window.localStorage.setItem('ud', JSON.stringify(ud))
-            $('#Input_Email').val('@Model.Email')
-            window.location.reload()
-        </script>
-    }
-    else
-    {
-        <script>
-            var ud = JSON.parse(window.localStorage.getItem("ud"));
-            $('#user-profile-img').attr('src', ud.i)
-            $('#user-name').text(ud.n)
-            $('#Input_Email').val(ud.e)
-        </script>
-    }
+}
+else
+{
+    <script>
+        var user_details = JSON.parse(window.localStorage.getItem("ud"));
+        $('#kt_user_image').attr('src', user_details.i)
+        $('#kt_user_name').text(user_details.n)
+        $('#Input_Email').val(user_details.e)
+    </script>
 }

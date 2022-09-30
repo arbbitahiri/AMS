@@ -7,17 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Reports\StaffAbsence.rdl" />
     <None Remove="Reports\StaffAttendanceHistory.rdl" />
     <None Remove="Reports\StaffAttended.rdl" />
+    <None Remove="Reports\StaffDepartmentList.rdl" />
     <None Remove="Reports\StaffList.rdl" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Reports\StaffAbsence.rdl" />
     <EmbeddedResource Include="Reports\StaffAttendanceHistory.rdl" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Reports\StaffAttended.rdl" />
+    <EmbeddedResource Include="Reports\StaffDepartmentList.rdl" />
     <EmbeddedResource Include="Reports\StaffList.rdl" />
   </ItemGroup>
 

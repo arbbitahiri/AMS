@@ -33,6 +33,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     [NotMapped]
     public DbSet<SearchApplication> SearchApplication { get; set; }
 
+    [NotMapped]
+    public DbSet<StaffListHistory> StaffListHistory { get; set; }
+
     #endregion
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -45,6 +48,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
         builder.Entity<AttendanceConsecutiveDays>().HasNoKey();
         builder.Entity<StaffConsecutiveDays>().HasNoKey();
         builder.Entity<SearchApplication>().HasNoKey();
+        builder.Entity<StaffListHistory>().HasNoKey();
 
         base.OnModelCreating(builder);
     }

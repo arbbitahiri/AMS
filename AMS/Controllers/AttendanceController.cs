@@ -381,7 +381,7 @@ public class AttendanceController : BaseController
             new ReportParameter("StartDate", Resource.StartDate),
             new ReportParameter("EndDate", Resource.EndDate),
             new ReportParameter("WorkingSince", Resource.WorkingSince),
-            new ReportParameter("ListOfStaff", Resource.StaffList),
+            new ReportParameter("AttendanceList", Resource.AttendanceList),
             new ReportParameter("AMS", Resource.AMSTitle)
         };
 
@@ -401,6 +401,60 @@ public class AttendanceController : BaseController
             _ => Resource.AttendanceList
         };
         return atype == ReportType.PDF ?
+            File(reportByte, contentType) :
+            File(reportByte, contentType, fileName);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    [Description("Arb Tahiri", "Report for list of staff absences depending of the search.")]
+    public async Task<IActionResult> ReportAbsence(SearchAbsence search, ReportType btype)
+    {
+        var absence = await db.StaffAttendance
+            .Where(a => a.Active && a.Absent
+                && a.Staff.StaffRegistrationStatus.Any(b => b.Active && b.StatusTypeId == (int)Status.Finished)
+                && a.StaffId == (search.BStaffId ?? a.StaffId)
+                && a.Staff.StaffDepartment.Any(b => b.DepartmentId == (search.BDepartmentId ?? b.DepartmentId))
+                && a.Staff.StaffDepartment.Any(b => b.StaffTypeId == (search.BStaffTypeId ?? b.StaffTypeId))
+                && a.AbsentTypeId == (search.BAbsentTypeId ?? a.AbsentTypeId)
+                && (!search.BInsertedDate.HasValue || a.InsertedDate.Date == search.BInsertedDate.Value.Date))
+            .Select(a => new ReportVM
+            {
+                StaffId = a.StaffId,
+                PersonalNumber = a.Staff.PersonalNumber,
+                FirstName = a.Staff.FirstName,
+                LastName = a.Staff.LastName,
+                Department = string.Join(",", a.Staff.StaffDepartment.Select(a => user.Language == LanguageEnum.Albanian ? a.Department.NameSq : a.Department.NameEn).ToList()),
+                StartDate = a.InsertedDate.ToString("dd/MM/yyyy"),
+                AbsentType = a.AbsentTypeId.HasValue ? user.Language == LanguageEnum.Albanian ? a.AbsentType.NameSq : a.AbsentType.NameEn : "///"
+            }).ToListAsync();
+
+        var dataSource = new List<ReportDataSource>() { new ReportDataSource("StaffDetails", absence) };
+        var parameters = new List<ReportParameter>()
+        {
+            new ReportParameter("PrintedFrom", $"{user.FirstName} {user.LastName}"),
+            new ReportParameter("Department", Resource.Department),
+            new ReportParameter("Date", Resource.Date),
+            new ReportParameter("AbsentType", Resource.AbsentType),
+            new ReportParameter("ListOfAbsences", Resource.ListOfAbsences),
+            new ReportParameter("AMS", Resource.AMSTitle)
+        };
+
+        var reportByte = RDLCReport.GenerateReport("StaffAbsence.rdl", dataSource, parameters, btype, ReportOrientation.Portrait);
+        string contentType = btype switch
+        {
+            ReportType.PDF => "application/pdf",
+            ReportType.Excel => "application/ms-excel",
+            ReportType.Word => "application/msword",
+            _ => "application/pdf"
+        };
+        string fileName = btype switch
+        {
+            ReportType.PDF => Resource.ListOfAbsences,
+            ReportType.Excel => $"{Resource.ListOfAbsences}.xlsx",
+            ReportType.Word => $"{Resource.ListOfAbsences}.docx",
+            _ => Resource.AttendanceList
+        };
+        return btype == ReportType.PDF ?
             File(reportByte, contentType) :
             File(reportByte, contentType, fileName);
     }

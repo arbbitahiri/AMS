@@ -79,4 +79,17 @@ public class DDLRepository : IDDLRepository
             Value = a.AbsentTypeId.ToString(),
             Text = language == LanguageEnum.Albanian ? a.NameSq : a.NameEn
         }).OrderBy(a => a.Text).ToListAsync();
+
+    public async Task<List<SelectListItem>> StatusTypes(LanguageEnum language, bool staff = false)
+    {
+        int[] statuses = { (int)Status.Deleted, (int)Status.Processing };
+        var result = await db.StatusType
+            .Where(a => a.Active && (!staff || statuses.Contains(a.StatusTypeId)))
+            .Select(a => new SelectListItem
+            {
+                Value = a.StatusTypeId.ToString(),
+                Text = language == LanguageEnum.Albanian ? a.NameSq : a.NameEn
+            }).OrderBy(a => a.Text).ToListAsync();
+        return result;
+    }
 }

@@ -333,7 +333,8 @@ public class UsersController : BaseController
             .Select(a => new AddRole
             {
                 UserIde = uIde,
-                Name = $"{a.FirstName} {a.LastName} ({a.Email})"
+                Name = $"{a.FirstName} {a.LastName} ({a.Email})",
+                Roles = a.RealRoleUser.Select(a => a.RoleId).ToList()
             }).FirstOrDefaultAsync();
         return PartialView(user);
     }

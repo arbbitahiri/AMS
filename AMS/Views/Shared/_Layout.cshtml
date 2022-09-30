@@ -119,8 +119,8 @@
                                     <partial name="_Language" model="user.Language" />
 
                                     <div class="dropdown">
-                                        <div class="topbar-item" data-toggle="dropdown" data-offset="10px,0px">
-                                            <div class="btn btn-icon btn-icon-mobile w-auto btn-clean d-flex align-items-center btn-lg" id="kt_quick_user_toggle">
+                                        <div class="topbar-item">
+                                            <div class="btn btn-icon btn-icon-mobile w-auto btn-clean d-flex align-items-center btn-lg" id="kt_quick_user_toggle" onclick="show_side_profile()">
                                                 <span class="text-muted font-weight-bold font-size-base d-none d-md-inline mr-1">@Resource.Hi,</span>
                                                 <span class="text-dark-50 font-weight-bolder font-size-base d-none d-md-inline mr-3">@user.FirstName</span>
                                                 <span class="symbol symbol-lg-35 symbol-25 symbol-light-success">
@@ -128,7 +128,6 @@
                                                 </span>
                                             </div>
                                         </div>
-                                        @await Component.InvokeAsync("Profile")
                                     </div>
                                 </div>
                             </div>
@@ -143,9 +142,12 @@
                     <div class="subheader py-1 subheader-solid" id="kt_subheader">
                         <div class="container-fluid d-flex align-items-center justify-content-between flex-wrap flex-sm-nowrap">
                             <div class="d-flex align-items-center flex-wrap mr-2">
-                                <button class="burger-icon burger-icon-left mr-4 d-inline-block d-lg-none" id="kt_subheader_mobile_toggle">
-                                    <span></span>
-                                </button>
+                                @if ((controller as string) == "Profile")
+                                {
+                                    <button class="burger-icon burger-icon-left mr-4 d-inline-block d-lg-none" id="kt_subheader_mobile_toggle">
+                                        <span></span>
+                                    </button>
+                                }
                                 <h5 class="text-dark font-weight-bold mt-2 mb-2 mr-5">@ViewData["Title"]</h5>
                             </div>
                         </div>
@@ -175,6 +177,8 @@
             </div>
         </div>
     </div>
+
+    <div id="kt_quick_user" class="offcanvas offcanvas-right p-10 h-100 overflow-auto"></div>
 
     <div id="kt_scrolltop" class="scrolltop">
         <span class="svg-icon">

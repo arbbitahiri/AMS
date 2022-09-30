@@ -67,6 +67,7 @@ public class MenuController : BaseController
             Icon = create.Icon,
             Claim = create.ClaimPolicy,
             ClaimType = create.ClaimPolicy?.Split(":")[0],
+            Area = create.Area,
             Controller = create.Controller,
             Action = create.Action,
             OrdinalNumber = create.OrdinalNumber,
@@ -98,6 +99,7 @@ public class MenuController : BaseController
             Active = menu.Active,
             Icon = menu.Icon,
             ClaimPolicy = menu.Claim,
+            Area = menu.Area,
             Controller = menu.Controller,
             Action = menu.Action,
             OrdinalNumber = menu.OrdinalNumber,
@@ -126,6 +128,7 @@ public class MenuController : BaseController
         menu.Icon = edit.Icon;
         menu.Claim = edit.ClaimPolicy;
         menu.ClaimType = edit.ClaimPolicy?.Split(":")[0];
+        menu.Area = edit.Area;
         menu.Controller = edit.Controller;
         menu.Action = edit.Action;
         menu.OrdinalNumber = edit.OrdinalNumber;

@@ -52,9 +52,10 @@ public class TimeoutModel : BaseOModel
         Error = TempData.Get<ErrorVM>("Error");
         Language = Thread.CurrentThread.CurrentCulture.Name;
 
-        ApplicationUser user = await _userManager.GetUserAsync(HttpContext.User);
+        var user = await _userManager.GetUserAsync(HttpContext.User);
         if (user != null)
         {
+            ReturnUrl = returnUrl;
             Name = $"{user.FirstName} {user.LastName}";
             Email = user.Email;
             Image = user.ProfileImage;
@@ -76,7 +77,8 @@ public class TimeoutModel : BaseOModel
         var result = await _signManger.PasswordSignInAsync(Input.Email, Input.Password, false, lockoutOnFailure: true);
         if (result.Succeeded)
         {
-            return RedirectToAction("Index", "Home");
+            var toReturn = ReturnUrl.Split("/");
+            return Redirect(ReturnUrl);
         }
         if (result.IsNotAllowed)
         {

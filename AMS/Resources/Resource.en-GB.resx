@@ -1104,4 +1104,19 @@
   <data name="ListOfAbsences" xml:space="preserve">
     <value>List of absences</value>
   </data>
+  <data name="ConfigureAccountSettings" xml:space="preserve">
+    <value>Configuring account settings</value>
+  </data>
+  <data name="MyAccount" xml:space="preserve">
+    <value>My account</value>
+  </data>
+  <data name="EnterPasswordToContinue" xml:space="preserve">
+    <value>Enter your password to login to your account</value>
+  </data>
+  <data name="LogInAsDifferentUser" xml:space="preserve">
+    <value>Log in as different user</value>
+  </data>
+  <data name="AdvancedSearch" xml:space="preserve">
+    <value>Advanced search</value>
+  </data>
 </root>
