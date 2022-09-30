@@ -9,7 +9,8 @@ public enum Status
     Finished = 5,
     Deleted = 6,
     Unprocessed = 7,
-    PendingForAnswers = 8
+    PendingForAnswers = 8,
+    DateEnded = 1002
 }
 
 public enum ErrorStatus

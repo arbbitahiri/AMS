@@ -82,7 +82,7 @@ public class DDLRepository : IDDLRepository
 
     public async Task<List<SelectListItem>> StatusTypes(LanguageEnum language, bool staff = false)
     {
-        int[] statuses = { (int)Status.Deleted, (int)Status.Processing };
+        int[] statuses = { (int)Status.Deleted, (int)Status.Processing, (int)Status.DateEnded };
         var result = await db.StatusType
             .Where(a => a.Active && (!staff || statuses.Contains(a.StatusTypeId)))
             .Select(a => new SelectListItem
