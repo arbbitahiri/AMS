@@ -9,5 +9,6 @@ public class Search
     public string Controller { get; set; }
     public string Action { get; set; }
     public string HttpMethod { get; set; }
-    public bool Error { get; set; }
+    public int? Error { get; set; }
+    public bool AdvancedSearch { get; set; }
 }

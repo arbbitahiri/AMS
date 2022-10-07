@@ -77,8 +77,6 @@ public class DocumentController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        DateTime? expirationDate = create.Expires ? DateTime.ParseExact(create.ExpireDate, "dd/MM/yyyy", null) : null;
-
         string path = await SaveFile(configuration, create.FormFile, "StaffDocuments", null);
         db.Add(new StaffDocument
         {
@@ -87,7 +85,7 @@ public class DocumentController : BaseController
             Title = create.ATitle,
             Path = path,
             Description = create.Description,
-            ExpirationDate = expirationDate,
+            ExpirationDate = create.ExpireDate,
             Active = true,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
@@ -115,7 +113,7 @@ public class DocumentController : BaseController
                 ETitle = a.Title,
                 Description = a.Description,
                 Expires = a.ExpirationDate.HasValue,
-                ExpireDate = a.ExpirationDate.HasValue ? a.ExpirationDate.Value.ToString("dd/MM/yyyy") : null
+                ExpireDate = a.ExpirationDate
             }).FirstOrDefaultAsync();
         return View(document);
     }
@@ -129,14 +127,12 @@ public class DocumentController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        DateTime? expirationDate = edit.Expires ? DateTime.ParseExact(edit.ExpireDate, "dd/MM/yyyy", null) : null;
-
         var staffDocumentId = CryptoSecurity.Decrypt<int>(edit.StaffDocumentIde);
         var document = await db.StaffDocument.FirstOrDefaultAsync(a => a.StaffDocumentId == staffDocumentId);
         document.DocumentTypeId = edit.EDocumentTypeId;
         document.Title = edit.ETitle;
         document.Description = edit.Description;
-        document.ExpirationDate = expirationDate;
+        document.ExpirationDate = edit.ExpireDate;
         document.UpdatedDate = DateTime.Now;
         document.UpdatedFrom = user.Id;
         document.UpdatedNo = UpdateNo(document.UpdatedNo);

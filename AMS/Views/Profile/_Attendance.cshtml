@@ -36,6 +36,7 @@
             data: data,
             deferRender: true,
             columnDefs: [
+                { targets: [0, 4], searchable: false },
                 { width: "5%", targets: [0, 4] },
                 { className: "text-center button-td", targets: [4] },
                 { defaultContent: "///", targets: "_all" }

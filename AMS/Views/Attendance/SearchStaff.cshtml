@@ -1,6 +1,7 @@
 ﻿@using AMS.Models.Attendance
 @model SearchStaff
 @inject IDDLRepository repo
+@inject IConfiguration configuration
 @{
     UserModel user = (UserModel)ViewData["User"];
     Layout = null;
@@ -165,6 +166,7 @@
             deferRender: true,
             columnDefs: [
                 { width: "5%", targets: [0, 5] },
+                { targets: [0, 5, 6], searchable: false },
                 { width: "15%", targets: [4, 6] },
                 { className: "text-center button-td", targets: [5, 6] },
                 { defaultContent: "///", targets: "_all" }
@@ -223,7 +225,7 @@
     }
 
     function change_attendance(e, ide, ws, rc) {
-        if (ws >= 14) {
+        if (ws >= @configuration["AppSettings:WorkingDays"]) {
             Swal.fire({
                 icon: 'warning',
                 title: '@Html.Raw(Resource.Warning)',

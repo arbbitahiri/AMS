@@ -51,7 +51,7 @@
                         <span class="input-group-text"><i class="la la-calendar"></i></span>
                     </div>
                 </div>
-                <span id="spn_expire_date" class="text-danger d-none">@Resource.RequiredField</span>
+                <span asp-validation-for="ExpireDate" class="text-danger"></span>
             </div>
         </div>
         <div class="row form-group pl-2 pr-2">
@@ -82,7 +82,7 @@
 
     <div class="modal-footer modal-footer-uniform w-full justify-content-between">
         <button type="button" class="btn btn-bold btn-pure btn-secondary" data-bs-dismiss="modal">@Resource.Close</button>
-        <button type="button" id="btn_submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
+        <button type="submit" id="btn_submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
     </div>
 </form>
 
@@ -113,6 +113,24 @@
 
         $('#lbl_expires').text('');
 
+        $("#ExpireDate").datepicker({
+            language: cultureShort,
+            rtl: KTUtil.isRTL(),
+            todayBtn: "linked",
+            todayHighlight: true,
+            templates: arrows,
+            autoclose: true,
+            orientation: "bottom",
+            format: 'dd/mm/yyyy'
+        }).inputmask("mask", {
+            mask: "99/99/9999",
+            placeholder: "dd/MM/yyyy"
+        });
+
+        change_staff_add();
+    });
+
+    function change_staff_add() {
         $('#AStaffId').select2({
             width: "100%",
             language: {
@@ -144,37 +162,7 @@
             templateResult: format_repo,
             templateSelection: format_repo_selection
         });
-
-        $("#ExpireDate").datepicker({
-            language: cultureShort,
-            rtl: KTUtil.isRTL(),
-            todayBtn: "linked",
-            todayHighlight: true,
-            templates: arrows,
-            autoclose: true,
-            orientation: "bottom",
-            format: 'dd/mm/yyyy'
-        }).inputmask("mask", {
-            mask: "99/99/9999",
-            placeholder: "dd/MM/yyyy"
-        });
-
-        $('#btn_submit').on('click', function () {
-            if (form.valid()) {
-                if ($('#Expires').is(":checked")) {
-                    if ($('#ExpireDate').val() != null && $('#ExpireDate').val() != "") {
-                        $('#spn_expire_date').addClass('d-none');
-                        form.submit();
-                    } else {
-                        $('#spn_expire_date').removeClass('d-none');
-                    }
-                } else {
-                    $('#spn_expire_date').addClass('d-none');
-                    form.submit();
-                }
-            }
-        });
-    });
+    }
 
     function change_check() {
         if (!$('#Expires').is(":checked")) {

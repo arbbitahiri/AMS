@@ -98,7 +98,7 @@
 <div class="card card-custom gutter-b d-none" id="kt_staff_search">
     <div class="card-header">
         <h3 class="card-title mb-0">@Resource.SearchResult</h3>
-        <div class="card-toolbar">
+        <div class="card-toolbar d-none" id="kt_download">
             <div class="btn-group dropleft">
                 <button type="button" class="btn btn-primary font-weight-bold btn-md dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@Resource.Download</button>
                 <div class="dropdown-menu dropdown-menu-sm p-0" role="menu">
@@ -222,6 +222,9 @@
         }
 
         function search_staff(data) {
+            if (data.length > 0) {
+                $('#kt_download').removeClass('d-none');
+            }
             $('#kt_staff_search').removeClass('d-none');
             $("#tbl_staff").DataTable({
                 destroy: true,
@@ -233,6 +236,7 @@
                 pageLength: 10,
                 data: data,
                 columnDefs: [
+                    { targets: [0, 8], searchable: false },
                     { targets: [8], className: "button-td text-center" },
                     { targets: [0, 8], width: "5%" },
                     { targets: [1], width: "15%" },
@@ -279,7 +283,7 @@
                                 '<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown">@Resource.Actions</button>' +
                                 '<div class="dropdown-menu" role="menu" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 29px, 0px); top: 0px; left: 0px; will-change: transform;">' +
                                 '<button type="button" class="dropdown-item cursor-pointer" onclick="staff_profile(\'' + row.staffIde + '\')">@Html.Raw(ActionButton.Profile.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Profile</span></button>' +
-                                '<button type="button" class="dropdown-item cursor-pointer" onclick="edit_staff(\'' + row.staffDepartmentIde + '\')">@Html.Raw(ActionButton.Edit.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Edit</span></button>' +
+                                '<button type="button" class="dropdown-item cursor-pointer" onclick="edit_staff(\'' + row.staffDepartmentIde + '\')">@Html.Raw(ActionButton.Plus.Replace("\'","\""))<span class="title" style="margin-top: 3px; margin-left: 10px;">@Resource.Add</span></button>' +
                                 '</div></div>';
                             return dropdown;
                         }
@@ -300,13 +304,13 @@
 
         function get_report(type) {
             $('#frm_search_staff').attr('data-ajax', false);
-            $('#frm_search_staff').attr('action', '@Url.Action("Report", "Staff")');
+            $('#frm_search_staff').attr('action', '@Url.Action("Report", "StaffDepartment")');
             $('#frm_search_staff').attr('target', '_blank');
             $('#frm_search_staff').addClass('no-loading');
             $('#reportType').val(type);
             $('#frm_search_staff').submit();
             $('#frm_search_staff').attr('data-ajax', true);
-            $('#frm_search_staff').attr('action', '@Url.Action("Search", "Staff")');
+            $('#frm_search_staff').attr('action', '@Url.Action("Search", "StaffDepartment")');
             $('#frm_search_staff').removeAttr('target');
             $('#frm_search_staff').removeClass('no-loading');
         }

@@ -1,8 +1,10 @@
 ﻿using AMS.Data.General;
 using AMS.Resources;
 using AMS.Utilities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace AMS.Repositories;
 
@@ -14,6 +16,25 @@ public class DDLRepository : IDDLRepository
     {
         this.db = db;
     }
+
+    public List<SelectListItem> Controllers() =>
+        Assembly.GetExecutingAssembly().GetTypes().Where(a => typeof(Controller).IsAssignableFrom(a))
+        .SelectMany(a => a.GetMethods(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public))
+        .Where(a => !a.GetCustomAttributes(typeof(System.Runtime.CompilerServices.CompilerGeneratedAttribute), true).Any())
+        .Select(a => a.DeclaringType.Name).Distinct().Select(a => new SelectListItem
+        {
+            Value = a.Replace("Controller", ""),
+            Text = a
+        }).ToList();
+
+    public List<SelectListItem> HttpMethods() =>
+        new()
+        {
+            new SelectListItem("GET", "GET"),
+            new SelectListItem("POST", "POST"),
+            new SelectListItem("PUT", "PUT"),
+            new SelectListItem("DELETE", "DELETE")
+        };
 
     public List<SelectListItem> Languages() => new()
     {

@@ -46,7 +46,7 @@
                     <label asp-for="Expires" id="lbl_expires" onclick="change_check()"></label>
                 </div>
             </div>
-            <div class="col-md-6 form-group" style="display: none;" id="kt_expire_date">
+            <div class="col-md-6 form-group" style='@(Model.Expires ? "" : "display: none;")' id="kt_expire_date">
                 <label asp-for="ExpireDate" class="required"></label>
                 <div class="input-group date">
                     <input asp-for="ExpireDate" type="text" placeholder="dd/MM/yyyy" class="form-control" autocomplete="off" />

@@ -1,0 +1,112 @@
+﻿@using AMS.Areas.Trace.Models.Application
+@model Details
+
+<style>
+    #form_content, #exeption {
+        min-height: 200px !important
+    }
+
+    .tooltip {
+        z-index: 1000;
+    }
+</style>
+
+<div class="modal-header">
+    <h5 class="modal-title">@Resource.LogControll</h5>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="ki ki-close"></i>
+    </button>
+</div>
+
+<div class="modal-body">
+    <div class="row">
+        <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+            <label asp-for="Ip"></label>
+            <input asp-for="Ip" class="form-control" disabled />
+        </div>
+        <div class="col-lg-6 col-md-4 col-sm-6 form-group">
+            <label asp-for="Url"></label>
+            @if (Model.Url.Length < 35)
+            {
+                <input asp-for="Url" class="form-control" disabled />
+            }
+            else
+            {
+                <textarea asp-for="Url" rows="1" class="form-control" disabled></textarea>
+            }
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+            <label asp-for="InsertedDate"></label>
+            <input asp-for="InsertedDate" class="form-control" disabled />
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+            <label asp-for="Controller"></label>
+            <input asp-for="Controller" class="form-control" disabled />
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+            <label asp-for="Action"></label>
+            <input asp-for="Action" class="form-control" disabled />
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+            <label asp-for="Title"></label>
+            <input asp-for="Title" class="form-control" disabled />
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+            <label asp-for="HttpMethod"></label>
+            <input asp-for="HttpMethod" class="form-control" disabled />
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+            <label asp-for="Username"></label>
+            <input asp-for="Username" class="form-control" disabled />
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+            <label asp-for="Error"></label>
+            <input asp-for="Error" class="form-control" disabled />
+        </div>
+
+        @if (Model.FormContent != null)
+        {
+            <div class="col-md-12 form-group">
+                <label asp-for="FormContent"></label><br />
+                <div id="form_content">
+                </div>
+            </div>
+        }
+
+        @if (Model.Exception != null)
+        {
+            <div class="col-md-12 form-group">
+                <label asp-for="Exception"></label><br />
+                <div id="exeption">
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@if (Model.FormContent != null)
+{
+    <script>
+        var editor = ace.edit("form_content");
+
+        $(document).ready(function () {
+            editor.setTheme("ace/theme/monokai");
+            editor.getSession().setMode("ace/mode/json");
+            document.getElementById('form_content').style.fontSize = '15px';
+            editor.setValue(JSON.stringify(JSON.parse('@Html.Raw(Model.FormContent)'), null, 2));
+        });
+    </script>
+}
+@if (Model.Exception != null)
+{
+    <script>
+        var exEditor = ace.edit("exeption");
+
+        $(document).ready(function () {
+            exEditor.setTheme("ace/theme/monokai");
+            exEditor.getSession().setMode("ace/mode/json");
+            document.getElementById('exeption').style.fontSize = '15px';
+            exEditor.setValue('@Html.Raw(Model.Exception.Replace("'", "").Replace("\"", ""))');
+        });
+    </script>
+}

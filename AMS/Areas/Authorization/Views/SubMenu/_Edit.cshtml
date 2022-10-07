@@ -19,7 +19,9 @@
 <form asp-action="Edit" asp-controller="SubMenu" asp-area="Authorization" id="frm_EditSubMenu" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="on_success_submenu" role="form">
     <div class="modal-body">
         @Html.AntiForgeryToken()
-        <input asp-for="SubMenuIde" type="hidden"/>
+        <input asp-for="SubMenuIde" type="hidden" />
+        <input asp-for="TagsSQ" type="hidden" />
+        <input asp-for="TagsEN" type="hidden" />
 
         <div class="row">
             <div class="col-md-4 form-group">
@@ -57,7 +59,7 @@
                 <label asp-for="Icon"></label>
                 <div class="input-group">
                     <input asp-for="Icon" class="form-control" />
-                    <div class="input-group-append"><span class="input-group-text"><i id="kt_icon" class="fas fa-code"></i></span></div>
+                    <div class="input-group-append"><span class="input-group-text"><i id="kt_icon" class="@Model.Icon"></i></span></div>
                 </div>
             </div>
             <div class="col-md-4 form-group">
@@ -76,17 +78,17 @@
         <div class="row form-group">
             <div class="col-md-6">
                 <label asp-for="TagsSQ"></label>
-                <input asp-for="TagsSQ" name="basic" id="txt_tags_sq" class="tagify form-control" />
+                <input asp-for="TagsSQ" name="basic" id="txt_tags_sq_e_s" class="tagify form-control" />
             </div>
             <div class="col-md-6">
                 <label asp-for="TagsEN"></label>
-                <input asp-for="TagsEN" name="basic" id="txt_tags_en" class="tagify form-control" />
+                <input asp-for="TagsEN" name="basic" id="txt_tags_en_e_s" class="tagify form-control" />
             </div>
         </div>
     </div>
     <div class="modal-footer modal-footer-uniform w-full justify-content-between">
         <button type="button" class="btn btn-bold btn-pure btn-secondary" data-bs-dismiss="modal">@Resource.Close</button>
-        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Edit</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right" id="btn_submit">@Resource.Edit</button>
     </div>
 </form>
 
@@ -101,9 +103,17 @@
 
         $('#Icon').on('change', function () {
             if ($(this).val() != null && $(this).val() != '') {
-                $('#kt_icon').removeClass('fas fa-code').addClass($(this).val());
+                $('#kt_icon').removeClass('@Model.Icon').addClass($(this).val());
             } else {
-                $('#kt_icon').addClass('fas fa-code');
+                $('#kt_icon').addClass('@Model.Icon');
+            }
+        });
+
+        $('#btn_submit').on('click', function () {
+            if (form.valid()) {
+                $('#TagsSQ').val($('#txt_tags_sq_e_s').val());
+                $('#TagsEN').val($('#txt_tags_en_e_s').val());
+                form.submit();
             }
         });
 
@@ -112,8 +122,8 @@
 
     var KTTagify = function () {
         var init_tagify = function () {
-            var input_sq = document.getElementById('txt_tags_sq');
-            var input_en = document.getElementById('txt_tags_en');
+            var input_sq = document.getElementById('txt_tags_sq_e_s');
+            var input_en = document.getElementById('txt_tags_en_e_s');
 
             var tagify_sq = new Tagify(input_sq, {
                 delimiters: ",",
@@ -128,17 +138,9 @@
             });
 
             function transform_tag(tagData) {
-                var states = [
-                    'success',
-                    'primary',
-                    'danger',
-                    'warning',
-                    'dark',
-                    'primary',
-                    'info'
-                ];
+                var states = ['success', 'dark'];
 
-                tagData.class = 'tagify__tag tagify__tag--' + states[KTUtil.getRandomInt(0, 7)];
+                tagData.class = 'tagify__tag tagify__tag--' + states[random_int_interval(0, 1)];
             }
         }
 
@@ -150,7 +152,7 @@
     }();
 
     function go_back(ide) {
-        $('#modal-large').find('.modal-content').load('@Url.Action("_Edit", "Menu")?ide=' + ide)
+        $('#modal-center-xlarge').find('.modal-content').load('@Url.Action("_Edit", "Menu")?ide=' + ide);
     }
 
     function change_active(e) {
@@ -162,6 +164,14 @@
     }
 
     function on_success_submenu(data) {
-        handle_success(data, SubmitPathType.RELOAD, "");
+        var for_menu = '@(string.IsNullOrEmpty(Model.MenuIde))' == 'True';
+        if (for_menu) {
+            handle_success(data, SubmitPathType.RELOAD, "");
+        } else {
+            handle_success(data, SubmitPathType.NORELOAD, "");
+            setTimeout(function () {
+                go_back('@Model.MenuIde');
+            }, 2100);
+        }
     }
 </script>

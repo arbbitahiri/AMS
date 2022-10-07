@@ -12,6 +12,8 @@
     <div class="modal-body">
         @Html.AntiForgeryToken()
         <input asp-for="MenuIde" type="hidden" />
+        <input asp-for="TagsSQ" type="hidden" />
+        <input asp-for="TagsEN" type="hidden" />
 
         <div class="row">
             <div class="col-md-4 form-group">
@@ -60,11 +62,11 @@
         <div class="row form-group">
             <div class="col-md-6">
                 <label asp-for="TagsSQ"></label>
-                <input asp-for="TagsSQ" name="basic" id="txt_tags_sq" class="tagify form-control" />
+                <input asp-for="TagsSQ" name="basic" id="txt_tags_sq_s" class="tagify form-control" />
             </div>
             <div class="col-md-6">
                 <label asp-for="TagsEN"></label>
-                <input asp-for="TagsEN" name="basic" id="txt_tags_en" class="tagify form-control" />
+                <input asp-for="TagsEN" name="basic" id="txt_tags_en_s" class="tagify form-control" />
             </div>
         </div>
         <div class="separator separator-solid mb-5"></div>
@@ -88,7 +90,7 @@
     </div>
     <div class="modal-footer justify-content-between">
         <button type="button" class="btn btn-bold btn-pure btn-secondary" data-bs-dismiss="modal">@Resource.Close</button>
-        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
+        <button type="button" class="btn btn-bold btn-pure btn-primary float-right" id="btn_submit">@Resource.Add</button>
     </div>
 </form>
 
@@ -113,13 +115,21 @@
             }
         });
 
+        $('#btn_submit').on('click', function () {
+            if (form.valid()) {
+                $('#TagsSQ').val($('#txt_tags_sq_s').val());
+                $('#TagsEN').val($('#txt_tags_en_s').val());
+                form.submit();
+            }
+        });
+
         KTTagify.init();
     });
 
     var KTTagify = function () {
         var init_tagify = function () {
-            var input_sq = document.getElementById('txt_tags_sq');
-            var input_en = document.getElementById('txt_tags_en');
+            var input_sq = document.getElementById('txt_tags_sq_s');
+            var input_en = document.getElementById('txt_tags_en_s');
 
             var tagify_sq = new Tagify(input_sq, {
                 delimiters: ",",
@@ -134,17 +144,9 @@
             });
 
             function transform_tag(tagData) {
-                var states = [
-                    'success',
-                    'primary',
-                    'danger',
-                    'warning',
-                    'dark',
-                    'primary',
-                    'info'
-                ];
+                var states = ['success', 'dark'];
 
-                tagData.class = 'tagify__tag tagify__tag--' + states[KTUtil.getRandomInt(0, 7)];
+                tagData.class = 'tagify__tag tagify__tag--' + states[random_int_interval(0, 1)];
             }
         }
 

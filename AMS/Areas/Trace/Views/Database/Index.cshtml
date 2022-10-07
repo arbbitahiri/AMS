@@ -1,0 +1,250 @@
+﻿@using AMS.Areas.Trace.Models.Database
+@model DatabaseStructure
+
+<style>
+    #editor {
+        min-height: 100px !important;
+        font-size: 17px !important;
+    }
+
+    .dataTables_scroll {
+        box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 30%), 0 2px 6px 2px rgba(60, 64, 67, 15%) !important;
+    }
+</style>
+
+<div class="d-flex flex-row">
+    <div class="flex-row-auto offcanvas-mobile w-300px w-xxl-300px" id="kt_database_info">
+        <partial name="Structure" model="Model" />
+    </div>
+    <div class="flex-row-fluid ml-lg-8 d-block">
+        <div class="card card-custom gutter-b shadow shadow-lg">
+            <div class="card-header">
+                <h3 class="card-title mb-0">@Resource.SQLDatabase</h3>
+                <div class="card-toolbar">
+                    <button onclick="submit_query()" class="btn btn-outline-dark btn-icon w-100 px-4">
+                        <i class="fas fa-play fa-2x mr-2"></i>@Resource.Execute
+                    </button>
+                </div>
+            </div>
+            <form asp-action="ExecuteQuery" asp-controller="Database" id="frm_query_command" method="post" data-ajax="true" data-ajax-success="success_result">
+                <div class="card-body">
+                    @Html.AntiForgeryToken()
+                    <input id="reportType" name="reportType" type="hidden" />
+                    <input id="query" name="query" type="hidden" />
+
+                    <div class="row">
+                        <div class="col-12 form-group">
+                            <div id="editor">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="separator separator-solid my-5"></div>
+
+                    <div id="kt_result" style="display: none;">
+                        <div id="kt_query_result"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script asp-append-version="true" src="~/lib/datatables/js/dataTables.buttons.min.js"></script>
+    <script asp-append-version="true" src="~/lib/datatables/js/buttons.colVis.min.js"></script>
+    <script asp-append-version="true" src="~/lib/datatables/js/buttons.flash.min.js"></script>
+    <script asp-append-version="true" src="~/lib/datatables/js/buttons.html5.min.js"></script>
+    <script asp-append-version="true" src="~/lib/datatables/js/buttons.print.min.js"></script>
+    <script asp-append-version="true" src="~/lib/datatables/js/jszip.min.js"></script>
+    <script asp-append-version="true" src="~/lib/datatables/js/vfs_fonts.js"></script>
+    <script asp-append-version="true" src="~/lib/ace/ace.min.js"></script>
+    <script asp-append-version="true" src="~/lib/ace/ext-language_tools.js"></script>
+    <script asp-append-version="true" src="~/js/sqlcommands.js"></script>
+
+    <script>
+        ace.config.set('basePath', '../../../lib/ace/');
+        var sql_editor = ace.edit("editor");
+
+        $(document).ready(function () {
+            sql_editor.setTheme('ace/theme/terminal');
+            sql_editor.getSession().setMode("ace/mode/sql");
+            sql_editor.setOptions({
+                maxLines: 25,
+                enableBasicAutocompletion: [{
+                    getCompletions: (editor, session, pos, prefix, callback) => {
+                        callback(null, sql_commands.map(function (word) {
+                            return {
+                                caption: word,
+                                value: word,
+                            };
+                        }));
+                    },
+                }],
+                enableLiveAutocompletion: true,
+            });
+
+            $('.select2').select2({
+                width: '100%',
+                language: {
+                    noResults: function () {
+                        return '@Html.Raw(Resource.NoResultsFound)';
+                    },
+                }
+            });
+
+            $('textarea').keyup(delay_event(function () {
+                var inputs = sql_editor.getValue().trim().replace(/(\r\n|\n|\r)/gm, " ").split(" ").filter(a => a != "" && a.toLowerCase() != "as");
+                var table_alias = [];
+                for (var i = 0; i < inputs.length; i++) {
+                    if (tables.includes(inputs[i]) && !table_alias.some(a => a.includes(`-${inputs[i + 1]}`))) {
+                        table_alias.push(`${inputs[i]}-${inputs[i + 1]}`);
+                    }
+                }
+
+                alias_columns(table_alias);
+            }, 400));
+
+            $('#kt_tables_columns').on('show.bs.collapse', function () {
+                $('#kt_icon_table').addClass('text-primary');
+                $('#kt_svg_table').addClass('svg-icon-primary');
+            });
+
+            $('#kt_functions').on('show.bs.collapse', function () {
+                $('#kt_icon_function').addClass('text-primary');
+                $('#kt_svg_function').addClass('svg-icon-primary');
+            });
+
+            $('#kt_procedures').on('show.bs.collapse', function () {
+                $('#kt_icon_procedure').addClass('text-primary');
+                $('#kt_svg_procedure').addClass('svg-icon-primary');
+            });
+
+            $('#kt_tables_columns').on('hide.bs.collapse', function () {
+                $('#kt_icon_table').removeClass('text-primary');
+                $('#kt_svg_table').removeClass('svg-icon-primary');
+            });
+
+            $('#kt_functions').on('hide.bs.collapse', function () {
+                $('#kt_icon_function').removeClass('text-primary');
+                $('#kt_svg_function').removeClass('svg-icon-primary');
+            });
+
+            $('#kt_procedures').on('hide.bs.collapse', function () {
+                $('#kt_icon_procedure').removeClass('text-primary');
+                $('#kt_svg_procedure').removeClass('svg-icon-primary');
+            });
+
+            $(document).bind('keydown keyup', function (e) {
+                if (e.which === 116) {
+                    submit_query();
+                    return false;
+                }
+            });
+        });
+
+        var tables = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Tables.Select(a => a.Name)))');
+        var functions = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Functions.Select(a => a.Name)))');
+        var procedures = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Procedures.Select(a => a.Name)))');
+        var columns = JSON.parse('@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.TableColumns))');
+
+        tables.forEach(info_sql_commands);
+        functions.forEach(info_sql_commands);
+        procedures.forEach(info_sql_commands);
+
+        function info_sql_commands(item) {
+            sql_commands.push(item);
+        }
+
+        function alias_columns(e) {
+            var result = [];
+            e.forEach(function (i) {
+                table = i.split('-')[0];
+                alias = i.split('-')[1];
+
+                if (columns.some(a => a.Table.includes(table))) {
+                    columns.filter(function (j) {
+                        if (j.Table === table) {
+                            return j.Columns;
+                        }
+                    })
+                        .map(a => a.Columns)
+                        .flat()
+                        .forEach(a => result.push(`${alias}.${a}`));
+                }
+            });
+
+            sql_commands = sql_commands.concat(result);
+        }
+
+        function delay_event(callback, ms) {
+            var timer = 0;
+            return function () {
+                var context = this, args = arguments;
+                clearTimeout(timer);
+                timer = setTimeout(function () {
+                    callback.apply(context, args);
+                }, ms || 0);
+            }
+        }
+
+        function submit_query() {
+            $('#query').val(sql_editor.getValue());
+            $('#frm_query_command').submit();
+        }
+
+        function success_result(data) {
+            if (data.error.status != ErrorStatus.SUCCESS) {
+                Swal.fire({
+                    icon: 'error',
+                    title: '@Html.Raw(Resource.Error)',
+                    text: data.error.description,
+                    confirmButtonText: '@Html.Raw(Resource.Okay)'
+                });
+                return;
+            }
+
+            var results = data.results;
+            if (results.length == 0) {
+                Swal.fire({
+                    icon: 'info',
+                    title: '@Html.Raw(Resource.Info)',
+                    text: "@Html.Raw(Resource.NoResultsFound)",
+                    confirmButtonText: '@Html.Raw(Resource.Okay)'
+                });
+                return;
+            }
+
+            $('#kt_result').show();
+            $('#kt_query_result').empty();
+
+            var table = $('<table></table>', {
+                class: 'table table-striped table-bordered w-full table-hover'
+            });
+
+            table.append($('<thead></thead>').append($('<tr></tr>')));
+
+            $.each(results[0], function (i, j) {
+                table.find('thead').find('tr').append($('<th></th>', { text: j }));
+            });
+            console.log(table);
+
+            results.shift();
+            table.DataTable({
+                language: {
+                    url: `/Culture/DataTable/${culture}.json`
+                },
+                keys: true,
+                data: results,
+                deferRender: true,
+                scrollX: true
+            });
+
+            $('#kt_query_result').append(table);
+
+            setTimeout(function () {
+                $('.dataTables_scroll').css('box-shadow', '0 1px 2px 0 rgba(60, 64, 67, 30%), 0 2px 6px 2px rgba(60, 64, 67, 15%) !important');
+            }, 500);
+        }
+    </script>
+}

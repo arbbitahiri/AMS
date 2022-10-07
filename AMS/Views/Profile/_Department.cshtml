@@ -45,6 +45,7 @@
             data: data,
             deferRender: true,
             columnDefs: [
+                { targets: [0, 5], searchable: false },
                 { className: "button-td text-center", targets: [5] },
                 { visible: has_claim, targets: [5] },
                 { width: "5%", targets: [0, 5] },

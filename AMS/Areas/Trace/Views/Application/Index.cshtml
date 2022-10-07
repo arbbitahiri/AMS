@@ -1,0 +1,379 @@
+﻿@using AMS.Areas.Trace.Models.Application
+@model Search
+@inject IDDLRepository repo
+@{
+    ViewData["Title"] = Resource.ListOfLogs;
+
+    UserModel user = (UserModel)ViewData["User"];
+}
+
+<div class="card card-custom gutter-b">
+    <div class="card-header">
+        <h3 class="card-title">@Resource.SearchParameters</h3>
+        <div class="card-toolbar">
+            <input type="checkbox" onchange="change_advanced(this)" id="kt_advance" />
+            <label for="kt_advance" class="m-0">@Resource.AdvancedSearch</label>
+        </div>
+    </div>
+    <div class="card-body">
+        <form asp-action="Search" method="post" data-ajax="true" data-ajax-success="search_success" data-ajax-method="POST" id="kt_frm_log">
+            @Html.AntiForgeryToken()
+            <input asp-for="AdvancedSearch" type="hidden" value="false"/>
+            <input id="type" name="type" type="hidden" />
+
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+                    <label asp-for="Role">@Resource.Role</label>
+                    <select asp-for="Role" asp-items="await repo.Roles(user.Language)" class="form-control select2" onchange="change_users(this)">
+                        <option value="">@Resource.Choose</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+                    <label asp-for="User">@Resource.User</label>
+                    <select asp-for="User" class="form-control select2">
+                        <option value="">@Resource.Choose</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <label asp-for="Date">@Resource.Date</label>
+                    <input asp-for="Date" type="text" class="form-control" />
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <label>@Resource.IPAddress</label>
+                    <input asp-for="Ip" type="text" class="form-control" />
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 form-group advance" style="display: none;">
+                    <label asp-for="Controller">@Resource.Controller</label>
+                    <select asp-for="Controller" asp-items="repo.Controllers()" class="form-control select2">
+                        <option value="">@Resource.Choose</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 form-group advance" style="display: none;">
+                    <label asp-for="Action">@Resource.Action</label>
+                    <input asp-for="Action" type="text" class="form-control" />
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 form-group advance" style="display: none;">
+                    <label asp-for="HttpMethod">@Resource.HttpMethod</label>
+                    <select asp-for="HttpMethod" asp-items="repo.HttpMethods()" class="form-control select2">
+                        <option value="">@Resource.Choose</option>
+                    </select>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 form-group advance" style="display: none;">
+                    <label asp-for="Error">@Resource.IsError</label><br />
+                    <select asp-for="Error" class="form-control select2">
+                        <option value="">@Resource.Choose</option>
+                        <option value="1">@Resource.Yes</option>
+                        <option value="2">@Resource.No</option>
+                    </select>
+                    @*<input asp-for="Error" type="checkbox" data-switch="true" style="cursor: pointer; width: 90px;"
+                           data-bootstrap-switch data-off-color="warning" data-on-color="success" data-handle-width="90"
+                           data-on-text="@Html.Raw(Resource.Yes)" data-off-text="@Html.Raw(Resource.No)" />*@
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <label asp-for="Error" style="visibility:hidden"></label><br />
+                    <button type="submit" class="btn btn-primary btn-block">@Resource.Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card card-custom d-none" id="result">
+    <div class="card-header">
+        <h4 class="card-title mb-0">@Resource.SearchResult</h4>
+        <div class="card-toolbar" id="kt_download">
+            <div class="btn-group dropleft">
+                <button class="btn btn-primary font-weight-bold btn-md dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    @Resource.Download
+                </button>
+                <div class="dropdown-menu dropdown-menu-sm p-0">
+                    <div class="d-flex">
+                        <button class="dropdown-item d-flex flex-column" onclick="get_report(ReportType.PDF)">
+                            <img src="~/Media/Extensions/pdf.png" class="btn-download" asp-append-version="true" />
+                            <span class="title text-center w-100">PDF</span>
+                        </button>
+                        <button class="dropdown-item d-flex flex-column" onclick="get_report(ReportType.EXCEL)">
+                            <img src="~/Media/Extensions/xls.png" class="btn-download" asp-append-version="true" />
+                            <span class="title text-center w-100">Excel</span>
+                        </button>
+                    </div>
+                    <div class="d-flex">
+                        <button class="dropdown-item d-flex flex-column" onclick="get_report(ReportType.WORD)">
+                            <img src="~/Media/Extensions/doc.png" class="btn-download" asp-append-version="true" />
+                            <span class="title text-center w-100">WORD</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body table-responsive fixed-table-body">
+        <table id="tbl_logs" class="table table-striped table-bordered w-full table-hover no-datatable">
+            <thead>
+                <tr>
+                    <th data-priority="2">@Resource.IP.ToUpper()</th>
+                    <th data-priority="3">@Resource.Controller</th>
+                    <th data-priority="3">@Resource.Action</th>
+                    <th data-priority="3">@Resource.User</th>
+                    <th>@Resource.Exception</th>
+                    <th data-priority="3">@Resource.FormContent</th>
+                    <th data-priority="1">@Resource.InsertedDate</th>
+                    <th class="text-center" data-priority="1" data-orderable="false">@Resource.Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/ace/ace.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function () {
+            var start = moment().startOf('day');
+            var end = moment().endOf('day');
+
+            $('#Date').daterangepicker({
+                buttonClasses: ' btn',
+                applyClass: 'btn-primary',
+                cancelClass: 'btn-secondary',
+                timePicker: true,
+                timePicker24Hour: true,
+                timePickerIncrement: 30,
+                startDate: start,
+                endDate: end,
+                locale: {
+                    format: 'DD/MM/YYYY HH:mm',
+                    seperator: " - ",
+                    applyLabel: '@Resource.Continue',
+                    cancelLabel: '@Resource.Cancel',
+                    fromLabel: '@Resource.From',
+                    toLabel: '@Resource.Till',
+                    customRangeLabel: "@Html.Raw(Resource.OtherDate)",
+                    weekLabel: "@Resource.WeekLetter",
+                    daysOfWeek: [
+                        "@Resource.SundayLetter",
+                        "@Html.Raw(Resource.MondayLetter)",
+                        "@Resource.TuesdayLetter",
+                        "@Html.Raw(Resource.WednesdayLetter)",
+                        "@Resource.ThursdayLetter",
+                        "@Resource.FridayLetter",
+                        "@Resource.SaturdayLetter"
+                    ],
+                    monthNames: [
+                        "@Resource.January",
+                        "@Resource.February",
+                        "@Resource.March",
+                        "@Resource.April",
+                        "@Resource.May",
+                        "@Resource.June",
+                        "@Resource.July",
+                        "@Resource.August",
+                        "@Resource.September",
+                        "@Resource.October",
+                        "@Html.Raw(Resource.November)",
+                        "@Resource.December"
+                    ],
+                    firstDay: 1
+                },
+                ranges: {
+                    '@Resource.Today': [moment().startOf('day'), moment()],
+                    '@Resource.Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    '@Html.Raw(Resource.Last7Days)': [moment().subtract(6, 'days'), moment()],
+                    '@Html.Raw(Resource.ThisWeek)': [moment().startOf('week'), moment().endOf('week')],
+                    '@Html.Raw(Resource.Last30Days)': [moment().subtract(29, 'days'), moment()],
+                    '@Html.Raw(Resource.ThisMonth)': [moment().startOf('month'), moment().endOf('month')],
+                    '@Html.Raw(Resource.LastMonth)': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, function (start, end, label) {
+                $('#Date .form-control').val(start.format('DD/MM/YYYY HH:mm') + ' / ' + end.format('DD/MM/YYYY HH:mm'));
+                $('#Date').val(start.format('DD/MM/YYYY HH:mm') + ' / ' + end.format('DD/MM/YYYY HH:mm'));
+            });
+
+            $(".select2").select2({
+                width: "100%",
+                language: {
+                    noResults: function () {
+                        return '@Html.Raw(Resource.NoResultsFound)';
+                    },
+                }
+            });
+
+            load_users();
+        });
+
+        function change_advanced(e) {
+            $('.advance').toggle(250);
+
+            if ($(e).is(':checked')) {
+                $('#AdvancedSearch').val(true);
+            } else {
+                $('#AdvancedSearch').val(false);
+            }
+        }
+
+        function load_users() {
+            $('#User').select2({
+                width: "100%",
+                language: {
+                    noResults: function () {
+                        return '@Html.Raw(Resource.NoResultsFound)';
+                    },
+                    searching: function () {
+                        return '@Html.Raw(Resource.Searching)';
+                    },
+                },
+                ajax: {
+                    url: '@Url.Action("AspUsers")',
+                    type: 'post',
+                    datatype: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            name: params.term,
+                            role: $('#Role').val(),
+                            __RequestVerificationToken: $("[name='__RequestVerificationToken']").val()
+                        };
+                    },
+                    processResults: function (response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    catch: true
+                },
+                templateResult: format_repo,
+                templateSelection: format_repo_selection
+            });
+        }
+
+        function change_users(e) {
+            if ($(e).val() != null && $(e).val() != "") {
+                $('#User').val('').change();
+            }
+        }
+
+        function search_success(data) {
+            if (data.length > 0) {
+                $('#kt_download').removeClass('d-none');
+            }
+            $('#result').removeClass('d-none');
+            var rowCount = 1;
+            $('#tbl_logs').DataTable({
+                destroy: true,
+                language: {
+                    url: `/Culture/DataTable/${culture}.json`
+                },
+                keys: true,
+                responsive: true,
+                pageLength: 10,
+                deferRender: true,
+                data: data,
+                drawCallback: function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                },
+                columnDefs: [
+                    { targets: [0, 7], width: "5%" },
+                    { targets: [1, 2, 3, 6], width: "10%" },
+                    { targets: [4], width: "25%" },
+                    { targets: [5], width: "25%" },
+                    { targets: "_all", defaultContent: "///" },
+                    { targets: [7], className: "button-td text-center" },
+                    { targets: [7], searchable: false }
+                ],
+                columns: [
+                    { data: "ip" },
+                    { data: "controller" },
+                    { data: "action" },
+                    { data: "username" },
+                    {
+                        data: function (row, type, set) {
+                            rowCount++;
+                            var exception = '///';
+                            if (row.exception != null) {
+                                if (row.exception.length > 80) {
+                                    exception = row.exception.substring(0, 80) + '<span class="load-more" onclick="log_details(\'' + row.logIde + '\')"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LoadMore)</a></b></span>';
+                                } else {
+                                    exception = row.exception ?? "///";
+                                }
+                            }
+                            return exception;
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            rowCount++;
+                            var frmCont = '///';
+                            if (row.formContent != null && row.formContent != "") {
+                                var form_content = JSON.parse(row.formContent);
+                                form_content = form_content.filter(a => a.Key != "__RequestVerificationToken");
+                                var content = JSON.stringify(form_content);
+                                if (content.length > 80) {
+                                    frmCont = content.substring(0, 80) + '<span class="load-more" onclick="load_more(this)"><b>.. <a href="#' + rowCount + '">@Html.Raw(Resource.LoadMore)</a></b></span><span class="d-none load-less-fst">' + content.substring(80) + '<span class="d-none load-less-snd" onclick="load_less(this)"><b> <a href="#' + rowCount + '">@Html.Raw(Resource.LookLess)</a></b></span></span>';
+                                } else {
+                                    frmCont = content ?? "///";
+                                }
+                            }
+                            return frmCont;
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            return moment(row.insertDate).format('DD/MM/YYYY HH:mm:ss');
+                        }
+                    },
+                    {
+                        data: function (row, type, set) {
+                            return '<a href=\'javascript:;\' data-toggle="tooltip" title="@Html.Raw(Resource.Details)" data-title="@Html.Raw(Resource.Details)" data-placement="left" class="btn btn-primary btn-icon btn-circle btn-sm" onclick="log_details(\'' + row.logIde + '\')"><i class="fas fa-search"></i></a>';
+                        }
+                    }
+                ]
+            });
+        }
+
+        function load_more_d(e) {
+            $(e).parent().find('.load-less-fst').removeClass('d-none');
+            $(e).parent().parent().find('.load-less-snd').removeClass('d-none');
+            $(e).addClass('d-none');
+        }
+
+        function load_less_d(e) {
+            $(e).addClass('d-none');
+            $(e).parent().addClass('d-none');
+            $(e).parent().parent().find('.load-more').removeClass('d-none');
+        }
+
+        function load_more(e) {
+            $(e).parent().find('.load-less-fst').removeClass('d-none');
+            $(e).parent().parent().find('.load-less-snd').removeClass('d-none');
+            $(e).addClass('d-none');
+        }
+
+        function load_less(e) {
+            $(e).addClass('d-none');
+            $(e).parent().addClass('d-none');
+            $(e).parent().parent().find('.load-more').removeClass('d-none');
+        }
+
+        function log_details(ide) {
+            $('#modal-center-xlarge').find('.modal-content').load('@Url.Action("Details", "Application")?ide=' + ide, function () {
+                $('#modal-center-xlarge').modal('toggle');
+            });
+        }
+
+        function get_report(type) {
+            $('#kt_frm_log').attr('data-ajax', false);
+            $('#kt_frm_log').attr('action', '/Trace/Application/Report');
+            $('#kt_frm_log').attr('target', '_blank');
+            $('#kt_frm_log').addClass('noLoading');
+            $('#type').val(type);
+            $('#kt_frm_log').submit();
+            $('#kt_frm_log').attr('data-ajax', true);
+            $('#kt_frm_log').attr('action', '/Trace/Application/Search');
+            $('#kt_frm_log').removeAttr('target');
+            $('#kt_frm_log').removeClass('no-loading');
+        }
+    </script>
+}

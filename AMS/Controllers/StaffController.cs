@@ -117,7 +117,8 @@ public class StaffController : BaseController
                     PersonalNumber = a.PersonalNumber,
                     Firstname = a.FirstName,
                     Lastname = a.LastName,
-                    BirthDate = a.BirthDate.ToString("dd/MM/yyyy"),
+                    BirthDate = a.BirthDate,
+                    //BirthDate = a.BirthDate.ToString("dd/MM/yyyy"),
                     GenderId = a.GenderId,
                     Email = a.Email,
                     PhoneNumber = a.PhoneNumber,
@@ -199,7 +200,8 @@ public class StaffController : BaseController
                 PersonalNumber = staff.PersonalNumber,
                 FirstName = staff.Firstname,
                 LastName = staff.Lastname,
-                BirthDate = DateTime.ParseExact(staff.BirthDate, "dd/MM/yyyy", null),
+                BirthDate = staff.BirthDate,
+                //BirthDate = DateTime.ParseExact(staff.BirthDate, "dd/MM/yyyy", null),
                 GenderId = staff.GenderId,
                 CityId = staff.CityId,
                 CountryId = staff.CountryId,
@@ -254,7 +256,8 @@ public class StaffController : BaseController
         staff.PersonalNumber = edit.PersonalNumber;
         staff.FirstName = edit.Firstname;
         staff.LastName = edit.Lastname;
-        staff.BirthDate = DateTime.ParseExact(edit.BirthDate, "dd/MM/yyyy", null);
+        staff.BirthDate = edit.BirthDate;
+        //staff.BirthDate = DateTime.ParseExact(edit.BirthDate, "dd/MM/yyyy", null);
         staff.CityId = edit.CityId;
         staff.CountryId = edit.CountryId;
         staff.Address = edit.Address;
@@ -380,8 +383,6 @@ public class StaffController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        DateTime? expirationDate = add.Expires ? DateTime.ParseExact(add.ExpireDate, "dd/MM/yyyy", null) : null;
-
         string path = await SaveFile(configuration, add.FormFile, "StaffDocuments", null);
         db.Add(new StaffDocument
         {
@@ -391,7 +392,7 @@ public class StaffController : BaseController
             Path = path,
             Description = add.Description,
             Active = true,
-            ExpirationDate = expirationDate,
+            ExpirationDate = add.ExpireDate,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
         });
@@ -418,7 +419,7 @@ public class StaffController : BaseController
                 Description = a.Description,
                 Active = a.Active,
                 Expires = a.ExpirationDate.HasValue,
-                ExpireDate = a.ExpirationDate.HasValue ? a.ExpirationDate.Value.ToString("dd/MM/yyyy") : null
+                ExpireDate = a.ExpirationDate
             }).FirstOrDefaultAsync();
 
         return View(document);
@@ -433,14 +434,12 @@ public class StaffController : BaseController
             return Json(new ErrorVM { Status = ErrorStatus.Warning, Description = Resource.InvalidData });
         }
 
-        DateTime? expirationDate = edit.Expires ? DateTime.ParseExact(edit.ExpireDate, "dd/MM/yyyy", null) : null;
-
         var document = await db.StaffDocument.FirstOrDefaultAsync(a => a.StaffDocumentId == CryptoSecurity.Decrypt<int>(edit.StaffDocumentIde));
         document.DocumentTypeId = edit.DocumentTypeId;
         document.Title = edit.Title;
         document.Description = edit.Description;
         document.Active = edit.Active;
-        document.ExpirationDate = expirationDate;
+        document.ExpirationDate = edit.ExpireDate;
         document.UpdatedDate = DateTime.Now;
         document.UpdatedFrom = user.Id;
         document.UpdatedNo = UpdateNo(document.UpdatedNo);
@@ -583,8 +582,10 @@ public class StaffController : BaseController
             StaffId = staffId,
             StaffTypeId = add.StaffTypeId,
             DepartmentId = add.DepartmentId,
-            StartDate = DateTime.ParseExact(add.StartDate, "dd/MM/yyyy", null),
-            EndDate = DateTime.ParseExact(add.EndDate, "dd/MM/yyyy", null),
+            //StartDate = DateTime.ParseExact(add.StartDate, "dd/MM/yyyy", null),
+            //EndDate = DateTime.ParseExact(add.EndDate, "dd/MM/yyyy", null),
+            StartDate = add.StartDate,
+            EndDate = add.EndDate,
             Description = add.Description,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
@@ -610,8 +611,10 @@ public class StaffController : BaseController
                 StaffDepartmentIde = ide,
                 DepartmentId = a.DepartmentId,
                 StaffTypeId = a.StaffTypeId,
-                StartDate = a.StartDate.ToString("dd/MM/yyyy"),
-                EndDate = a.EndDate.ToString("dd/MM/yyyy"),
+                StartDate = a.StartDate,
+                EndDate = a.EndDate,
+                //StartDate = a.StartDate.ToString("dd/MM/yyyy"),
+                //EndDate = a.EndDate.ToString("dd/MM/yyyy"),
                 Description = a.Description
             }).FirstOrDefaultAsync();
 
@@ -631,8 +634,10 @@ public class StaffController : BaseController
         var department = await db.StaffDepartment.FirstOrDefaultAsync(a => a.StaffDepartmentId == staffDepartmentId);
         department.DepartmentId = edit.DepartmentId;
         department.StaffTypeId = edit.StaffTypeId;
-        department.StartDate = DateTime.ParseExact(edit.StartDate, "dd/MM/yyyy", null);
-        department.EndDate = DateTime.ParseExact(edit.EndDate, "dd/MM/yyyy", null);
+        department.StartDate = edit.StartDate;
+        department.EndDate = edit.EndDate;
+        //department.StartDate = DateTime.ParseExact(edit.StartDate, "dd/MM/yyyy", null);
+        //department.EndDate = DateTime.ParseExact(edit.EndDate, "dd/MM/yyyy", null);
         department.UpdatedDate = DateTime.Now;
         department.UpdatedFrom = user.Id;
         department.UpdatedNo = UpdateNo(department.UpdatedNo);
@@ -831,58 +836,6 @@ public class StaffController : BaseController
     public async Task<IActionResult> CheckUsername(string Username)
     {
         if (await db.AspNetUsers.AnyAsync(a => a.UserName == Username))
-        {
-            return Json(true);
-        }
-        else
-        {
-            return Json(false);
-        }
-    }
-
-    [Description("Arb Tahiri", "Method to check end date of subject.")]
-    public IActionResult CheckEndDate(DateTime DepartmentEndDate, string EndDate, string StartDate)
-    {
-        var startDate = DateTime.ParseExact(StartDate ?? DateTime.Now.ToString(), "dd/MM/yyyy", null);
-        var endDate = DateTime.ParseExact(EndDate, "dd/MM/yyyy", null);
-
-        if (endDate <= DepartmentEndDate)
-        {
-            return Json(true);
-        }
-        else if (startDate >= endDate)
-        {
-            return Json(Resource.StartDateVSEndDate);
-        }
-        else
-        {
-            return Json(false);
-        }
-    }
-
-    [Description("Arb Tahiri", "Method to check end date and start date.")]
-    public IActionResult CheckDates(string StartDate, string EndDate)
-    {
-        var startDate = !string.IsNullOrEmpty(StartDate) ? DateTime.ParseExact(StartDate, "dd/MM/yyyy", null) : new DateTime();
-        var endDate = !string.IsNullOrEmpty(EndDate) ? DateTime.ParseExact(EndDate, "dd/MM/yyyy", null) : new DateTime();
-
-        if (startDate <= endDate)
-        {
-            return Json(true);
-        }
-        else
-        {
-            return Json(false);
-        }
-    }
-
-    [Description("Arb Tahiri", "Method to check end date and start date.")]
-    public IActionResult CheckDatesQualification(string From, string To)
-    {
-        var startDate = DateTime.ParseExact(From, "dd/MM/yyyy", null);
-        var endDate = DateTime.ParseExact(To, "dd/MM/yyyy", null);
-
-        if (startDate <= endDate)
         {
             return Json(true);
         }

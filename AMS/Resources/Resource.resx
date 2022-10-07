@@ -192,6 +192,9 @@
   <data name="AdvancedSearch" xml:space="preserve">
     <value>Kërkimi avancuar</value>
   </data>
+  <data name="AgeOverEightteen" xml:space="preserve">
+    <value>Mosha duhet të jetë më e madhe se 18!</value>
+  </data>
   <data name="AL" xml:space="preserve">
     <value>SQ</value>
   </data>
@@ -351,6 +354,9 @@
   <data name="DarkMode" xml:space="preserve">
     <value>Errët</value>
   </data>
+  <data name="Database" xml:space="preserve">
+    <value>Baza e të dhënave</value>
+  </data>
   <data name="DataDeletedSuccessfully" xml:space="preserve">
     <value>Të dhënat u fshinë me sukses!</value>
   </data>
@@ -362,6 +368,9 @@
   </data>
   <data name="Date" xml:space="preserve">
     <value>Data</value>
+  </data>
+  <data name="DateCannotBeLessThanToday" xml:space="preserve">
+    <value>Data nuk mund të jetë më e vogël se sot!</value>
   </data>
   <data name="Day" xml:space="preserve">
     <value>Ditë</value>
@@ -468,6 +477,12 @@
   <data name="ErrorProcessingData" xml:space="preserve">
     <value>Ka ndodhur një gabim gjatë procesimit të të dhënave! Ju lutem provoni përsëri më vonë.</value>
   </data>
+  <data name="Exception" xml:space="preserve">
+    <value>Gabimi</value>
+  </data>
+  <data name="Execute" xml:space="preserve">
+    <value>Ekzekuto</value>
+  </data>
   <data name="ExistsStaffRole" xml:space="preserve">
     <value>{0} {1} ekziston si {2}. Duhet të pasivizoni këtë për të regjistruar pastaj!</value>
   </data>
@@ -498,8 +513,20 @@
   <data name="ForgotPassword" xml:space="preserve">
     <value>Keni harruar fjalëkalimin?</value>
   </data>
+  <data name="FormContent" xml:space="preserve">
+    <value>Përmbajtja e formës</value>
+  </data>
   <data name="Friday" xml:space="preserve">
     <value>E premte</value>
+  </data>
+  <data name="FridayLetter" xml:space="preserve">
+    <value>Pr</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>Nga</value>
+  </data>
+  <data name="Functions" xml:space="preserve">
+    <value>Funksionet</value>
   </data>
   <data name="Gender" xml:space="preserve">
     <value>Gjinia</value>
@@ -537,6 +564,9 @@
   <data name="HoursAgo" xml:space="preserve">
     <value>Orë më parë</value>
   </data>
+  <data name="HttpMethod" xml:space="preserve">
+    <value>Metoda http</value>
+  </data>
   <data name="Icon" xml:space="preserve">
     <value>Ikona</value>
   </data>
@@ -561,6 +591,15 @@
   <data name="InvalidLogin" xml:space="preserve">
     <value>Email/emri përdoruesit ose fjalëkalimi janë të pasakta!</value>
   </data>
+  <data name="IP" xml:space="preserve">
+    <value>Ip</value>
+  </data>
+  <data name="IPAddress" xml:space="preserve">
+    <value>IP adresa</value>
+  </data>
+  <data name="IsError" xml:space="preserve">
+    <value>Gabim?</value>
+  </data>
   <data name="January" xml:space="preserve">
     <value>Janar</value>
   </data>
@@ -575,6 +614,15 @@
   </data>
   <data name="Language" xml:space="preserve">
     <value>Gjuha</value>
+  </data>
+  <data name="Last30Days" xml:space="preserve">
+    <value>30 ditët e fundit</value>
+  </data>
+  <data name="Last7Days" xml:space="preserve">
+    <value>7 ditët e fundit</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>Muajin e kaluar</value>
   </data>
   <data name="Lastname" xml:space="preserve">
     <value>Mbiemri</value>
@@ -621,6 +669,9 @@
   <data name="Locked" xml:space="preserve">
     <value>Bllokuar</value>
   </data>
+  <data name="LogControll" xml:space="preserve">
+    <value>Kontrollimi gjurmëve</value>
+  </data>
   <data name="Login" xml:space="preserve">
     <value>Kyçu</value>
   </data>
@@ -660,6 +711,9 @@
   <data name="MaxImageSize" xml:space="preserve">
     <value>Madhësia maksimale e lejuar për foto</value>
   </data>
+  <data name="MaximumAllowedFileSize" xml:space="preserve">
+    <value>Madhësia maksimale e lejuar e dokumentit është: {0}</value>
+  </data>
   <data name="May" xml:space="preserve">
     <value>Maj</value>
   </data>
@@ -693,6 +747,9 @@
   <data name="Monday" xml:space="preserve">
     <value>E hënë</value>
   </data>
+  <data name="MondayLetter" xml:space="preserve">
+    <value>Hë</value>
+  </data>
   <data name="MustBe18YearsOld" xml:space="preserve">
     <value>Punonjësi i stafit duhet të jetë 18 vjeç ose më i vjetër.</value>
   </data>
@@ -716,6 +773,9 @@
   </data>
   <data name="No" xml:space="preserve">
     <value>Jo</value>
+  </data>
+  <data name="NoCommandExecuted" xml:space="preserve">
+    <value>Nuk është ekzekutuar asnjë komandë!</value>
   </data>
   <data name="NoDocuments" xml:space="preserve">
     <value>Nuk ka dokumente</value>
@@ -771,6 +831,9 @@
   <data name="OFF" xml:space="preserve">
     <value>JO</value>
   </data>
+  <data name="Okay" xml:space="preserve">
+    <value>Në rregull</value>
+  </data>
   <data name="ON" xml:space="preserve">
     <value>PO</value>
   </data>
@@ -782,6 +845,9 @@
   </data>
   <data name="OrdinalNumber" xml:space="preserve">
     <value>Numri rendor</value>
+  </data>
+  <data name="OtherDate" xml:space="preserve">
+    <value>Datë tjetër</value>
   </data>
   <data name="Passive" xml:space="preserve">
     <value>Pasive</value>
@@ -828,6 +894,9 @@
   <data name="PostalCode" xml:space="preserve">
     <value>Kodi postal</value>
   </data>
+  <data name="Procedures" xml:space="preserve">
+    <value>Procedurat</value>
+  </data>
   <data name="Profile" xml:space="preserve">
     <value>Profili</value>
   </data>
@@ -848,6 +917,9 @@
   </data>
   <data name="ResetPassword" xml:space="preserve">
     <value>Rikthe fjalëkalimin</value>
+  </data>
+  <data name="Result" xml:space="preserve">
+    <value>Rezultati</value>
   </data>
   <data name="Role" xml:space="preserve">
     <value>Grupi</value>
@@ -872,6 +944,9 @@
   </data>
   <data name="Saturday" xml:space="preserve">
     <value>E shtunë</value>
+  </data>
+  <data name="SaturdayLetter" xml:space="preserve">
+    <value>Sh</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Ruaj</value>
@@ -936,6 +1011,9 @@
   <data name="SMTPHost" xml:space="preserve">
     <value>Hosti SMTP</value>
   </data>
+  <data name="SQLDatabase" xml:space="preserve">
+    <value>Baza e të dhënave në SQL</value>
+  </data>
   <data name="SSLEnable" xml:space="preserve">
     <value>Aktivizo protokolin SSL</value>
   </data>
@@ -969,6 +1047,9 @@
   <data name="StatusType" xml:space="preserve">
     <value>Lloji statusit</value>
   </data>
+  <data name="Structure" xml:space="preserve">
+    <value>Struktura</value>
+  </data>
   <data name="SubMenu" xml:space="preserve">
     <value>Nënmeny</value>
   </data>
@@ -980,6 +1061,9 @@
   </data>
   <data name="Sunday" xml:space="preserve">
     <value>E diele</value>
+  </data>
+  <data name="SundayLetter" xml:space="preserve">
+    <value>Di</value>
   </data>
   <data name="SureYouWantToDeleteDepartmentForStaff" xml:space="preserve">
     <value>A jeni i sigurt për fshirjen e departamentit nga stafi?</value>
@@ -1024,10 +1108,10 @@
     <value>Taget</value>
   </data>
   <data name="TagsEN" xml:space="preserve">
-    <value>Taget në anglisht (të ndara me presje)</value>
+    <value>Taget në anglisht</value>
   </data>
   <data name="TagsSQ" xml:space="preserve">
-    <value>Taget në shqip (të ndara me presje)</value>
+    <value>Taget në shqip</value>
   </data>
   <data name="ThereHasBeenSystemError" xml:space="preserve">
     <value>Ka ndodhur një gabim në sistem.</value>
@@ -1041,14 +1125,32 @@
   <data name="ThisAccountLocked" xml:space="preserve">
     <value>Kjo llogari është bllokuar!</value>
   </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>Këtë muaj</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>Këtë javë</value>
+  </data>
   <data name="Thursday" xml:space="preserve">
     <value>E enjte</value>
+  </data>
+  <data name="ThursdayLetter" xml:space="preserve">
+    <value>En</value>
+  </data>
+  <data name="Till" xml:space="preserve">
+    <value>Deri</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Titulli</value>
   </data>
+  <data name="Today" xml:space="preserve">
+    <value>Sot</value>
+  </data>
   <data name="Tuesday" xml:space="preserve">
     <value>E martë</value>
+  </data>
+  <data name="TuesdayLetter" xml:space="preserve">
+    <value>Ma</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Lloji</value>
@@ -1080,6 +1182,9 @@
   <data name="UpdatePersonalData" xml:space="preserve">
     <value>Ndryshoni të dhënat personale</value>
   </data>
+  <data name="Url" xml:space="preserve">
+    <value>Linku</value>
+  </data>
   <data name="User" xml:space="preserve">
     <value>Përdoruesi</value>
   </data>
@@ -1104,11 +1209,26 @@
   <data name="Wednesday" xml:space="preserve">
     <value>E mërkurë</value>
   </data>
+  <data name="WednesdayLetter" xml:space="preserve">
+    <value>Më</value>
+  </data>
+  <data name="Week" xml:space="preserve">
+    <value>Java</value>
+  </data>
+  <data name="WeekLetter" xml:space="preserve">
+    <value>J</value>
+  </data>
+  <data name="Weeks" xml:space="preserve">
+    <value>Javë</value>
+  </data>
   <data name="WorkingSince" xml:space="preserve">
     <value>Duke punuar që</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Po</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Dje</value>
   </data>
   <data name="YouHaveNoAccessHere" xml:space="preserve">
     <value>Nuk keni qasje në këtë pjesë të sistemit!</value>

@@ -193,7 +193,9 @@
                 responsive: true,
                 pageLength: 10,
                 data: data,
+                deferRender: true,
                 columnDefs: [
+                    { targets: [0, 7], searchable: false },
                     { targets: [7], className: "button-td text-center" },
                     { targets: [0, 7], width: "5%" },
                     { targets: [2, 3, 4, 5, 6], width: "15%" },

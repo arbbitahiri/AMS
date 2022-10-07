@@ -45,7 +45,7 @@
         <div class="col-md-4">
             <label asp-for="BirthDate" class="required"></label>
             <div class="input-group date">
-                <input asp-for="BirthDate" type="text" placeholder="dd/MM/yyyy" value="@(string.IsNullOrEmpty(Model.BirthDate) ? "" : Model.BirthDate)" class="form-control" autocomplete="off" />
+                <input asp-for="BirthDate" type="text" placeholder="dd/MM/yyyy" class="form-control" autocomplete="off" />
                 <div class="input-group-append">
                     <span class="input-group-text"><i class="la la-calendar"></i></span>
                 </div>

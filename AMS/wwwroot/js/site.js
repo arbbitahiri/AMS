@@ -318,3 +318,7 @@ function show_side_profile() {
         $('#kt_quick_user').addClass('offcanvas-on');
     });
 }
+
+function random_int_interval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min)
+}

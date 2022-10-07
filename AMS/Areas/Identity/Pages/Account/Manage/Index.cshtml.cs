@@ -4,7 +4,7 @@ using AMS.Models.Shared;
 using AMS.Resources;
 using AMS.Utilities;
 using AMS.Utilities.General;
-using AMS.Utilities.Validation;
+using AMS.Utilities.AttributeValidations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -49,8 +49,8 @@ public partial class IndexModel : BaseIModel
         [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
         public string PhoneNumber { get; set; }
 
-        [FileExtension(".png,.jpg,.bmp,.jpeg", ErrorMessageResourceName = "AllowedFormatImage", ErrorMessageResourceType = typeof(Resource))]
-        [MaxFileSize(10640, ErrorMessageResourceName = "MaxImageSize", ErrorMessageResourceType = typeof(Resource))]
+        [FileExtension(Constants.FileExtension, ErrorMessageResourceName = "AllowedFileFormats", ErrorMessageResourceType = typeof(Resource))]
+        [MaxFileSize(Constants.MaxFileSize, ErrorMessageResourceName = "MaximumAllowedFileSize", ErrorMessageResourceType = typeof(Resource))]
         public IFormFile ProfileImage { get; set; }
 
         public string ImagePath { get; set; }

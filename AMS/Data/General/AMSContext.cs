@@ -24,6 +24,7 @@ public partial class AMSContext : DbContext
     public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
     public virtual DbSet<City> City { get; set; }
     public virtual DbSet<Country> Country { get; set; }
+    public virtual DbSet<DatabaseQuery> DatabaseQuery { get; set; }
     public virtual DbSet<Department> Department { get; set; }
     public virtual DbSet<DocumentType> DocumentType { get; set; }
     public virtual DbSet<Email> Email { get; set; }
@@ -356,6 +357,27 @@ public partial class AMSContext : DbContext
                 .WithMany(p => p.CountryUpdatedFromNavigation)
                 .HasForeignKey(d => d.UpdatedFrom)
                 .HasConstraintName("FK_Country_AspNetUsers_Updated");
+        });
+
+        modelBuilder.Entity<DatabaseQuery>(entity =>
+        {
+            entity.ToTable("DatabaseQuery", "Core");
+
+            entity.Property(e => e.DatabaseQueryId).HasColumnName("DatabaseQueryID");
+
+            entity.Property(e => e.InsertedDate).HasColumnType("datetime");
+
+            entity.Property(e => e.InsertedFrom)
+                .IsRequired()
+                .HasMaxLength(450);
+
+            entity.Property(e => e.Query).IsRequired();
+
+            entity.HasOne(d => d.InsertedFromNavigation)
+                .WithMany(p => p.DatabaseQuery)
+                .HasForeignKey(d => d.InsertedFrom)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_DatabaseQuery_AspNetUsers");
         });
 
         modelBuilder.Entity<Department>(entity =>

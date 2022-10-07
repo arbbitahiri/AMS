@@ -20,8 +20,8 @@ public class FunctionRepository : IFunctionRepository
     public async Task<List<MenuListAccess>> MenuListAccess(string role, LanguageEnum lang) =>
         await db.Set<MenuListAccess>().FromSqlInterpolated(sql: $"SELECT * FROM [MenuListAccess] ({role}, {lang})").ToListAsync();
 
-    public async Task<List<Logs>> Logs(string roleId, string userId, DateTime startDate, DateTime endDate, string ip, string controller, string action, string httpMethod, bool error) =>
-        await db.Set<Logs>().FromSqlInterpolated(sql: $"SELECT * FROM [Logs] ({roleId}, {userId}, {startDate}, {endDate}, {ip}, {controller}, {action}, {httpMethod}, {error})").ToListAsync();
+    public async Task<List<Logs>> Logs(string roleId, string userId, DateTime startDate, DateTime endDate, string ip, string controller, string action, string httpMethod, int? error, bool advancedSearch) =>
+        await db.Set<Logs>().FromSqlInterpolated(sql: $"SELECT * FROM [Logs] ({roleId}, {userId}, {startDate}, {endDate}, {ip}, {controller}, {action}, {httpMethod}, {error}, {advancedSearch})").ToListAsync();
 
     public async Task<List<AttendanceConsecutiveDays>> AttendanceConsecutiveDays(int? staffId, int? departmentId, int? staffTypeId, DateTime? startDate, DateTime? endDate, LanguageEnum language) =>
         await db.Set<AttendanceConsecutiveDays>().FromSqlInterpolated(sql: $"SELECT * FROM [AttendanceConsecutiveDays] ({staffId}, {departmentId}, {staffTypeId}, {startDate}, {endDate}, {language})").ToListAsync();
@@ -34,4 +34,7 @@ public class FunctionRepository : IFunctionRepository
 
     public async Task<List<StaffListHistory>> StaffListHistory(int? staffId, int? departmentId, int? staffTypeId, DateTime? startDate, DateTime? endDate, string personalNumber, string firstName, string lastName, DateTime? birthDate, int? statusType, bool advanced, LanguageEnum language) =>
         await db.Set<StaffListHistory>().FromSqlInterpolated(sql: $"SELECT * FROM [StaffListHistory] ({staffId}, {departmentId}, {staffTypeId}, {startDate}, {endDate}, {personalNumber}, {firstName}, {lastName}, {birthDate}, {statusType}, {advanced}, {language})").ToListAsync();
+
+    public async Task<List<TablesWithColumns>> TablesWithColumns() =>
+        await db.Set<TablesWithColumns>().FromSqlInterpolated(sql: $"SELECT * FROM [TablesWithColumns] ()").ToListAsync();
 }

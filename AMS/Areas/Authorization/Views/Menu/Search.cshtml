@@ -20,7 +20,7 @@
                     <th>@Resource.Icon</th>
                     <th>@Resource.Controller</th>
                     <th>@Resource.Action</th>
-                    <th style="width: 10% !important;" data-orderable="false">@Resource.Actions</th>
+                    <th class="text-center" style="width: 10% !important;" data-orderable="false">@Resource.Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -51,7 +51,8 @@
             order: [[0, "asc"]],
             columnDefs: [
                 { targets: [5], width: '5%' },
-                { targets: [5], className: 'button-td' }
+                { targets: [0, 5], searchable: false },
+                { targets: [5], className: 'button-td text-center' }
             ],
             columns: [
                 {

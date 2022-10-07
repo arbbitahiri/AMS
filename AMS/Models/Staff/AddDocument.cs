@@ -1,5 +1,6 @@
 ﻿using AMS.Resources;
-using AMS.Utilities.Validation;
+using AMS.Utilities.AttributeValidations;
+using AMS.Utilities.General;
 using System.ComponentModel.DataAnnotations;
 
 namespace AMS.Models.Staff;
@@ -20,12 +21,13 @@ public class AddDocument
     public bool Expires { get; set; }
 
     [Display(Name = "ExpireDate", ResourceType = typeof(Resource))]
-    [RequiredIf(nameof(Expires), "True", ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    public string ExpireDate { get; set; }
+    [RequiredIfChecked(nameof(Expires), true, ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+    public DateTime? ExpireDate { get; set; }
 
     [Display(Name = "Document", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    [FileExtension(".xls,.xlsx,.xlsm,.doc,.docm,.docx,.pdf,.pps,.ppsx,.ppt,.pptx", ErrorMessageResourceName = "AllowedFileFormats", ErrorMessageResourceType = typeof(Resource))]
+    [FileExtension(Constants.FileExtension, ErrorMessageResourceName = "AllowedFileFormats", ErrorMessageResourceType = typeof(Resource))]
+    [MaxFileSize(Constants.MaxFileSize, ErrorMessageResourceName = "MaximumAllowedFileSize", ErrorMessageResourceType = typeof(Resource))]
     public IFormFile FormFile { get; set; }
 
     [Display(Name = "Description", ResourceType = typeof(Resource))]

@@ -3,6 +3,7 @@ using AMS.Data.Core;
 using AMS.Data.General;
 using AMS.Repositories;
 using AMS.Services;
+using AMS.Utilities.Binders;
 using AMS.Utilities.General;
 using AMS.Utilities.NotificationUtil;
 using Microsoft.AspNetCore.Authorization;
@@ -26,6 +27,9 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddControllersWithViews(setupAction =>
 {
     setupAction.EnableEndpointRouting = false;
+    setupAction.ModelBinderProviders.Insert(0, new DateTimeModelBinderProvider());
+    setupAction.ModelBinderProviders.Insert(0, new ArrayModelBinderProvider());
+    setupAction.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
 });
 
 builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>

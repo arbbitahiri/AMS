@@ -17,6 +17,7 @@ namespace AMS.Data.General
             CityUpdatedFromNavigation = new HashSet<City>();
             CountryInsertedFromNavigation = new HashSet<Country>();
             CountryUpdatedFromNavigation = new HashSet<Country>();
+            DatabaseQuery = new HashSet<DatabaseQuery>();
             DepartmentInsertedFromNavigation = new HashSet<Department>();
             DepartmentUpdatedFromNavigation = new HashSet<Department>();
             DocumentTypeInsertedFromNavigation = new HashSet<DocumentType>();
@@ -88,6 +89,7 @@ namespace AMS.Data.General
         public virtual ICollection<City> CityUpdatedFromNavigation { get; set; }
         public virtual ICollection<Country> CountryInsertedFromNavigation { get; set; }
         public virtual ICollection<Country> CountryUpdatedFromNavigation { get; set; }
+        public virtual ICollection<DatabaseQuery> DatabaseQuery { get; set; }
         public virtual ICollection<Department> DepartmentInsertedFromNavigation { get; set; }
         public virtual ICollection<Department> DepartmentUpdatedFromNavigation { get; set; }
         public virtual ICollection<DocumentType> DocumentTypeInsertedFromNavigation { get; set; }

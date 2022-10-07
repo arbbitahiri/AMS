@@ -1,5 +1,5 @@
 ﻿using AMS.Resources;
-using AMS.Utilities.Validation;
+using AMS.Utilities.AttributeValidations;
 using System.ComponentModel.DataAnnotations;
 
 namespace AMS.Models.Document;
@@ -21,8 +21,8 @@ public class Edit
     public bool Expires { get; set; }
 
     [Display(Name = "ExpireDate", ResourceType = typeof(Resource))]
-    [RequiredIf(nameof(Expires), "True", ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    public string ExpireDate { get; set; }
+    [RequiredIfChecked(nameof(Expires), true, ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
+    public DateTime? ExpireDate { get; set; }
 
     [Display(Name = "Description", ResourceType = typeof(Resource))]
     public string Description { get; set; }

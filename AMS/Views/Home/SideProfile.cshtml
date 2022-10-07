@@ -36,7 +36,7 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="navi-text text-muted text-hover-primary">@Model.Email</span>
+                        <span class="navi-text text-muted text-hover-primary" data-toggle="tooltip" data-placement="top" title="@Model.Email">@(Model.Email.Length > 20 ? Model.Email.Substring(0, 20) + "..." : Model.Email)</span>
                     </span>
                 </a>
                 <form method="post" action="/Identity/Account/Logout" id="kt_logout" class="d-inline">
@@ -105,6 +105,10 @@
 </div>
 
 <script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
     function close_side_profile() {
         $('#kt_quick_user').removeClass('offcanvas-on');
         $('.offcanvas-overlay').removeClass('offcanvas-overlay')

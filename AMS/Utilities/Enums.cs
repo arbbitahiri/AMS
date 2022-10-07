@@ -103,3 +103,11 @@ public enum Absent
     Yes = 1,
     No = 2
 }
+
+public enum ConnectionString
+{
+    ServerName = 1,
+    Database = 2,
+    UserId = 3,
+    Password = 4
+}

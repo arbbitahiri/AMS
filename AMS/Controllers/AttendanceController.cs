@@ -373,11 +373,6 @@ public class AttendanceController : BaseController
         var parameters = new List<ReportParameter>()
         {
             new ReportParameter("PrintedFrom", $"{user.FirstName} {user.LastName}"),
-            new ReportParameter("PersonalNumber", Resource.PersonalNumber),
-            new ReportParameter("FirstName", Resource.Firstname),
-            new ReportParameter("LastName", Resource.Lastname),
-            new ReportParameter("Department", Resource.Department),
-            new ReportParameter("StaffType", Resource.StaffType),
             new ReportParameter("StartDate", Resource.StartDate),
             new ReportParameter("EndDate", Resource.EndDate),
             new ReportParameter("WorkingSince", Resource.WorkingSince),

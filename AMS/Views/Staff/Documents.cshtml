@@ -92,10 +92,13 @@
                 data: data,
                 deferRender: true,
                 columnDefs: [
-                    { width: "5%", targets: [0, 3, 4, 5, 7, 8] },
+                    { targets: [0, 5, 8], searchable: false },
+                    { width: "1%", targets: [0] },
+                    { width: "5%", targets: [4, 5, 7, 8] },
+                    { width: "8%", targets: [3] },
                     { width: "15%", targets: [1, 2] },
                     { width: "40%", targets: [5] },
-                    { className: "button-td text-center", targets: [3, 4, 5, 7, 8] },
+                    { className: "button-td text-center", targets: [4, 5, 7, 8] },
                     { targets: "_all", defaultContent: "///" }
                 ],
                 order: [[0, "asc"]],
@@ -111,10 +114,11 @@
                     {
                         data: function (row, type, set) {
                             var img_path = row.fileType.includes('pdf') ? 'pdf' : (row.fileType.includes('xl') ? 'xls' : (row.fileType.includes('do') ? 'doc' : (row.fileType.includes('pp') ? 'ppt' : 'pdf')));
+                            var txt_path = row.fileType.includes('pdf') ? 'PDF' : (row.fileType.includes('xl') ? 'Excel' : (row.fileType.includes('do') ? 'Word' : (row.fileType.includes('pp') ? 'PowerPoint' : 'PDF')));
 
                             return '<div class="flex-shrink-0">' +
                                 '<img src="/media/extensions/' + img_path + '.png" asp-append-version="true" class="max-h-25px" />' +
-                                '</div>';
+                                '<span class="ml-2">' + txt_path + '</span></div>';
                         }
                     },
                     {

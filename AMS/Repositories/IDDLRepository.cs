@@ -7,6 +7,10 @@ public interface IDDLRepository
 {
     List<SelectListItem> Languages();
 
+    List<SelectListItem> Controllers();
+
+    List<SelectListItem> HttpMethods();
+
     Task<List<SelectListItem>> Genders(LanguageEnum language);
 
     Task<List<SelectListItem>> Roles(LanguageEnum language);

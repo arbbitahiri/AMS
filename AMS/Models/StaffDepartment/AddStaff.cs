@@ -1,4 +1,5 @@
 ﻿using AMS.Resources;
+using AMS.Utilities.AttributeValidations;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,20 +12,22 @@ public class AddStaff
 
     [Display(Name = "Department", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    public int DepartmentId { get; set; }
+    public int ADepartmentId { get; set; }
 
     [Display(Name = "StaffType", ResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    public int StaffTypeId { get; set; }
+    public int AStaffTypeId { get; set; }
 
     [Display(Name = "StartDate", ResourceType = typeof(Resource))]
+    [DateGreaterThanToday(ErrorMessageResourceName = "DateCannotBeLessThanToday", ErrorMessageResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    public DateTime StartDate { get; set; }
+    public DateTime AStartDate { get; set; }
 
     [Display(Name = "EndDate", ResourceType = typeof(Resource))]
-    [Remote("CheckDates", "StaffDepartment", AdditionalFields = nameof(StartDate), ErrorMessageResourceName = "StartDateVSEndDate", ErrorMessageResourceType = typeof(Resource))]
+    [DateGreaterThanToday(ErrorMessageResourceName = "DateCannotBeLessThanToday", ErrorMessageResourceType = typeof(Resource))]
+    [DateCompare(nameof(AStartDate), nameof(AStartDate), ErrorMessageResourceName = "StartDateVSEndDate", ErrorMessageResourceType = typeof(Resource))]
     [Required(ErrorMessageResourceName = "RequiredField", ErrorMessageResourceType = typeof(Resource))]
-    public DateTime EndDate { get; set; }
+    public DateTime AEndDate { get; set; }
 
     [Display(Name = "Description", ResourceType = typeof(Resource))]
     public string Description { get; set; }

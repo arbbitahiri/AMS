@@ -68,11 +68,8 @@ public class StaffDepartmentController : BaseController
             {
                 StaffIde = ide,
                 StaffName = $"{a.Staff.FirstName} {a.Staff.LastName} - ({a.Staff.PersonalNumber})",
-                DepartmentId = a.DepartmentId,
-                StaffTypeId = a.StaffTypeId,
-                StartDate = a.StartDate,
-                EndDate= a.EndDate,
-                Description = a.Description
+                ADepartmentId = a.DepartmentId,
+                AStaffTypeId = a.StaffTypeId
             }).FirstOrDefaultAsync();
         return PartialView(staff);
     }
@@ -105,10 +102,10 @@ public class StaffDepartmentController : BaseController
         db.StaffDepartment.Add(new StaffDepartment
         {
             StaffId = staffId,
-            DepartmentId = addStaff.DepartmentId,
-            StaffTypeId = addStaff.StaffTypeId,
-            StartDate = addStaff.StartDate,
-            EndDate = addStaff.EndDate,
+            DepartmentId = addStaff.ADepartmentId,
+            StaffTypeId = addStaff.AStaffTypeId,
+            StartDate = addStaff.AStartDate,
+            EndDate = addStaff.AEndDate,
             Description = addStaff.Description,
             InsertedDate = DateTime.Now,
             InsertedFrom = user.Id
@@ -184,26 +181,6 @@ public class StaffDepartmentController : BaseController
         return reportType == ReportType.PDF ?
             File(reportByte, contentType) :
             File(reportByte, contentType, fileName);
-    }
-
-    #endregion
-
-    #region Remote
-
-    [Description("Arb Tahiri", "Method to check end date and start date.")]
-    public IActionResult CheckDates(string StartDate, string EndDate)
-    {
-        var startDate = !string.IsNullOrEmpty(StartDate) ? DateTime.ParseExact(StartDate, "dd/MM/yyyy", null) : new DateTime();
-        var endDate = !string.IsNullOrEmpty(EndDate) ? DateTime.ParseExact(EndDate, "dd/MM/yyyy", null) : new DateTime();
-
-        if (startDate <= endDate)
-        {
-            return Json(true);
-        }
-        else
-        {
-            return Json(false);
-        }
     }
 
     #endregion

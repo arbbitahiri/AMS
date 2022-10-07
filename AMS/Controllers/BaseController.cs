@@ -23,6 +23,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Net;
 using System.Net.Mail;
+using System.Reflection;
 using System.Runtime.Versioning;
 
 namespace AMS.Controllers;
@@ -310,7 +311,7 @@ public class BaseController : Controller
         return password;
     }
 
-    protected string GetMonthName(int month) =>
+    protected static string GetMonthName(int month) =>
         month switch
         {
             1 => Resource.January,
@@ -469,19 +470,13 @@ public class BaseController : Controller
 
     #region Select list items
 
-    /// <summary>
-    /// Method to get first 10 users with specified name
-    /// </summary>
-    /// <param name="name">Can be first or last name, email or username</param>
-    /// <param name="role">Is the selected role in another select list</param>
-    /// <returns>First 10 users with the specified condition</returns>
     [HttpPost, ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "List of users for select list")]
     public async Task<IActionResult> AspUsers(string name, string role = "")
     {
         string search = string.IsNullOrEmpty(name) ? "" : name;
         var list = await db.AspNetUsers
-            .Where(a => (a.FirstName.ToLower().Contains(search.ToLower()) || a.LastName.ToLower().Contains(search.ToLower()) || a.Email.ToLower().Contains(search.ToLower()) || a.UserName.ToLower().Contains(search.ToLower()))
+            .Where(a => (a.FirstName.ToLower().Contains(search.ToLower()) || a.LastName.ToLower().Contains(search.ToLower()))
                 && (string.IsNullOrEmpty(role) || a.Role.Any(b => b.Id == role)))
             .Take(10)
             .Select(a => new Select2
@@ -495,11 +490,6 @@ public class BaseController : Controller
         return Json(list.OrderBy(a => a.id));
     }
 
-    /// <summary>
-    /// Method to get first 10 staff with specified name
-    /// </summary>
-    /// <param name="name">Can be first or last name, email or username</param>
-    /// <returns>First 10 staff with the specified condition</returns>
     [HttpPost, ValidateAntiForgeryToken]
     [Description("Arb Tahiri", "List of staff for select list")]
     public async Task<IActionResult> GetStaff(string name, string userId)
@@ -508,7 +498,8 @@ public class BaseController : Controller
         var list = await db.Staff
             .Include(a => a.User)
             .Where(a => (a.FirstName.ToLower().Contains(search.ToLower()) || a.LastName.ToLower().Contains(search.ToLower()))
-                && (string.IsNullOrEmpty(userId) || a.UserId != userId))
+                && (string.IsNullOrEmpty(userId) || a.UserId != userId)
+                && (a.StaffDepartment.Any(a => a.EndDate.Date >= DateTime.Now.Date)))
             .Take(10)
             .Select(a => new Select2
             {
@@ -521,11 +512,6 @@ public class BaseController : Controller
         return Json(list.OrderBy(a => a.id));
     }
 
-    /// <summary>
-    /// Method to get staff
-    /// </summary>
-    /// <param staffId="staffId">Staff id from db</param>
-    /// <returns>The staff</returns>
     [HttpGet, Description("Arb Tahiri", "List of staff for select list")]
     public async Task<IActionResult> GetCurrentStaff(int staffId) =>
         Json(await db.Staff

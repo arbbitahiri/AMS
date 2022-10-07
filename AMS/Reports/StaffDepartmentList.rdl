@@ -562,7 +562,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=RowNumber(nothing)</Value>
                                   <Style>
                                     <FontFamily>Times New Roman</FontFamily>
                                   </Style>
@@ -843,14 +843,14 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="EndDate1">
+                        <Textbox Name="Status">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!EndDate.Value</Value>
+                                  <Value>=Fields!Status.Value</Value>
                                   <Style>
                                     <FontFamily>Times New Roman</FontFamily>
                                   </Style>
@@ -859,7 +859,7 @@
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>EndDate1</rd:DefaultName>
+                          <rd:DefaultName>Status</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -908,7 +908,7 @@
             <Top>12.37431mm</Top>
             <Left>2.921mm</Left>
             <Height>18mm</Height>
-            <Width>11.46in</Width>
+            <Width>11.46026in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>

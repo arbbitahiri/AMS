@@ -1,5 +1,126 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using AMS.Models.StaffDepartment
+@model AddStaff
+@inject IDDLRepository repo
 @{
+    UserModel user = (UserModel)ViewData["User"];
 }
+
+<div class="modal-header">
+    <h5 class="modal-title">@Resource.AddDepartment @Resource.For.ToLower() @Model.StaffName</h5>
+    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+        <i aria-hidden="true" class="ki ki-close"></i>
+    </button>
+</div>
+
+<form asp-action="AddStaff" asp-controller="StaffDepartment" id="frm_create_department" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="success_create_department" role="form">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        <input asp-for="StaffIde" type="hidden" />
+
+        <div class="row pl-2 pr-2">
+            <div class="col-md-6 form-group">
+                <label asp-for="ADepartmentId" class="required"></label>
+                <select asp-for="ADepartmentId" asp-items="await repo.Departments(user.Language)" class="form-control select2">
+                    <option value="">@Resource.Choose</option>
+                </select>
+                <span asp-validation-for="ADepartmentId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="AStaffTypeId" class="required"></label>
+                <select asp-for="AStaffTypeId" asp-items="await repo.StaffTypes(user.Language)" class="form-control select2">
+                    <option value="">@Resource.Choose</option>
+                </select>
+                <span asp-validation-for="AStaffTypeId" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="AStartDate" class="required"></label>
+                <div class="input-group date">
+                    <input asp-for="AStartDate" type="text" placeholder="dd/MM/yyyy" class="form-control" autocomplete="off" value="@DateTime.Now.ToString("dd/MM/yyyy")"/>
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="la la-calendar"></i></span>
+                    </div>
+                </div>
+                <span asp-validation-for="AStartDate" class="text-danger"></span>
+            </div>
+            <div class="col-md-6 form-group">
+                <label asp-for="AEndDate" class="required"></label>
+                <div class="input-group date">
+                    <input asp-for="AEndDate" type="text" placeholder="dd/MM/yyyy" class="form-control" autocomplete="off" value="@DateTime.Now.ToString("dd/MM/yyyy")" />
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="la la-calendar"></i></span>
+                    </div>
+                </div>
+                <span asp-validation-for="AEndDate" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="row form-group pl-2 pr-2 pt-2">
+            <div class="col-md-12">
+                <label asp-for="Description"></label>
+                <textarea asp-for="Description" type="text" rows="2" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer modal-footer-uniform w-full justify-content-between">
+        <button type="button" class="btn btn-bold btn-pure btn-secondary" data-bs-dismiss="modal">@Resource.Close</button>
+        <button type="submit" class="btn btn-bold btn-pure btn-primary float-right">@Resource.Add</button>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $.validator.setDefaults({ ignore: '' });
+        var form = $('#frm_create_department');
+        form.removeData('validator');
+        form.removeData('unobtrusiveValidation');
+        $.validator.unobtrusive.parse(form);
+
+        if (culture == 'sq-AL') {
+            $('textarea').prop('spellcheck', false);
+        } else {
+            $('textarea').prop('spellcheck', true);
+        }
+
+        $(".select2").select2({
+            width: "100%",
+            language: {
+                noResults: function () {
+                    return '@Html.Raw(Resource.NoResultsFound)';
+                },
+            }
+        });
+
+        $("#AStartDate").datepicker({
+            language: cultureShort,
+            rtl: KTUtil.isRTL(),
+            todayBtn: "linked",
+            todayHighlight: true,
+            templates: arrows,
+            autoclose: true,
+            orientation: "bottom",
+            format: 'dd/mm/yyyy'
+        }).inputmask("mask", {
+            mask: "99/99/9999",
+            placeholder: "dd/MM/yyyy"
+        });
+
+        $("#AEndDate").datepicker({
+            language: cultureShort,
+            rtl: KTUtil.isRTL(),
+            todayBtn: "linked",
+            todayHighlight: true,
+            templates: arrows,
+            autoclose: true,
+            orientation: "bottom",
+            format: 'dd/mm/yyyy'
+        }).inputmask("mask", {
+            mask: "99/99/9999",
+            placeholder: "dd/MM/yyyy"
+        });
+    });
+
+    function success_create_department(data) {
+        handle_success(data, SubmitPathType.RELOAD, "");
+    }
+</script>

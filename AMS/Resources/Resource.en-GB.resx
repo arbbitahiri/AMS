@@ -1087,10 +1087,10 @@
     <value>Tags</value>
   </data>
   <data name="TagsEN" xml:space="preserve">
-    <value>Tags in english (comma separated)</value>
+    <value>Tags in english</value>
   </data>
   <data name="TagsSQ" xml:space="preserve">
-    <value>Tags in albanian (comma separated)</value>
+    <value>Tags in albanian</value>
   </data>
   <data name="SureYouWantToDeleteStaffCannotReturn" xml:space="preserve">
     <value>Deleted staff cannot be restored. Are you sure you want to delete staff?</value>
@@ -1118,5 +1118,122 @@
   </data>
   <data name="AdvancedSearch" xml:space="preserve">
     <value>Advanced search</value>
+  </data>
+  <data name="AgeOverEightteen" xml:space="preserve">
+    <value>Age must be greater than 18 years!</value>
+  </data>
+  <data name="DateCannotBeLessThanToday" xml:space="preserve">
+    <value>Date cannot be less than today!</value>
+  </data>
+  <data name="MaximumAllowedFileSize" xml:space="preserve">
+    <value>Maximum allowed document size is: {0}</value>
+  </data>
+  <data name="Exception" xml:space="preserve">
+    <value>Exception</value>
+  </data>
+  <data name="FormContent" xml:space="preserve">
+    <value>Form content</value>
+  </data>
+  <data name="FridayLetter" xml:space="preserve">
+    <value>Fr</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="HttpMethod" xml:space="preserve">
+    <value>Http method</value>
+  </data>
+  <data name="IP" xml:space="preserve">
+    <value>Ip</value>
+  </data>
+  <data name="IPAddress" xml:space="preserve">
+    <value>IP address</value>
+  </data>
+  <data name="IsError" xml:space="preserve">
+    <value>Error?</value>
+  </data>
+  <data name="Last30Days" xml:space="preserve">
+    <value>Last 30 days</value>
+  </data>
+  <data name="Last7Days" xml:space="preserve">
+    <value>Last 7 days</value>
+  </data>
+  <data name="LastMonth" xml:space="preserve">
+    <value>Last month</value>
+  </data>
+  <data name="LogControll" xml:space="preserve">
+    <value>Log controll</value>
+  </data>
+  <data name="MondayLetter" xml:space="preserve">
+    <value>Mo</value>
+  </data>
+  <data name="OtherDate" xml:space="preserve">
+    <value>Other date</value>
+  </data>
+  <data name="SaturdayLetter" xml:space="preserve">
+    <value>Sa</value>
+  </data>
+  <data name="SundayLetter" xml:space="preserve">
+    <value>Su</value>
+  </data>
+  <data name="ThisMonth" xml:space="preserve">
+    <value>This month</value>
+  </data>
+  <data name="ThursdayLetter" xml:space="preserve">
+    <value>Th</value>
+  </data>
+  <data name="Till" xml:space="preserve">
+    <value>To</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>Today</value>
+  </data>
+  <data name="TuesdayLetter" xml:space="preserve">
+    <value>Tu</value>
+  </data>
+  <data name="Url" xml:space="preserve">
+    <value>Url</value>
+  </data>
+  <data name="WednesdayLetter" xml:space="preserve">
+    <value>We</value>
+  </data>
+  <data name="Week" xml:space="preserve">
+    <value>Week</value>
+  </data>
+  <data name="WeekLetter" xml:space="preserve">
+    <value>W</value>
+  </data>
+  <data name="Weeks" xml:space="preserve">
+    <value>Weeks</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
+  </data>
+  <data name="Database" xml:space="preserve">
+    <value>Database</value>
+  </data>
+  <data name="Execute" xml:space="preserve">
+    <value>Execute</value>
+  </data>
+  <data name="Result" xml:space="preserve">
+    <value>Result</value>
+  </data>
+  <data name="SQLDatabase" xml:space="preserve">
+    <value>SQL database</value>
+  </data>
+  <data name="Functions" xml:space="preserve">
+    <value>Functions</value>
+  </data>
+  <data name="NoCommandExecuted" xml:space="preserve">
+    <value>No command executed!</value>
+  </data>
+  <data name="Okay" xml:space="preserve">
+    <value>Okay</value>
+  </data>
+  <data name="Procedures" xml:space="preserve">
+    <value>Procedures</value>
+  </data>
+  <data name="Structure" xml:space="preserve">
+    <value>Structure</value>
   </data>
 </root>
