@@ -1114,7 +1114,7 @@
     <value>Enter your password to login to your account</value>
   </data>
   <data name="LogInAsDifferentUser" xml:space="preserve">
-    <value>Log in as different user</value>
+    <value>Log in as different user?</value>
   </data>
   <data name="AdvancedSearch" xml:space="preserve">
     <value>Advanced search</value>
@@ -1235,5 +1235,8 @@
   </data>
   <data name="Structure" xml:space="preserve">
     <value>Structure</value>
+  </data>
+  <data name="ThisWeek" xml:space="preserve">
+    <value>This week</value>
   </data>
 </root>
